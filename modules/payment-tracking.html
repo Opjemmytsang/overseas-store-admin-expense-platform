@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>付款及核對追蹤｜海外分店行政及費用管理平台</title>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand-block">
+        <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
+        <h1>付款及核對追蹤</h1>
+        <p>集中查看案件進度、付款狀態、附件完成度及核對結果。</p>
+      </div>
+      <nav class="menu">
+        <a class="menu-item" href="../index.html">首頁</a>
+        <a class="menu-item" href="tax.html">貨品報稅</a>
+        <a class="menu-item" href="flight.html">機票申請</a>
+        <a class="menu-item" href="hotel.html">酒店申請</a>
+        <a class="menu-item" href="store-expense.html">鋪頭雜費申請</a>
+        <a class="menu-item active" href="payment-tracking.html">付款及核對追蹤</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <a class="top-link" href="../index.html">← 返回行政及費用申請首頁</a>
+      <section class="module-top">
+        <div class="module-eyebrow">Payment &amp; Verification Tracking</div>
+        <h2>付款及核對追蹤</h2>
+        <p>現版本為靜態前台示範頁，可日後接駁 SharePoint List / Excel Table 顯示案件狀態。</p>
+      </section>
+
+      <section class="panel-grid" style="margin-top:20px;">
+        <div class="panel-card">
+          <div class="section-eyebrow">建議顯示欄位</div>
+          <h3>Excel / SharePoint 同步欄位</h3>
+          <ul class="clean-list">
+            <li>案件編號 / 申請編號</li>
+            <li>模組類型</li>
+            <li>案件狀態</li>
+            <li>文件是否齊全</li>
+            <li>金額是否一致</li>
+            <li>核對狀態</li>
+            <li>付款日期 / Transaction ID</li>
+          </ul>
+        </div>
+        <div class="panel-card">
+          <div class="section-eyebrow">自動流程建議</div>
+          <h3>Power Automate</h3>
+          <ul class="clean-list">
+            <li>收到提交後建立 SharePoint folder</li>
+            <li>將附件存入「行政及費用附件庫」</li>
+            <li>寫入 Excel Table `tblAdminExpenseCases`</li>
+            <li>自動標記文件齊全度及核對狀態</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="table-card">
+        <h3>本地摘要預覽</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>模組</th><th>本地記錄數</th><th>最後記錄時間</th></tr></thead>
+            <tbody id="recordsBody"><tr><td colspan="3" class="empty-cell">暫時未有記錄</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+  <script>
+    const modules = [
+      { key: 'tax', label: '貨品報稅' },
+      { key: 'flight', label: '機票申請' },
+      { key: 'hotel', label: '酒店申請' },
+      { key: 'store-expense', label: '鋪頭雜費申請' }
+    ];
+    const recordsBody = document.getElementById('recordsBody');
+    function render() {
+      const rows = modules.map(item => {
+        const data = AppUtils.loadRecords(item.key);
+        return { ...item, count: data.length, latest: data[0]?.createdAt || '' };
+      });
+      recordsBody.innerHTML = rows.some(row => row.count > 0)
+        ? rows.map(row => `<tr><td>${AppUtils.escapeHtml(row.label)}</td><td>${row.count}</td><td>${AppUtils.escapeHtml(row.latest)}</td></tr>`).join('')
+        : '<tr><td colspan="3" class="empty-cell">暫時未有記錄</td></tr>';
+    }
+    render();
+  </script>
+</body>
+</html>

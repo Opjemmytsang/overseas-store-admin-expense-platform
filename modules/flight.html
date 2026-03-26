@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>機票申請｜海外分店行政及費用管理平台</title>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand-block">
+        <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
+        <h1>機票申請</h1>
+        <p>提交海外分店員工出差、探店或工作安排所需的機票資料。</p>
+      </div>
+      <nav class="menu">
+        <a class="menu-item" href="../index.html">首頁</a>
+        <a class="menu-item" href="tax.html">貨品報稅</a>
+        <a class="menu-item active" href="flight.html">機票申請</a>
+        <a class="menu-item" href="hotel.html">酒店申請</a>
+        <a class="menu-item" href="store-expense.html">鋪頭雜費申請</a>
+        <a class="menu-item" href="payment-tracking.html">付款及核對追蹤</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <a class="top-link" href="../index.html">← 返回行政及費用申請首頁</a>
+      <section class="module-top">
+        <div class="module-eyebrow">Flight Request</div>
+        <h2>機票申請表</h2>
+        <p>填寫旅客資料、行程日期、預算及附件，供公司內部統一安排。</p>
+      </section>
+
+      <div class="module-layout">
+        <section class="form-card">
+          <h3>申請資料</h3>
+          <div class="form-grid">
+            <div class="field"><label for="requestNo">申請編號</label><input id="requestNo" placeholder="例如 FLT-202603-001" /></div>
+            <div class="field"><label for="status">申請狀態</label><select id="status"><option>待提交</option><option>待審批</option><option>待訂票</option><option>已訂票</option><option>已完成</option></select></div>
+            <div class="field"><label for="applicant">申請人</label><input id="applicant" placeholder="例如 Chan Tai Man" /></div>
+            <div class="field"><label for="storeDept">分店 / 部門</label><input id="storeDept" placeholder="例如 Thailand / Bangkok" /></div>
+            <div class="field"><label for="traveler">旅客姓名</label><input id="traveler" placeholder="例如 Jenny Chan" /></div>
+            <div class="field"><label for="passportName">護照英文名</label><input id="passportName" placeholder="需與護照一致" /></div>
+            <div class="field"><label for="fromCity">出發地</label><input id="fromCity" placeholder="例如 Hong Kong" /></div>
+            <div class="field"><label for="toCity">目的地</label><input id="toCity" placeholder="例如 Bangkok" /></div>
+            <div class="field"><label for="departDate">出發日期</label><input id="departDate" type="date" /></div>
+            <div class="field"><label for="returnDate">回程日期</label><input id="returnDate" type="date" /></div>
+            <div class="field"><label for="budget">預算金額</label><input id="budget" type="number" step="0.01" /></div>
+            <div class="field"><label for="currency">幣別</label><select id="currency"><option>HKD</option><option>THB</option><option>USD</option><option>RMB</option></select></div>
+            <div class="field full"><label for="purpose">用途說明</label><textarea id="purpose" placeholder="例如 探店、開舖、支援工作等"></textarea></div>
+          </div>
+
+          <div class="upload-grid">
+            <div class="upload-box">
+              <h4>護照 / 身份證明</h4>
+              <p>供訂票核對旅客資料。</p>
+              <input id="passportFile" type="file" accept="image/*,.pdf" multiple />
+              <div class="preview-grid" id="passportPreview"></div>
+            </div>
+            <div class="upload-box">
+              <h4>行程相關附件</h4>
+              <p>例如邀請函、行程單、批准文件等。</p>
+              <input id="supportFile" type="file" accept="image/*,.pdf" multiple />
+              <div class="preview-grid" id="supportPreview"></div>
+            </div>
+          </div>
+
+          <div class="button-row">
+            <button class="btn btn-primary" id="saveBtn">儲存本地記錄</button>
+            <button class="btn btn-secondary" id="exportBtn">匯出 CSV</button>
+          </div>
+        </section>
+
+        <aside class="status-card">
+          <h3>申請摘要</h3>
+          <div class="summary-grid">
+            <div class="summary-box"><span>旅客</span><strong id="travelerSummary">未填寫</strong></div>
+            <div class="summary-box"><span>行程</span><strong id="tripSummary">未填寫</strong></div>
+          </div>
+          <div class="status-list">
+            <div class="status-item"><div><strong>護照 / 身份證明</strong><span id="passportMeta">未上傳</span></div><div id="passportBadge" class="badge warn">待上傳</div></div>
+            <div class="status-item"><div><strong>行程相關附件</strong><span id="supportMeta">未上傳</span></div><div id="supportBadge" class="badge warn">待上傳</div></div>
+          </div>
+          <div class="note">正式版可接駁 SharePoint 文件庫及 Power Automate，自動通知負責訂票同事。</div>
+        </aside>
+      </div>
+
+      <section class="table-card">
+        <h3>本地記錄</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>申請編號</th><th>申請人</th><th>旅客</th><th>出發地</th><th>目的地</th><th>出發日期</th><th>回程日期</th><th>預算</th><th>狀態</th></tr></thead>
+            <tbody id="recordsBody"><tr><td colspan="9" class="empty-cell">暫時未有記錄</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+  <script>
+    const fileStore = { passport: [], support: [] };
+    const previewMap = { passport: document.getElementById('passportPreview'), support: document.getElementById('supportPreview') };
+    const metaMap = { passport: document.getElementById('passportMeta'), support: document.getElementById('supportMeta') };
+    const badgeMap = { passport: document.getElementById('passportBadge'), support: document.getElementById('supportBadge') };
+    const travelerSummary = document.getElementById('travelerSummary');
+    const tripSummary = document.getElementById('tripSummary');
+    const recordsBody = document.getElementById('recordsBody');
+
+    function setBadge(el, text, type) { el.className = `badge ${type}`; el.textContent = text; }
+    function readFileAsDataURL(file) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); }); }
+    async function handleFiles(type, files) {
+      const items = [];
+      for (const file of files) items.push({ name: file.name, dataUrl: await readFileAsDataURL(file) });
+      fileStore[type] = items;
+      previewMap[type].innerHTML = items.map(row => `<img src="${row.dataUrl}" alt="${row.name}">`).join('');
+      metaMap[type].textContent = items.length ? `${items.length} 個檔案` : '未上傳';
+      setBadge(badgeMap[type], items.length ? '已上傳' : '待上傳', items.length ? 'ok' : 'warn');
+    }
+
+    function buildPayload() {
+      return {
+        moduleType: '機票申請',
+        requestNo: document.getElementById('requestNo').value.trim(),
+        status: document.getElementById('status').value,
+        applicant: document.getElementById('applicant').value.trim(),
+        storeDept: document.getElementById('storeDept').value.trim(),
+        traveler: document.getElementById('traveler').value.trim(),
+        passportName: document.getElementById('passportName').value.trim(),
+        fromCity: document.getElementById('fromCity').value.trim(),
+        toCity: document.getElementById('toCity').value.trim(),
+        departDate: document.getElementById('departDate').value,
+        returnDate: document.getElementById('returnDate').value,
+        budget: Number(document.getElementById('budget').value || 0),
+        currency: document.getElementById('currency').value,
+        purpose: document.getElementById('purpose').value.trim(),
+        files: fileStore,
+        createdAt: new Date().toISOString()
+      };
+    }
+
+    function refreshSummary() {
+      travelerSummary.textContent = document.getElementById('traveler').value.trim() || '未填寫';
+      const fromCity = document.getElementById('fromCity').value.trim();
+      const toCity = document.getElementById('toCity').value.trim();
+      tripSummary.textContent = fromCity && toCity ? `${fromCity} → ${toCity}` : '未填寫';
+    }
+
+    function renderRecords() {
+      const rows = AppUtils.loadRecords('flight');
+      recordsBody.innerHTML = rows.length ? rows.map(row => `<tr><td>${AppUtils.escapeHtml(row.requestNo || '')}</td><td>${AppUtils.escapeHtml(row.applicant || '')}</td><td>${AppUtils.escapeHtml(row.traveler || '')}</td><td>${AppUtils.escapeHtml(row.fromCity || '')}</td><td>${AppUtils.escapeHtml(row.toCity || '')}</td><td>${AppUtils.escapeHtml(row.departDate || '')}</td><td>${AppUtils.escapeHtml(row.returnDate || '')}</td><td>${AppUtils.escapeHtml(AppUtils.money(row.budget))} ${AppUtils.escapeHtml(row.currency || '')}</td><td>${AppUtils.escapeHtml(row.status || '')}</td></tr>`).join('') : '<tr><td colspan="9" class="empty-cell">暫時未有記錄</td></tr>';
+    }
+
+    document.querySelectorAll('input, select, textarea').forEach(el => el.addEventListener('input', refreshSummary));
+    document.getElementById('passportFile').addEventListener('change', e => handleFiles('passport', e.target.files));
+    document.getElementById('supportFile').addEventListener('change', e => handleFiles('support', e.target.files));
+    document.getElementById('saveBtn').addEventListener('click', () => { AppUtils.saveRecord('flight', buildPayload()); renderRecords(); alert('已儲存到本地記錄。'); });
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const rows = AppUtils.loadRecords('flight');
+      if (!rows.length) return alert('未有記錄可以匯出。');
+      AppUtils.exportCsv('flight-requests.csv', ['申請編號','申請人','旅客','出發地','目的地','出發日期','回程日期','預算','幣別','狀態','建立時間'], rows.map(row => [row.requestNo,row.applicant,row.traveler,row.fromCity,row.toCity,row.departDate,row.returnDate,row.budget,row.currency,row.status,row.createdAt]));
+    });
+    refreshSummary(); renderRecords();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+CaseOrRequestNo,ModuleType,Status,Applicant,DepartmentOrStore,ConsigneeOrTravelerOrGuest,InvoiceNo,InvoiceDate,Destination,ExpenseType,Amount,Currency,TaxAmount,PaymentAmount,PaymentDate,TransactionId,DocsComplete,AmountMatched,CheckStatus,AttachmentFolderUrl,CreatedAt,Remarks

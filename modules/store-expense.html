@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>鋪頭雜費申請｜海外分店行政及費用管理平台</title>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand-block">
+        <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
+        <h1>鋪頭雜費申請</h1>
+        <p>管理店舖日常行政雜費、報銷用途、金額及附件單據。</p>
+      </div>
+      <nav class="menu">
+        <a class="menu-item" href="../index.html">首頁</a>
+        <a class="menu-item" href="tax.html">貨品報稅</a>
+        <a class="menu-item" href="flight.html">機票申請</a>
+        <a class="menu-item" href="hotel.html">酒店申請</a>
+        <a class="menu-item active" href="store-expense.html">鋪頭雜費申請</a>
+        <a class="menu-item" href="payment-tracking.html">付款及核對追蹤</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <a class="top-link" href="../index.html">← 返回行政及費用申請首頁</a>
+      <section class="module-top">
+        <div class="module-eyebrow">Store Miscellaneous Expense</div>
+        <h2>鋪頭雜費申請表</h2>
+        <p>填寫鋪頭日常開支、用途、付款方式及上傳附件單據。</p>
+      </section>
+
+      <div class="module-layout">
+        <section class="form-card">
+          <h3>申請資料</h3>
+          <div class="form-grid">
+            <div class="field"><label for="requestNo">申請編號</label><input id="requestNo" placeholder="例如 EXP-202603-001" /></div>
+            <div class="field"><label for="status">申請狀態</label><select id="status"><option>待提交</option><option>待審批</option><option>待付款</option><option>已付款</option><option>已完成</option></select></div>
+            <div class="field"><label for="applicant">申請人</label><input id="applicant" /></div>
+            <div class="field"><label for="storeName">店舖 / 分店</label><input id="storeName" /></div>
+            <div class="field"><label for="expenseType">費用類型</label><input id="expenseType" placeholder="例如 交通、維修、文具、清潔等" /></div>
+            <div class="field"><label for="expenseDate">費用日期</label><input id="expenseDate" type="date" /></div>
+            <div class="field"><label for="amount">金額</label><input id="amount" type="number" step="0.01" /></div>
+            <div class="field"><label for="currency">幣別</label><select id="currency"><option>THB</option><option>HKD</option><option>USD</option><option>RMB</option></select></div>
+            <div class="field"><label for="paymentMethod">付款方式</label><input id="paymentMethod" placeholder="例如 現金 / 公司卡 / 轉帳" /></div>
+            <div class="field"><label for="vendor">供應商 / 收款方</label><input id="vendor" /></div>
+            <div class="field full"><label for="purpose">用途說明</label><textarea id="purpose" placeholder="請簡述費用用途"></textarea></div>
+            <div class="field full"><label for="remark">備註</label><textarea id="remark" placeholder="可填寫付款情況、補充說明等"></textarea></div>
+          </div>
+
+          <div class="upload-grid">
+            <div class="upload-box">
+              <h4>單據 / 發票</h4>
+              <p>請上傳清晰單據或收據。</p>
+              <input id="receiptFile" type="file" accept="image/*,.pdf" multiple />
+              <div class="preview-grid" id="receiptPreview"></div>
+            </div>
+            <div class="upload-box">
+              <h4>其他附件</h4>
+              <p>例如報價單、付款證明、批准文件等。</p>
+              <input id="supportFile" type="file" accept="image/*,.pdf" multiple />
+              <div class="preview-grid" id="supportPreview"></div>
+            </div>
+          </div>
+
+          <div class="button-row">
+            <button class="btn btn-primary" id="saveBtn">儲存本地記錄</button>
+            <button class="btn btn-secondary" id="exportBtn">匯出 CSV</button>
+          </div>
+        </section>
+
+        <aside class="status-card">
+          <h3>申請摘要</h3>
+          <div class="summary-grid">
+            <div class="summary-box"><span>店舖 / 分店</span><strong id="storeSummary">未填寫</strong></div>
+            <div class="summary-box"><span>費用類型</span><strong id="typeSummary">未填寫</strong></div>
+          </div>
+          <div class="status-list">
+            <div class="status-item"><div><strong>單據 / 發票</strong><span id="receiptMeta">未上傳</span></div><div id="receiptBadge" class="badge warn">待上傳</div></div>
+            <div class="status-item"><div><strong>其他附件</strong><span id="supportMeta">未上傳</span></div><div id="supportBadge" class="badge warn">待上傳</div></div>
+          </div>
+          <div class="note">正式版可接駁 Power Automate，自動建立附件 folder 並寫入 Excel Table。</div>
+        </aside>
+      </div>
+
+      <section class="table-card">
+        <h3>本地記錄</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>申請編號</th><th>申請人</th><th>店舖</th><th>費用類型</th><th>費用日期</th><th>金額</th><th>幣別</th><th>付款方式</th><th>狀態</th></tr></thead>
+            <tbody id="recordsBody"><tr><td colspan="9" class="empty-cell">暫時未有記錄</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+  <script>
+    const fileStore = { receipt: [], support: [] };
+    const previewMap = { receipt: document.getElementById('receiptPreview'), support: document.getElementById('supportPreview') };
+    const metaMap = { receipt: document.getElementById('receiptMeta'), support: document.getElementById('supportMeta') };
+    const badgeMap = { receipt: document.getElementById('receiptBadge'), support: document.getElementById('supportBadge') };
+    const storeSummary = document.getElementById('storeSummary');
+    const typeSummary = document.getElementById('typeSummary');
+    const recordsBody = document.getElementById('recordsBody');
+
+    function setBadge(el, text, type) { el.className = `badge ${type}`; el.textContent = text; }
+    function readFileAsDataURL(file) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); }); }
+    async function handleFiles(type, files) {
+      const items = [];
+      for (const file of files) items.push({ name: file.name, dataUrl: await readFileAsDataURL(file) });
+      fileStore[type] = items;
+      previewMap[type].innerHTML = items.map(row => `<img src="${row.dataUrl}" alt="${row.name}">`).join('');
+      metaMap[type].textContent = items.length ? `${items.length} 個檔案` : '未上傳';
+      setBadge(badgeMap[type], items.length ? '已上傳' : '待上傳', items.length ? 'ok' : 'warn');
+    }
+
+    function buildPayload() {
+      return {
+        moduleType: '鋪頭雜費申請',
+        requestNo: document.getElementById('requestNo').value.trim(),
+        status: document.getElementById('status').value,
+        applicant: document.getElementById('applicant').value.trim(),
+        storeName: document.getElementById('storeName').value.trim(),
+        expenseType: document.getElementById('expenseType').value.trim(),
+        expenseDate: document.getElementById('expenseDate').value,
+        amount: Number(document.getElementById('amount').value || 0),
+        currency: document.getElementById('currency').value,
+        paymentMethod: document.getElementById('paymentMethod').value.trim(),
+        vendor: document.getElementById('vendor').value.trim(),
+        purpose: document.getElementById('purpose').value.trim(),
+        remark: document.getElementById('remark').value.trim(),
+        files: fileStore,
+        createdAt: new Date().toISOString()
+      };
+    }
+
+    function refreshSummary() {
+      storeSummary.textContent = document.getElementById('storeName').value.trim() || '未填寫';
+      typeSummary.textContent = document.getElementById('expenseType').value.trim() || '未填寫';
+    }
+
+    function renderRecords() {
+      const rows = AppUtils.loadRecords('store-expense');
+      recordsBody.innerHTML = rows.length ? rows.map(row => `<tr><td>${AppUtils.escapeHtml(row.requestNo || '')}</td><td>${AppUtils.escapeHtml(row.applicant || '')}</td><td>${AppUtils.escapeHtml(row.storeName || '')}</td><td>${AppUtils.escapeHtml(row.expenseType || '')}</td><td>${AppUtils.escapeHtml(row.expenseDate || '')}</td><td>${AppUtils.escapeHtml(AppUtils.money(row.amount))}</td><td>${AppUtils.escapeHtml(row.currency || '')}</td><td>${AppUtils.escapeHtml(row.paymentMethod || '')}</td><td>${AppUtils.escapeHtml(row.status || '')}</td></tr>`).join('') : '<tr><td colspan="9" class="empty-cell">暫時未有記錄</td></tr>';
+    }
+
+    document.querySelectorAll('input, select, textarea').forEach(el => el.addEventListener('input', refreshSummary));
+    document.getElementById('receiptFile').addEventListener('change', e => handleFiles('receipt', e.target.files));
+    document.getElementById('supportFile').addEventListener('change', e => handleFiles('support', e.target.files));
+    document.getElementById('saveBtn').addEventListener('click', () => { AppUtils.saveRecord('store-expense', buildPayload()); renderRecords(); alert('已儲存到本地記錄。'); });
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const rows = AppUtils.loadRecords('store-expense');
+      if (!rows.length) return alert('未有記錄可以匯出。');
+      AppUtils.exportCsv('store-expenses.csv', ['申請編號','申請人','店舖','費用類型','費用日期','金額','幣別','付款方式','供應商','狀態','建立時間'], rows.map(row => [row.requestNo,row.applicant,row.storeName,row.expenseType,row.expenseDate,row.amount,row.currency,row.paymentMethod,row.vendor,row.status,row.createdAt]));
+    });
+    refreshSummary(); renderRecords();
+  </script>
+</body>
+</html>
