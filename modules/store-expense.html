@@ -39,7 +39,7 @@
             <div class="field"><label for="requestNo">申請編號</label><input id="requestNo" placeholder="例如 EXP-202603-001" /></div>
             <div class="field"><label for="status">申請狀態</label><select id="status"><option>待提交</option><option>待審批</option><option>待付款</option><option>已付款</option><option>已完成</option></select></div>
             <div class="field"><label for="applicant">申請人</label><input id="applicant" /></div>
-            <div class="field"><label for="storeName">店舖 / 分店</label><input id="storeName" /></div>
+            <div class="field"><label for="storeName">店舖代碼</label><select id="storeName"><option value="">請選擇店舖</option><option>BA3</option><option>BA5</option><option>BA8</option><option>BA9</option><option>BAA</option><option>BAB</option><option>BAC</option><option>LA1</option><option>AU4</option></select></div>
             <div class="field"><label for="expenseType">費用類型</label><input id="expenseType" placeholder="例如 交通、維修、文具、清潔等" /></div>
             <div class="field"><label for="expenseDate">費用日期</label><input id="expenseDate" type="date" /></div>
             <div class="field"><label for="amount">金額</label><input id="amount" type="number" step="0.01" /></div>
@@ -74,7 +74,7 @@
         <aside class="status-card">
           <h3>申請摘要</h3>
           <div class="summary-grid">
-            <div class="summary-box"><span>店舖 / 分店</span><strong id="storeSummary">未填寫</strong></div>
+            <div class="summary-box"><span>店舖代碼</span><strong id="storeSummary">未選擇</strong></div>
             <div class="summary-box"><span>費用類型</span><strong id="typeSummary">未填寫</strong></div>
           </div>
           <div class="status-list">
@@ -139,7 +139,7 @@
     }
 
     function refreshSummary() {
-      storeSummary.textContent = document.getElementById('storeName').value.trim() || '未填寫';
+      storeSummary.textContent = document.getElementById('storeName').value.trim() || '未選擇';
       typeSummary.textContent = document.getElementById('expenseType').value.trim() || '未填寫';
     }
 
