@@ -29,7 +29,7 @@
       <section class="module-top">
         <div class="module-eyebrow">Flight Request</div>
         <h2>機票申請表</h2>
-        <p>填寫旅客資料、行程日期、預算及附件，供公司內部統一安排。</p>
+        <p>可先上傳護照、航班詳情及付款證明，再補回關鍵欄位，快速整理成完整個案。</p>
       </section>
 
       <div class="module-layout">
@@ -42,12 +42,24 @@
             <div class="field"><label for="storeDept">店舖代碼</label><select id="storeDept"><option value="">請選擇店舖</option><option>BA3</option><option>BA5</option><option>BA8</option><option>BA9</option><option>BAA</option><option>BAB</option><option>BAC</option><option>LA1</option><option>AU4</option></select></div>
             <div class="field"><label for="traveler">旅客姓名</label><input id="traveler" placeholder="例如 Jenny Chan" /></div>
             <div class="field"><label for="passportName">護照英文名</label><input id="passportName" placeholder="需與護照一致" /></div>
-            <div class="field"><label for="fromCity">出發地</label><input id="fromCity" placeholder="例如 Hong Kong" /></div>
-            <div class="field"><label for="toCity">目的地</label><input id="toCity" placeholder="例如 Bangkok" /></div>
+            <div class="field"><label for="passportNo">護照號碼</label><input id="passportNo" placeholder="例如 P2126706" /></div>
+            <div class="field"><label for="bookingReference">航空公司參考編號</label><input id="bookingReference" placeholder="例如 EFVH4Z" /></div>
+            <div class="field"><label for="airline">航空公司</label><input id="airline" placeholder="例如 Lao Airlines" /></div>
+            <div class="field"><label for="cabinClass">艙等</label><input id="cabinClass" placeholder="例如 Economy" /></div>
+            <div class="field"><label for="outboundFlightNo">去程航班號</label><input id="outboundFlightNo" placeholder="例如 QV446" /></div>
+            <div class="field"><label for="returnFlightNo">回程航班號</label><input id="returnFlightNo" placeholder="例如 QV445" /></div>
+            <div class="field"><label for="fromCity">出發地</label><input id="fromCity" placeholder="例如 Bangkok" /></div>
+            <div class="field"><label for="toCity">目的地</label><input id="toCity" placeholder="例如 Vientiane" /></div>
             <div class="field"><label for="departDate">出發日期</label><input id="departDate" type="date" /></div>
             <div class="field"><label for="returnDate">回程日期</label><input id="returnDate" type="date" /></div>
             <div class="field"><label for="budget">預算金額</label><input id="budget" type="number" step="0.01" /></div>
             <div class="field"><label for="currency">幣別</label><select id="currency"><option>HKD</option><option>THB</option><option>USD</option><option>RMB</option></select></div>
+            <div class="field"><label for="paymentOwner">實際付款方</label><select id="paymentOwner"><option>公司</option><option>申請人</option><option>其他同事代付</option></select></div>
+            <div class="field"><label for="advancePayerName">代付款人姓名</label><input id="advancePayerName" placeholder="如不適用可留空" /></div>
+            <div class="field"><label for="paidAmount">實際支付金額</label><input id="paidAmount" type="number" step="0.01" /></div>
+            <div class="field"><label for="reimbursementStatus">還款 / 報銷狀態</label><select id="reimbursementStatus"><option>不適用</option><option>待報銷</option><option>待還款</option><option>已報銷</option><option>已還款</option></select></div>
+            <div class="field"><label for="reimbursementDate">還款 / 報銷日期</label><input id="reimbursementDate" type="date" /></div>
+            <div class="field"><label for="paymentMethod">付款方式</label><input id="paymentMethod" placeholder="例如 信用卡 / 公司卡" /></div>
             <div class="field full"><label for="purpose">用途說明</label><textarea id="purpose" placeholder="例如 探店、開舖、支援工作等"></textarea></div>
           </div>
 
@@ -59,10 +71,16 @@
               <div class="preview-grid" id="passportPreview"></div>
             </div>
             <div class="upload-box">
-              <h4>行程相關附件</h4>
-              <p>例如邀請函、行程單、批准文件等。</p>
-              <input id="supportFile" type="file" accept="image/*,.pdf" multiple />
-              <div class="preview-grid" id="supportPreview"></div>
+              <h4>航班詳情 / 行程附件</h4>
+              <p>例如航班截圖、行程單、批准文件等。</p>
+              <input id="itineraryFile" type="file" accept="image/*,.pdf" multiple />
+              <div class="preview-grid" id="itineraryPreview"></div>
+            </div>
+            <div class="upload-box">
+              <h4>付款證明</h4>
+              <p>例如付款頁面截圖或交易證明。</p>
+              <input id="paymentFile" type="file" accept="image/*,.pdf" multiple />
+              <div class="preview-grid" id="paymentPreview"></div>
             </div>
           </div>
 
@@ -77,12 +95,15 @@
           <div class="summary-grid">
             <div class="summary-box"><span>旅客</span><strong id="travelerSummary">未填寫</strong></div>
             <div class="summary-box"><span>行程</span><strong id="tripSummary">未填寫</strong></div>
+            <div class="summary-box"><span>付款</span><strong id="paymentSummary">未填寫</strong></div>
+            <div class="summary-box"><span>參考編號</span><strong id="bookingSummary">未填寫</strong></div>
           </div>
           <div class="status-list">
             <div class="status-item"><div><strong>護照 / 身份證明</strong><span id="passportMeta">未上傳</span></div><div id="passportBadge" class="badge warn">待上傳</div></div>
-            <div class="status-item"><div><strong>行程相關附件</strong><span id="supportMeta">未上傳</span></div><div id="supportBadge" class="badge warn">待上傳</div></div>
+            <div class="status-item"><div><strong>航班詳情 / 行程附件</strong><span id="itineraryMeta">未上傳</span></div><div id="itineraryBadge" class="badge warn">待上傳</div></div>
+            <div class="status-item"><div><strong>付款證明</strong><span id="paymentMeta">未上傳</span></div><div id="paymentBadge" class="badge warn">待上傳</div></div>
           </div>
-          <div class="note">正式版可接駁 SharePoint 文件庫及 Power Automate，自動通知負責訂票同事。</div>
+          <div class="note">可先用附件整理個案，再在 SharePoint List 補回付款方及報銷狀態。</div>
         </aside>
       </div>
 
@@ -90,8 +111,8 @@
         <h3>本地記錄</h3>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>申請編號</th><th>申請人</th><th>旅客</th><th>出發地</th><th>目的地</th><th>出發日期</th><th>回程日期</th><th>預算</th><th>狀態</th></tr></thead>
-            <tbody id="recordsBody"><tr><td colspan="9" class="empty-cell">暫時未有記錄</td></tr></tbody>
+            <thead><tr><th>申請編號</th><th>店舖</th><th>旅客</th><th>參考編號</th><th>行程</th><th>預算</th><th>實付</th><th>付款方</th><th>報銷狀態</th><th>狀態</th></tr></thead>
+            <tbody id="recordsBody"><tr><td colspan="10" class="empty-cell">暫時未有記錄</td></tr></tbody>
           </table>
         </div>
       </section>
@@ -100,12 +121,26 @@
 
   <script src="../assets/js/app.js"></script>
   <script>
-    const fileStore = { passport: [], support: [] };
-    const previewMap = { passport: document.getElementById('passportPreview'), support: document.getElementById('supportPreview') };
-    const metaMap = { passport: document.getElementById('passportMeta'), support: document.getElementById('supportMeta') };
-    const badgeMap = { passport: document.getElementById('passportBadge'), support: document.getElementById('supportBadge') };
+    const fileStore = { passport: [], itinerary: [], payment: [] };
+    const previewMap = {
+      passport: document.getElementById('passportPreview'),
+      itinerary: document.getElementById('itineraryPreview'),
+      payment: document.getElementById('paymentPreview')
+    };
+    const metaMap = {
+      passport: document.getElementById('passportMeta'),
+      itinerary: document.getElementById('itineraryMeta'),
+      payment: document.getElementById('paymentMeta')
+    };
+    const badgeMap = {
+      passport: document.getElementById('passportBadge'),
+      itinerary: document.getElementById('itineraryBadge'),
+      payment: document.getElementById('paymentBadge')
+    };
     const travelerSummary = document.getElementById('travelerSummary');
     const tripSummary = document.getElementById('tripSummary');
+    const paymentSummary = document.getElementById('paymentSummary');
+    const bookingSummary = document.getElementById('bookingSummary');
     const recordsBody = document.getElementById('recordsBody');
 
     function setBadge(el, text, type) { el.className = `badge ${type}`; el.textContent = text; }
@@ -128,12 +163,24 @@
         storeDept: document.getElementById('storeDept').value.trim(),
         traveler: document.getElementById('traveler').value.trim(),
         passportName: document.getElementById('passportName').value.trim(),
+        passportNo: document.getElementById('passportNo').value.trim(),
+        bookingReference: document.getElementById('bookingReference').value.trim(),
+        airline: document.getElementById('airline').value.trim(),
+        cabinClass: document.getElementById('cabinClass').value.trim(),
+        outboundFlightNo: document.getElementById('outboundFlightNo').value.trim(),
+        returnFlightNo: document.getElementById('returnFlightNo').value.trim(),
         fromCity: document.getElementById('fromCity').value.trim(),
         toCity: document.getElementById('toCity').value.trim(),
         departDate: document.getElementById('departDate').value,
         returnDate: document.getElementById('returnDate').value,
         budget: Number(document.getElementById('budget').value || 0),
         currency: document.getElementById('currency').value,
+        paymentOwner: document.getElementById('paymentOwner').value,
+        advancePayerName: document.getElementById('advancePayerName').value.trim(),
+        paidAmount: Number(document.getElementById('paidAmount').value || 0),
+        reimbursementStatus: document.getElementById('reimbursementStatus').value,
+        reimbursementDate: document.getElementById('reimbursementDate').value,
+        paymentMethod: document.getElementById('paymentMethod').value.trim(),
         purpose: document.getElementById('purpose').value.trim(),
         files: fileStore,
         createdAt: new Date().toISOString()
@@ -145,21 +192,26 @@
       const fromCity = document.getElementById('fromCity').value.trim();
       const toCity = document.getElementById('toCity').value.trim();
       tripSummary.textContent = fromCity && toCity ? `${fromCity} → ${toCity}` : '未填寫';
+      const paymentOwner = document.getElementById('paymentOwner').value;
+      const paidAmount = Number(document.getElementById('paidAmount').value || 0);
+      paymentSummary.textContent = paidAmount > 0 ? `${paymentOwner} / ${AppUtils.money(paidAmount)}` : paymentOwner || '未填寫';
+      bookingSummary.textContent = document.getElementById('bookingReference').value.trim() || '未填寫';
     }
 
     function renderRecords() {
       const rows = AppUtils.loadRecords('flight');
-      recordsBody.innerHTML = rows.length ? rows.map(row => `<tr><td>${AppUtils.escapeHtml(row.requestNo || '')}</td><td>${AppUtils.escapeHtml(row.applicant || '')}</td><td>${AppUtils.escapeHtml(row.traveler || '')}</td><td>${AppUtils.escapeHtml(row.fromCity || '')}</td><td>${AppUtils.escapeHtml(row.toCity || '')}</td><td>${AppUtils.escapeHtml(row.departDate || '')}</td><td>${AppUtils.escapeHtml(row.returnDate || '')}</td><td>${AppUtils.escapeHtml(AppUtils.money(row.budget))} ${AppUtils.escapeHtml(row.currency || '')}</td><td>${AppUtils.escapeHtml(row.status || '')}</td></tr>`).join('') : '<tr><td colspan="9" class="empty-cell">暫時未有記錄</td></tr>';
+      recordsBody.innerHTML = rows.length ? rows.map(row => `<tr><td>${AppUtils.escapeHtml(row.requestNo || '')}</td><td>${AppUtils.escapeHtml(row.storeDept || '')}</td><td>${AppUtils.escapeHtml(row.traveler || '')}</td><td>${AppUtils.escapeHtml(row.bookingReference || '')}</td><td>${AppUtils.escapeHtml(row.fromCity || '')} → ${AppUtils.escapeHtml(row.toCity || '')}</td><td>${AppUtils.escapeHtml(AppUtils.money(row.budget))} ${AppUtils.escapeHtml(row.currency || '')}</td><td>${AppUtils.escapeHtml(AppUtils.money(row.paidAmount || 0))}</td><td>${AppUtils.escapeHtml(row.paymentOwner || '')}</td><td>${AppUtils.escapeHtml(row.reimbursementStatus || '')}</td><td>${AppUtils.escapeHtml(row.status || '')}</td></tr>`).join('') : '<tr><td colspan="10" class="empty-cell">暫時未有記錄</td></tr>';
     }
 
     document.querySelectorAll('input, select, textarea').forEach(el => el.addEventListener('input', refreshSummary));
     document.getElementById('passportFile').addEventListener('change', e => handleFiles('passport', e.target.files));
-    document.getElementById('supportFile').addEventListener('change', e => handleFiles('support', e.target.files));
+    document.getElementById('itineraryFile').addEventListener('change', e => handleFiles('itinerary', e.target.files));
+    document.getElementById('paymentFile').addEventListener('change', e => handleFiles('payment', e.target.files));
     document.getElementById('saveBtn').addEventListener('click', () => { AppUtils.saveRecord('flight', buildPayload()); renderRecords(); alert('已儲存到本地記錄。'); });
     document.getElementById('exportBtn').addEventListener('click', () => {
       const rows = AppUtils.loadRecords('flight');
       if (!rows.length) return alert('未有記錄可以匯出。');
-      AppUtils.exportCsv('flight-requests.csv', ['申請編號','申請人','旅客','出發地','目的地','出發日期','回程日期','預算','幣別','狀態','建立時間'], rows.map(row => [row.requestNo,row.applicant,row.traveler,row.fromCity,row.toCity,row.departDate,row.returnDate,row.budget,row.currency,row.status,row.createdAt]));
+      AppUtils.exportCsv('flight-requests.csv', ['申請編號','店舖代碼','申請人','旅客','護照英文名','護照號碼','航空公司','參考編號','去程航班號','回程航班號','出發地','目的地','出發日期','回程日期','預算','幣別','實際付款方','代付款人姓名','實際支付金額','還款/報銷狀態','還款/報銷日期','付款方式','狀態','建立時間'], rows.map(row => [row.requestNo,row.storeDept,row.applicant,row.traveler,row.passportName,row.passportNo,row.airline,row.bookingReference,row.outboundFlightNo,row.returnFlightNo,row.fromCity,row.toCity,row.departDate,row.returnDate,row.budget,row.currency,row.paymentOwner,row.advancePayerName,row.paidAmount,row.reimbursementStatus,row.reimbursementDate,row.paymentMethod,row.status,row.createdAt]));
     });
     refreshSummary(); renderRecords();
   </script>
