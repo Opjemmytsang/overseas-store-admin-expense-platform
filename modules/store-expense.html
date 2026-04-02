@@ -12,7 +12,7 @@
       <div class="brand-block">
         <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
         <h1>費用及報銷入口</h1>
-        <p>將店舖費用整理為單次申請及月度總表兩種模式，讓提交、覆核及跟進更有條理。</p>
+        <p>將店舖雜費拆分為兩種模式：單次申請與月度總表，統一寫入 Batch / Line 結構。</p>
       </div>
       <nav class="menu">
         <a class="menu-item" href="../index.html">首頁</a>
@@ -27,41 +27,41 @@
     <main class="main-content">
       <a class="top-link" href="../index.html">← 返回行政及費用申請首頁</a>
       <section class="module-top">
-        <div class="module-eyebrow">Expense &amp; Reimbursement Portal</div>
+        <div class="module-eyebrow">Expense & Reimbursement Portal</div>
         <h2>費用及報銷入口</h2>
-        <p>現時費用模組已分為兩種提交方式：<strong>單次申請</strong> 適合即時個案；<strong>月度總表申請</strong> 適合整月匯總。</p>
+        <p>現時雜費模組已改為雙入口架構：<strong>單次申請</strong> 建 1 個 Batch + 1 個 Line；<strong>月度總表</strong> 建 1 個 Batch + 多個 Line。</p>
       </section>
 
       <section class="feature-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 20px;">
         <a class="feature-card" href="single-expense.html">
           <div class="feature-index">01</div>
           <h3>單次申請</h3>
-          <p>適合一張單據、一筆雜費或一次獨立付款，可先整理附件內容，再完成提交。</p>
+          <p>適合一張單據、一筆雜費、一次獨立付款。可上傳收據 / PDF，自動讀取後直接提交。</p>
         </a>
         <a class="feature-card" href="monthly-expense.html">
           <div class="feature-index">02</div>
           <h3>月度總表申請</h3>
-          <p>適合一個月多筆報銷，先填批次資料，再匯入總表建立明細。</p>
+          <p>適合一個月多筆報銷。先填批次資料，再匯入 Excel 建立多條明細。</p>
         </a>
       </section>
 
       <section class="panel-grid">
         <div class="panel-card">
-          <div class="section-eyebrow">Data Structure</div>
-          <h3>資料層次</h3>
+          <div class="section-eyebrow">Data Model</div>
+          <h3>共用儲存結構</h3>
           <ul class="clean-list">
-            <li>批次主表：保存批次資料、店舖、總金額、狀態及月份。</li>
-            <li>明細主表：保存每筆支出日期、費用類型、供應商、金額及付款資料。</li>
-            <li>付款及核對追蹤頁可同時讀取批次與明細資料。</li>
+            <li>Batch：主表，存批次資料、店舖、總金額、狀態、月份等。</li>
+            <li>Line：明細表，存每一筆支出日期、費用類型、供應商、金額等。</li>
+            <li>付款及核對追蹤頁會同時讀取 Batch 與 Line。</li>
           </ul>
         </div>
         <div class="panel-card">
-          <div class="section-eyebrow">Workflow</div>
-          <h3>建議使用方式</h3>
+          <div class="section-eyebrow">Recommended Flow</div>
+          <h3>建議落地方式</h3>
           <ul class="clean-list">
-            <li>前台頁面作為統一提交入口，讓資料表達更清楚。</li>
-            <li>後續可銜接 SharePoint List 或 Excel Table 保存批次與明細。</li>
-            <li>追蹤頁可按批次編號檢視總額、筆數及更新時間。</li>
+            <li>前台 HTML：先做原型及本地記錄。</li>
+            <li>Power Automate：之後將 Batch / Line 分開寫入 SharePoint List 或 Excel Table。</li>
+            <li>追蹤頁：按 BatchNo 展示總額、Line 數量及最後更新時間。</li>
           </ul>
         </div>
       </section>
