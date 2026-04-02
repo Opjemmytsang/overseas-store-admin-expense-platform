@@ -12,7 +12,7 @@
       <div class="brand-block">
         <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
         <h1>單次申請</h1>
-        <p>適用於一筆雜費、一張收據或一次獨立報銷。提交後會自動建立 1 筆 Batch 與 1 筆 Line。</p>
+        <p>適用於一筆費用、一張收據或一次獨立報銷，完成後會同步建立批次及明細。</p>
       </div>
       <nav class="menu">
         <a class="menu-item" href="../index.html">首頁</a>
@@ -29,7 +29,7 @@
       <section class="module-top">
         <div class="module-eyebrow">Single Expense Entry</div>
         <h2>單次申請</h2>
-        <p>以圖片或 PDF 單據作主，系統可先自動讀取，再由你確認後儲存為一個批次與一條明細。</p>
+        <p>以圖片或 PDF 單據作主，系統可先整理附件內容，再由你確認後儲存為一個批次與一條明細。</p>
       </section>
 
       <div class="module-layout">
@@ -37,17 +37,17 @@
           <h3>批次及明細資料</h3>
           <div class="form-grid">
             <div class="field"><label for="batchNo">批次編號</label><input id="batchNo" readonly /></div>
-            <div class="field"><label for="status">批次狀態</label><select id="status"><option>待提交</option><option>待審批</option><option>待付款</option><option>已付款</option><option>已完成</option></select></div>
+            <div class="field"><label for="status">批次狀態</label><select id="status"></select></div>
             <div class="field"><label for="applicant">申請人</label><input id="applicant" placeholder="例如 Alex Wong" /></div>
-            <div class="field"><label for="storeCode">店舖代碼</label><select id="storeCode"><option value="">請選擇店舖</option><option>BA3</option><option>BA5</option><option>BA8</option><option>BA9</option><option>BAA</option><option>BAB</option><option>BAC</option><option>LA1</option><option>AU4</option></select></div>
+            <div class="field"><label for="storeCode">店舖代碼</label><select id="storeCode"></select></div>
             <div class="field"><label for="expenseDate">支出日期</label><input id="expenseDate" type="date" /></div>
             <div class="field"><label for="expenseType">費用類型</label><input id="expenseType" placeholder="例如 交通、維修、文具、清潔等" /></div>
             <div class="field"><label for="vendor">供應商 / 商戶</label><input id="vendor" placeholder="例如 Example Services Ltd." /></div>
             <div class="field"><label for="amount">金額</label><input id="amount" type="number" step="0.01" /></div>
-            <div class="field"><label for="currency">幣別</label><select id="currency"><option>THB</option><option>HKD</option><option>USD</option><option>RMB</option></select></div>
-            <div class="field"><label for="paidBy">實際付款方</label><select id="paidBy"><option>公司</option><option>申請人</option><option>其他同事代付</option></select></div>
+            <div class="field"><label for="currency">幣別</label><select id="currency"></select></div>
+            <div class="field"><label for="paidBy">實際付款方</label><select id="paidBy"></select></div>
             <div class="field"><label for="advancePayerName">代付款人姓名</label><input id="advancePayerName" placeholder="例如 Mason Lee" /></div>
-            <div class="field"><label for="reimbursementStatus">還款 / 報銷狀態</label><select id="reimbursementStatus"><option>不適用</option><option>待報銷</option><option>待還款</option><option>已報銷</option><option>已還款</option></select></div>
+            <div class="field"><label for="reimbursementStatus">還款 / 報銷狀態</label><select id="reimbursementStatus"></select></div>
             <div class="field"><label for="reimbursementDate">還款 / 報銷日期</label><input id="reimbursementDate" type="date" /></div>
             <div class="field"><label for="paymentMethod">付款方式</label><input id="paymentMethod" placeholder="例如 現金 / 公司卡 / 轉帳" /></div>
             <div class="field full"><label for="description">項目說明</label><textarea id="description" placeholder="例如 更換門市燈箱配件"></textarea></div>
@@ -57,7 +57,7 @@
           <div class="upload-grid">
             <div class="upload-box">
               <h4>單據 / 收據</h4>
-              <p>可上傳 JPG、PNG 或 PDF。PDF 會先讀文字層，不夠再逐頁 OCR。</p>
+              <p>可上傳 JPG、PNG 或 PDF。</p>
               <input id="receiptFile" type="file" accept="image/*,.pdf" multiple />
               <div class="preview-grid" id="receiptPreview"></div>
             </div>
@@ -70,11 +70,11 @@
           </div>
 
           <div class="button-row">
-            <button class="btn btn-secondary" id="ocrBtn" type="button">按附件自動讀取並填寫</button>
-            <button class="btn btn-primary" id="saveBtn">儲存 Batch + Line</button>
-            <button class="btn btn-secondary" id="exportBtn">匯出單次明細 CSV</button>
+            <button class="btn btn-secondary" id="ocrBtn" type="button">整理附件內容</button>
+            <button class="btn btn-primary" id="saveBtn">儲存批次及明細</button>
+            <button class="btn btn-secondary" id="exportBtn">匯出明細 CSV</button>
           </div>
-          <div class="note" id="ocrStatus">系統會優先讀圖片／PDF 文字，再把常見日期、金額、商戶及付款方式填入欄位。</div>
+          <div class="note" id="ocrStatus">系統會按附件內容整理常見日期、金額、商戶及付款方式。</div>
         </section>
 
         <aside class="status-card">
@@ -89,15 +89,15 @@
             <div class="status-item"><div><strong>單據 / 收據</strong><span id="receiptMeta">未上傳</span></div><div id="receiptBadge" class="badge warn">待上傳</div></div>
             <div class="status-item"><div><strong>其他附件</strong><span id="supportMeta">未上傳</span></div><div id="supportBadge" class="badge warn">待上傳</div></div>
           </div>
-          <div class="note">儲存後會寫入共用批次表 <strong>expense-batches</strong> 及明細表 <strong>expense-lines</strong>。</div>
+          <div class="note">儲存後會同步寫入費用批次與費用明細資料。</div>
         </aside>
       </div>
 
       <section class="table-card">
-        <h3>最近單次申請</h3>
+        <h3>最近申請記錄</h3>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>BatchNo</th><th>申請人</th><th>店舖</th><th>支出日期</th><th>費用類型</th><th>金額</th><th>付款方</th><th>狀態</th></tr></thead>
+            <thead><tr><th>批次編號</th><th>申請人</th><th>店舖</th><th>支出日期</th><th>費用類型</th><th>金額</th><th>付款方</th><th>狀態</th></tr></thead>
             <tbody id="recordsBody"><tr><td colspan="8" class="empty-cell">暫時未有記錄</td></tr></tbody>
           </table>
         </div>
@@ -106,6 +106,7 @@
   </div>
 
   <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/form-options.js"></script>
   <script>
     const MODULE_LABEL = '單次申請';
     const BATCH_MODULE_KEY = 'expense-batches';
@@ -119,6 +120,8 @@
     const payerSummary = document.getElementById('payerSummary');
     const recordsBody = document.getElementById('recordsBody');
     const ocrStatus = document.getElementById('ocrStatus');
+
+    FormOptions.bindSelects({ statusId: 'status', statusGroup: 'expense', storeId: 'storeCode', currencyId: 'currency', reimbursementId: 'reimbursementStatus', paidById: 'paidBy' });
 
     function setBadge(el, text, type) { el.className = `badge ${type}`; el.textContent = text; }
     function readFileAsDataURL(file) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); }); }
@@ -211,7 +214,7 @@
     document.getElementById('receiptFile').addEventListener('change', e => handleFiles('receipt', e.target.files));
     document.getElementById('supportFile').addEventListener('change', e => handleFiles('support', e.target.files));
     document.getElementById('ocrBtn').addEventListener('click', async () => {
-      if (!fileStore.receipt.length && !fileStore.support.length) { ocrStatus.textContent = '請先上傳附件，再進行自動讀取。'; return; }
+      if (!fileStore.receipt.length && !fileStore.support.length) { ocrStatus.textContent = '請先上傳附件，再開始整理。'; return; }
       try {
         const receiptResults = await AppUtils.recognizeFiles(fileStore.receipt, ocrStatus);
         const supportResults = await AppUtils.recognizeFiles(fileStore.support, ocrStatus);
@@ -219,7 +222,7 @@
         applyExpenseData(data);
         refreshSummary();
       } catch (error) {
-        ocrStatus.textContent = '自動讀取失敗，請檢查網絡或稍後再試。';
+        ocrStatus.textContent = '內容整理未完成，請稍後再試或手動補回。';
       }
     });
     document.getElementById('saveBtn').addEventListener('click', () => {
@@ -227,7 +230,7 @@
       const line = buildLinePayload(batch.batchNo);
       AppUtils.saveExpenseBatch(batch, [line]);
       renderRecords();
-      alert('已儲存為 1 筆 Batch + 1 筆 Line。');
+      alert('已儲存批次及明細。');
     });
     document.getElementById('exportBtn').addEventListener('click', () => {
       const batch = buildBatchPayload();

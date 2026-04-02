@@ -12,24 +12,24 @@
       <div class="brand-block">
         <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
         <h1>酒店申請</h1>
-        <p>上傳住客證明、酒店確認文件及付款證明後，可自動讀取內容並填入相關欄位。</p>
+        <p>整理住客資料、酒店確認文件及付款記錄，方便後續預訂、審批與報銷跟進。</p>
       </div>
       <nav class="menu">
         <a class="menu-item" href="../index.html">首頁</a>
         <a class="menu-item" href="tax.html">貨品報稅</a>
         <a class="menu-item" href="flight.html">機票申請</a>
         <a class="menu-item active" href="hotel.html">酒店申請</a>
-        <a class="menu-item" href="store-expense.html">鋪頭雜費申請</a>
+        <a class="menu-item" href="store-expense.html">費用及報銷入口</a>
         <a class="menu-item" href="payment-tracking.html">付款及核對追蹤</a>
       </nav>
     </aside>
 
     <main class="main-content">
-      <a class="top-link" href="../index.html">← 返回行政及費用申請首頁</a>
+      <a class="top-link" href="../index.html">← 返回行政及費用管理首頁</a>
       <section class="module-top">
         <div class="module-eyebrow">Hotel Request</div>
         <h2>酒店申請表</h2>
-        <p>申請編號會按填表當刻自動生成；完成上傳後，可一鍵讀取附件內容並自動填寫。</p>
+        <p>申請編號會按填表當刻自動生成；完成上傳後，可整理附件內容並帶入主要欄位。</p>
       </section>
 
       <div class="module-layout">
@@ -37,9 +37,9 @@
           <h3>申請資料</h3>
           <div class="form-grid">
             <div class="field"><label for="requestNo">申請編號</label><input id="requestNo" readonly /></div>
-            <div class="field"><label for="status">申請狀態</label><select id="status"><option>待提交</option><option>待審批</option><option>待預訂</option><option>已預訂</option><option>已完成</option></select></div>
+            <div class="field"><label for="status">申請狀態</label><select id="status"></select></div>
             <div class="field"><label for="applicant">申請人</label><input id="applicant" placeholder="例如 Mandy Lee" /></div>
-            <div class="field"><label for="storeDept">店舖代碼</label><select id="storeDept"><option value="">請選擇店舖</option><option>BA3</option><option>BA5</option><option>BA8</option><option>BA9</option><option>BAA</option><option>BAB</option><option>BAC</option><option>LA1</option><option>AU4</option></select></div>
+            <div class="field"><label for="storeDept">店舖代碼</label><select id="storeDept"></select></div>
             <div class="field"><label for="guestName">住客姓名</label><input id="guestName" placeholder="例如 Ryan Ho" /></div>
             <div class="field"><label for="hotelCity">住宿地點</label><input id="hotelCity" placeholder="例如 Bangkok" /></div>
             <div class="field"><label for="hotelName">酒店名稱</label><input id="hotelName" placeholder="例如 Grand River Hotel" /></div>
@@ -49,11 +49,11 @@
             <div class="field"><label for="roomType">房型</label><input id="roomType" placeholder="例如 Deluxe Room" /></div>
             <div class="field"><label for="guestCount">入住人數</label><input id="guestCount" type="number" step="1" /></div>
             <div class="field"><label for="budget">預算金額</label><input id="budget" type="number" step="0.01" /></div>
-            <div class="field"><label for="currency">幣別</label><select id="currency"><option>THB</option><option>HKD</option><option>USD</option><option>RMB</option></select></div>
-            <div class="field"><label for="paymentOwner">實際付款方</label><select id="paymentOwner"><option>公司</option><option>申請人</option><option>其他同事代付</option></select></div>
+            <div class="field"><label for="currency">幣別</label><select id="currency"></select></div>
+            <div class="field"><label for="paymentOwner">實際付款方</label><select id="paymentOwner"></select></div>
             <div class="field"><label for="advancePayerName">代付款人姓名</label><input id="advancePayerName" placeholder="例如 Sonia Chan" /></div>
             <div class="field"><label for="paidAmount">實際支付金額</label><input id="paidAmount" type="number" step="0.01" /></div>
-            <div class="field"><label for="reimbursementStatus">還款 / 報銷狀態</label><select id="reimbursementStatus"><option>不適用</option><option>待報銷</option><option>待還款</option><option>已報銷</option><option>已還款</option></select></div>
+            <div class="field"><label for="reimbursementStatus">還款 / 報銷狀態</label><select id="reimbursementStatus"></select></div>
             <div class="field"><label for="reimbursementDate">還款 / 報銷日期</label><input id="reimbursementDate" type="date" /></div>
             <div class="field"><label for="paymentMethod">付款方式</label><input id="paymentMethod" placeholder="例如 公司卡" /></div>
             <div class="field full"><label for="purpose">用途說明</label><textarea id="purpose" placeholder="例如 培訓、探店、開舖支援等"></textarea></div>
@@ -81,11 +81,11 @@
           </div>
 
           <div class="button-row">
-            <button class="btn btn-secondary" id="ocrBtn" type="button">按附件自動讀取並填寫</button>
-            <button class="btn btn-primary" id="saveBtn">儲存本地記錄</button>
-            <button class="btn btn-secondary" id="exportBtn">匯出 CSV</button>
+            <button class="btn btn-secondary" id="ocrBtn" type="button">整理附件內容</button>
+            <button class="btn btn-primary" id="saveBtn">儲存案件記錄</button>
+            <button class="btn btn-secondary" id="exportBtn">匯出案件 CSV</button>
           </div>
-          <div class="note" id="ocrStatus">初版會按圖片內容自動讀取英文 / 中文資料，請在提交前再次核對。</div>
+          <div class="note" id="ocrStatus">系統會按附件內容整理常見資料，請在提交前再次核對。</div>
         </section>
 
         <aside class="status-card">
@@ -105,7 +105,7 @@
       </div>
 
       <section class="table-card">
-        <h3>本地記錄</h3>
+        <h3>案件記錄</h3>
         <div class="table-wrap">
           <table>
             <thead><tr><th>申請編號</th><th>店舖</th><th>住客</th><th>酒店</th><th>入住</th><th>退房</th><th>預算</th><th>實付</th><th>付款方</th><th>報銷狀態</th></tr></thead>
@@ -117,6 +117,7 @@
   </div>
 
   <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/form-options.js"></script>
   <script>
     const MODULE_LABEL = '酒店申請';
     const MODULE_KEY = 'hotel';
@@ -131,6 +132,8 @@
     const bookingSummary = document.getElementById('bookingSummary');
     const recordsBody = document.getElementById('recordsBody');
     const ocrStatus = document.getElementById('ocrStatus');
+
+    FormOptions.bindSelects({ statusId: 'status', statusGroup: 'hotel', storeId: 'storeDept', currencyId: 'currency', reimbursementId: 'reimbursementStatus', paymentOwnerId: 'paymentOwner' });
 
     function setBadge(el, text, type) { el.className = `badge ${type}`; el.textContent = text; }
     function readFileAsDataURL(file) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); }); }
@@ -207,7 +210,7 @@
     document.getElementById('guestFile').addEventListener('change', e => handleFiles('guest', e.target.files));
     document.getElementById('paymentFile').addEventListener('change', e => handleFiles('payment', e.target.files));
     document.getElementById('ocrBtn').addEventListener('click', async () => {
-      if (!fileStore.support.length && !fileStore.guest.length && !fileStore.payment.length) { ocrStatus.textContent = '請先上傳附件，再進行自動讀取。'; return; }
+      if (!fileStore.support.length && !fileStore.guest.length && !fileStore.payment.length) { ocrStatus.textContent = '請先上傳附件，再開始整理。'; return; }
       try {
         const guestResults = await AppUtils.recognizeFiles(fileStore.guest, ocrStatus);
         const supportResults = await AppUtils.recognizeFiles(fileStore.support, ocrStatus);
@@ -215,9 +218,9 @@
         const data = parseHotelData(guestResults.map(r => r.text).join('\n'), supportResults.map(r => r.text).join('\n'), paymentResults.map(r => r.text).join('\n'));
         applyHotelData(data);
         refreshSummary();
-      } catch (error) { ocrStatus.textContent = '自動讀取失敗，請檢查網絡或稍後再試。'; }
+      } catch (error) { ocrStatus.textContent = '內容整理未完成，請稍後再試或手動補回。'; }
     });
-    document.getElementById('saveBtn').addEventListener('click', () => { AppUtils.ensureRequestNo(requestNoEl, MODULE_LABEL, MODULE_KEY); AppUtils.saveRecord(MODULE_KEY, buildPayload()); renderRecords(); alert('已儲存到本地記錄。'); });
+    document.getElementById('saveBtn').addEventListener('click', () => { AppUtils.ensureRequestNo(requestNoEl, MODULE_LABEL, MODULE_KEY); AppUtils.saveRecord(MODULE_KEY, buildPayload()); renderRecords(); alert('已儲存案件記錄。'); });
     document.getElementById('exportBtn').addEventListener('click', () => {
       const rows = AppUtils.loadRecords(MODULE_KEY);
       if (!rows.length) return alert('未有記錄可以匯出。');
