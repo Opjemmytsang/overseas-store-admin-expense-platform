@@ -12,7 +12,7 @@
       <div class="brand-block">
         <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
         <h1>酒店申請</h1>
-        <p>提交入住資料、房型、住宿地點及附件，供公司統一安排。</p>
+        <p>上傳住客證明、酒店確認文件及付款證明後，可自動讀取內容並填入相關欄位。</p>
       </div>
       <nav class="menu">
         <a class="menu-item" href="../index.html">首頁</a>
@@ -29,40 +29,40 @@
       <section class="module-top">
         <div class="module-eyebrow">Hotel Request</div>
         <h2>酒店申請表</h2>
-        <p>可記錄住客資料、住宿安排及實際付款情況，方便後續還款或報銷跟進。</p>
+        <p>申請編號會按填表當刻自動生成；完成上傳後，可一鍵讀取附件內容並自動填寫。</p>
       </section>
 
       <div class="module-layout">
         <section class="form-card">
           <h3>申請資料</h3>
           <div class="form-grid">
-            <div class="field"><label for="requestNo">申請編號</label><input id="requestNo" placeholder="例如 HTL-202603-001" /></div>
+            <div class="field"><label for="requestNo">申請編號</label><input id="requestNo" readonly /></div>
             <div class="field"><label for="status">申請狀態</label><select id="status"><option>待提交</option><option>待審批</option><option>待預訂</option><option>已預訂</option><option>已完成</option></select></div>
-            <div class="field"><label for="applicant">申請人</label><input id="applicant" /></div>
+            <div class="field"><label for="applicant">申請人</label><input id="applicant" placeholder="例如 Mandy Lee" /></div>
             <div class="field"><label for="storeDept">店舖代碼</label><select id="storeDept"><option value="">請選擇店舖</option><option>BA3</option><option>BA5</option><option>BA8</option><option>BA9</option><option>BAA</option><option>BAB</option><option>BAC</option><option>LA1</option><option>AU4</option></select></div>
-            <div class="field"><label for="guestName">住客姓名</label><input id="guestName" /></div>
+            <div class="field"><label for="guestName">住客姓名</label><input id="guestName" placeholder="例如 Ryan Ho" /></div>
             <div class="field"><label for="hotelCity">住宿地點</label><input id="hotelCity" placeholder="例如 Bangkok" /></div>
-            <div class="field"><label for="hotelName">酒店名稱</label><input id="hotelName" placeholder="如已知可填寫" /></div>
-            <div class="field"><label for="bookingReference">預訂參考編號</label><input id="bookingReference" placeholder="如已知可填寫" /></div>
+            <div class="field"><label for="hotelName">酒店名稱</label><input id="hotelName" placeholder="例如 Grand River Hotel" /></div>
+            <div class="field"><label for="bookingReference">預訂參考編號</label><input id="bookingReference" placeholder="例如 HT89XZ" /></div>
             <div class="field"><label for="checkInDate">入住日期</label><input id="checkInDate" type="date" /></div>
             <div class="field"><label for="checkOutDate">退房日期</label><input id="checkOutDate" type="date" /></div>
-            <div class="field"><label for="roomType">房型</label><input id="roomType" placeholder="例如 Single Room" /></div>
+            <div class="field"><label for="roomType">房型</label><input id="roomType" placeholder="例如 Deluxe Room" /></div>
             <div class="field"><label for="guestCount">入住人數</label><input id="guestCount" type="number" step="1" /></div>
             <div class="field"><label for="budget">預算金額</label><input id="budget" type="number" step="0.01" /></div>
             <div class="field"><label for="currency">幣別</label><select id="currency"><option>THB</option><option>HKD</option><option>USD</option><option>RMB</option></select></div>
             <div class="field"><label for="paymentOwner">實際付款方</label><select id="paymentOwner"><option>公司</option><option>申請人</option><option>其他同事代付</option></select></div>
-            <div class="field"><label for="advancePayerName">代付款人姓名</label><input id="advancePayerName" placeholder="如不適用可留空" /></div>
+            <div class="field"><label for="advancePayerName">代付款人姓名</label><input id="advancePayerName" placeholder="例如 Sonia Chan" /></div>
             <div class="field"><label for="paidAmount">實際支付金額</label><input id="paidAmount" type="number" step="0.01" /></div>
             <div class="field"><label for="reimbursementStatus">還款 / 報銷狀態</label><select id="reimbursementStatus"><option>不適用</option><option>待報銷</option><option>待還款</option><option>已報銷</option><option>已還款</option></select></div>
             <div class="field"><label for="reimbursementDate">還款 / 報銷日期</label><input id="reimbursementDate" type="date" /></div>
-            <div class="field"><label for="paymentMethod">付款方式</label><input id="paymentMethod" placeholder="例如 信用卡 / 公司卡" /></div>
+            <div class="field"><label for="paymentMethod">付款方式</label><input id="paymentMethod" placeholder="例如 公司卡" /></div>
             <div class="field full"><label for="purpose">用途說明</label><textarea id="purpose" placeholder="例如 培訓、探店、開舖支援等"></textarea></div>
           </div>
 
           <div class="upload-grid">
             <div class="upload-box">
               <h4>住宿相關附件</h4>
-              <p>例如預訂要求、住宿條件、酒店確認文件等。</p>
+              <p>例如酒店確認文件、預訂頁面截圖等。</p>
               <input id="supportFile" type="file" accept="image/*,.pdf" multiple />
               <div class="preview-grid" id="supportPreview"></div>
             </div>
@@ -81,9 +81,11 @@
           </div>
 
           <div class="button-row">
+            <button class="btn btn-secondary" id="ocrBtn" type="button">按附件自動讀取並填寫</button>
             <button class="btn btn-primary" id="saveBtn">儲存本地記錄</button>
             <button class="btn btn-secondary" id="exportBtn">匯出 CSV</button>
           </div>
+          <div class="note" id="ocrStatus">初版會按圖片內容自動讀取英文 / 中文資料，請在提交前再次核對。</div>
         </section>
 
         <aside class="status-card">
@@ -99,7 +101,6 @@
             <div class="status-item"><div><strong>住客證明文件</strong><span id="guestMeta">未上傳</span></div><div id="guestBadge" class="badge warn">待上傳</div></div>
             <div class="status-item"><div><strong>付款證明</strong><span id="paymentMeta">未上傳</span></div><div id="paymentBadge" class="badge warn">待上傳</div></div>
           </div>
-          <div class="note">可在建立個案時一併記錄誰先付款，後續更容易追還款或報銷。</div>
         </aside>
       </div>
 
@@ -107,7 +108,7 @@
         <h3>本地記錄</h3>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>申請編號</th><th>店舖</th><th>住客</th><th>住宿地點</th><th>入住日期</th><th>退房日期</th><th>預算</th><th>實付</th><th>付款方</th><th>報銷狀態</th></tr></thead>
+            <thead><tr><th>申請編號</th><th>店舖</th><th>住客</th><th>酒店</th><th>入住</th><th>退房</th><th>預算</th><th>實付</th><th>付款方</th><th>報銷狀態</th></tr></thead>
             <tbody id="recordsBody"><tr><td colspan="10" class="empty-cell">暫時未有記錄</td></tr></tbody>
           </table>
         </div>
@@ -117,27 +118,19 @@
 
   <script src="../assets/js/app.js"></script>
   <script>
+    const MODULE_LABEL = '酒店申請';
+    const MODULE_KEY = 'hotel';
+    const requestNoEl = document.getElementById('requestNo');
     const fileStore = { support: [], guest: [], payment: [] };
-    const previewMap = {
-      support: document.getElementById('supportPreview'),
-      guest: document.getElementById('guestPreview'),
-      payment: document.getElementById('paymentPreview')
-    };
-    const metaMap = {
-      support: document.getElementById('supportMeta'),
-      guest: document.getElementById('guestMeta'),
-      payment: document.getElementById('paymentMeta')
-    };
-    const badgeMap = {
-      support: document.getElementById('supportBadge'),
-      guest: document.getElementById('guestBadge'),
-      payment: document.getElementById('paymentBadge')
-    };
+    const previewMap = { support: document.getElementById('supportPreview'), guest: document.getElementById('guestPreview'), payment: document.getElementById('paymentPreview') };
+    const metaMap = { support: document.getElementById('supportMeta'), guest: document.getElementById('guestMeta'), payment: document.getElementById('paymentMeta') };
+    const badgeMap = { support: document.getElementById('supportBadge'), guest: document.getElementById('guestBadge'), payment: document.getElementById('paymentBadge') };
     const guestSummary = document.getElementById('guestSummary');
     const citySummary = document.getElementById('citySummary');
     const paymentSummary = document.getElementById('paymentSummary');
     const bookingSummary = document.getElementById('bookingSummary');
     const recordsBody = document.getElementById('recordsBody');
+    const ocrStatus = document.getElementById('ocrStatus');
 
     function setBadge(el, text, type) { el.className = `badge ${type}`; el.textContent = text; }
     function readFileAsDataURL(file) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); }); }
@@ -150,33 +143,49 @@
       setBadge(badgeMap[type], items.length ? '已上傳' : '待上傳', items.length ? 'ok' : 'warn');
     }
 
+    function parseHotelData(guestText, supportText, paymentText) {
+      const data = {};
+      const mrzName = AppUtils.parseMrzName(guestText);
+      if (mrzName) data.guestName = mrzName;
+      const guestLine = guestText.match(/(?:guest|住客|name)\s*[:：]?\s*([A-Z][A-Za-z .'-]{3,40})/i);
+      if (guestLine && !data.guestName) data.guestName = guestLine[1].trim();
+      const hotelName = supportText.match(/([A-Z][A-Za-z '&-]{2,60}(?:Hotel|Resort|Inn|Suites|Villa|Residence))/i);
+      if (hotelName) data.hotelName = hotelName[1].trim();
+      const booking = supportText.match(/(?:reference|booking|confirmation|預訂參考編號)\s*[:：#]?\s*([A-Z0-9]{5,10})/i);
+      if (booking) data.bookingReference = booking[1].toUpperCase();
+      const roomType = supportText.match(/(Single Room|Twin Room|Double Room|Deluxe Room|Suite|Standard Room|Superior Room)/i);
+      if (roomType) data.roomType = roomType[1];
+      const dates = AppUtils.extractDates(supportText);
+      if (dates[0]) data.checkInDate = dates[0];
+      if (dates[1]) data.checkOutDate = dates[1];
+      const city = supportText.match(/(Bangkok|Vientiane|Hong Kong|Macau|Singapore|Tokyo|Osaka|Seoul|Phuket|Chiang Mai)/i);
+      if (city) data.hotelCity = city[1];
+      const guests = supportText.match(/(\d)\s*(?:guest|成人|房客)/i);
+      if (guests) data.guestCount = Number(guests[1]);
+      const totalMoney = AppUtils.findMoneyByKeywords(paymentText || supportText, ['total', '總額', 'amount', 'paid']) || AppUtils.largestMoney(paymentText || supportText);
+      if (totalMoney) { data.currency = totalMoney.currency; data.paidAmount = totalMoney.amount; }
+      return data;
+    }
+
+    function applyHotelData(data) {
+      AppUtils.setInputValue(document.getElementById('guestName'), data.guestName);
+      AppUtils.setInputValue(document.getElementById('hotelName'), data.hotelName);
+      AppUtils.setInputValue(document.getElementById('bookingReference'), data.bookingReference);
+      AppUtils.setInputValue(document.getElementById('roomType'), data.roomType);
+      AppUtils.setInputValue(document.getElementById('hotelCity'), data.hotelCity);
+      AppUtils.setInputValue(document.getElementById('checkInDate'), data.checkInDate);
+      AppUtils.setInputValue(document.getElementById('checkOutDate'), data.checkOutDate);
+      if (data.guestCount) AppUtils.setInputValue(document.getElementById('guestCount'), data.guestCount);
+      AppUtils.setInputValue(document.getElementById('currency'), data.currency);
+      if (data.paidAmount) {
+        AppUtils.setInputValue(document.getElementById('paidAmount'), data.paidAmount);
+        if (!document.getElementById('budget').value) AppUtils.setInputValue(document.getElementById('budget'), data.paidAmount);
+      }
+    }
+
     function buildPayload() {
-      return {
-        moduleType: '酒店申請',
-        requestNo: document.getElementById('requestNo').value.trim(),
-        status: document.getElementById('status').value,
-        applicant: document.getElementById('applicant').value.trim(),
-        storeDept: document.getElementById('storeDept').value.trim(),
-        guestName: document.getElementById('guestName').value.trim(),
-        hotelCity: document.getElementById('hotelCity').value.trim(),
-        hotelName: document.getElementById('hotelName').value.trim(),
-        bookingReference: document.getElementById('bookingReference').value.trim(),
-        checkInDate: document.getElementById('checkInDate').value,
-        checkOutDate: document.getElementById('checkOutDate').value,
-        roomType: document.getElementById('roomType').value.trim(),
-        guestCount: Number(document.getElementById('guestCount').value || 0),
-        budget: Number(document.getElementById('budget').value || 0),
-        currency: document.getElementById('currency').value,
-        paymentOwner: document.getElementById('paymentOwner').value,
-        advancePayerName: document.getElementById('advancePayerName').value.trim(),
-        paidAmount: Number(document.getElementById('paidAmount').value || 0),
-        reimbursementStatus: document.getElementById('reimbursementStatus').value,
-        reimbursementDate: document.getElementById('reimbursementDate').value,
-        paymentMethod: document.getElementById('paymentMethod').value.trim(),
-        purpose: document.getElementById('purpose').value.trim(),
-        files: fileStore,
-        createdAt: new Date().toISOString()
-      };
+      AppUtils.ensureRequestNo(requestNoEl, MODULE_LABEL, MODULE_KEY);
+      return { moduleType: MODULE_LABEL, requestNo: requestNoEl.value.trim(), status: document.getElementById('status').value, applicant: document.getElementById('applicant').value.trim(), storeDept: document.getElementById('storeDept').value.trim(), guestName: document.getElementById('guestName').value.trim(), hotelCity: document.getElementById('hotelCity').value.trim(), hotelName: document.getElementById('hotelName').value.trim(), bookingReference: document.getElementById('bookingReference').value.trim(), checkInDate: document.getElementById('checkInDate').value, checkOutDate: document.getElementById('checkOutDate').value, roomType: document.getElementById('roomType').value.trim(), guestCount: Number(document.getElementById('guestCount').value || 0), budget: Number(document.getElementById('budget').value || 0), currency: document.getElementById('currency').value, paymentOwner: document.getElementById('paymentOwner').value, advancePayerName: document.getElementById('advancePayerName').value.trim(), paidAmount: Number(document.getElementById('paidAmount').value || 0), reimbursementStatus: document.getElementById('reimbursementStatus').value, reimbursementDate: document.getElementById('reimbursementDate').value, paymentMethod: document.getElementById('paymentMethod').value.trim(), purpose: document.getElementById('purpose').value.trim(), files: fileStore, createdAt: new Date().toISOString() };
     }
 
     function refreshSummary() {
@@ -189,21 +198,35 @@
     }
 
     function renderRecords() {
-      const rows = AppUtils.loadRecords('hotel');
-      recordsBody.innerHTML = rows.length ? rows.map(row => `<tr><td>${AppUtils.escapeHtml(row.requestNo || '')}</td><td>${AppUtils.escapeHtml(row.storeDept || '')}</td><td>${AppUtils.escapeHtml(row.guestName || '')}</td><td>${AppUtils.escapeHtml(row.hotelCity || '')}</td><td>${AppUtils.escapeHtml(row.checkInDate || '')}</td><td>${AppUtils.escapeHtml(row.checkOutDate || '')}</td><td>${AppUtils.escapeHtml(AppUtils.money(row.budget))} ${AppUtils.escapeHtml(row.currency || '')}</td><td>${AppUtils.escapeHtml(AppUtils.money(row.paidAmount || 0))}</td><td>${AppUtils.escapeHtml(row.paymentOwner || '')}</td><td>${AppUtils.escapeHtml(row.reimbursementStatus || '')}</td></tr>`).join('') : '<tr><td colspan="10" class="empty-cell">暫時未有記錄</td></tr>';
+      const rows = AppUtils.loadRecords(MODULE_KEY);
+      recordsBody.innerHTML = rows.length ? rows.map(row => `<tr><td>${AppUtils.escapeHtml(row.requestNo || '')}</td><td>${AppUtils.escapeHtml(row.storeDept || '')}</td><td>${AppUtils.escapeHtml(row.guestName || '')}</td><td>${AppUtils.escapeHtml(row.hotelName || '')}</td><td>${AppUtils.escapeHtml(row.checkInDate || '')}</td><td>${AppUtils.escapeHtml(row.checkOutDate || '')}</td><td>${AppUtils.escapeHtml(AppUtils.money(row.budget))} ${AppUtils.escapeHtml(row.currency || '')}</td><td>${AppUtils.escapeHtml(AppUtils.money(row.paidAmount || 0))}</td><td>${AppUtils.escapeHtml(row.paymentOwner || '')}</td><td>${AppUtils.escapeHtml(row.reimbursementStatus || '')}</td></tr>`).join('') : '<tr><td colspan="10" class="empty-cell">暫時未有記錄</td></tr>';
     }
 
     document.querySelectorAll('input, select, textarea').forEach(el => el.addEventListener('input', refreshSummary));
     document.getElementById('supportFile').addEventListener('change', e => handleFiles('support', e.target.files));
     document.getElementById('guestFile').addEventListener('change', e => handleFiles('guest', e.target.files));
     document.getElementById('paymentFile').addEventListener('change', e => handleFiles('payment', e.target.files));
-    document.getElementById('saveBtn').addEventListener('click', () => { AppUtils.saveRecord('hotel', buildPayload()); renderRecords(); alert('已儲存到本地記錄。'); });
+    document.getElementById('ocrBtn').addEventListener('click', async () => {
+      if (!fileStore.support.length && !fileStore.guest.length && !fileStore.payment.length) { ocrStatus.textContent = '請先上傳附件，再進行自動讀取。'; return; }
+      try {
+        const guestResults = await AppUtils.recognizeFiles(fileStore.guest, ocrStatus);
+        const supportResults = await AppUtils.recognizeFiles(fileStore.support, ocrStatus);
+        const paymentResults = await AppUtils.recognizeFiles(fileStore.payment, ocrStatus);
+        const data = parseHotelData(guestResults.map(r => r.text).join('\n'), supportResults.map(r => r.text).join('\n'), paymentResults.map(r => r.text).join('\n'));
+        applyHotelData(data);
+        refreshSummary();
+      } catch (error) { ocrStatus.textContent = '自動讀取失敗，請檢查網絡或稍後再試。'; }
+    });
+    document.getElementById('saveBtn').addEventListener('click', () => { AppUtils.ensureRequestNo(requestNoEl, MODULE_LABEL, MODULE_KEY); AppUtils.saveRecord(MODULE_KEY, buildPayload()); renderRecords(); alert('已儲存到本地記錄。'); });
     document.getElementById('exportBtn').addEventListener('click', () => {
-      const rows = AppUtils.loadRecords('hotel');
+      const rows = AppUtils.loadRecords(MODULE_KEY);
       if (!rows.length) return alert('未有記錄可以匯出。');
       AppUtils.exportCsv('hotel-requests.csv', ['申請編號','店舖代碼','申請人','住客','酒店名稱','住宿地點','預訂參考編號','入住日期','退房日期','房型','入住人數','預算','幣別','實際付款方','代付款人姓名','實際支付金額','還款/報銷狀態','還款/報銷日期','付款方式','狀態','建立時間'], rows.map(row => [row.requestNo,row.storeDept,row.applicant,row.guestName,row.hotelName,row.hotelCity,row.bookingReference,row.checkInDate,row.checkOutDate,row.roomType,row.guestCount,row.budget,row.currency,row.paymentOwner,row.advancePayerName,row.paidAmount,row.reimbursementStatus,row.reimbursementDate,row.paymentMethod,row.status,row.createdAt]));
     });
-    refreshSummary(); renderRecords();
+
+    AppUtils.ensureRequestNo(requestNoEl, MODULE_LABEL, MODULE_KEY);
+    refreshSummary();
+    renderRecords();
   </script>
 </body>
 </html>

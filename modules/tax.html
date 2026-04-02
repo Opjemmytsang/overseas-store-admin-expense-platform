@@ -12,7 +12,7 @@
       <div class="brand-block">
         <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
         <h1>貨品報稅</h1>
-        <p>處理報稅資料上傳、報關文件核對、稅款與付款金額比對。</p>
+        <p>上傳發票、報關文件與付款證明後，可自動讀取關鍵資料並填入相關欄位。</p>
       </div>
       <nav class="menu">
         <a class="menu-item" href="../index.html">首頁</a>
@@ -26,146 +26,82 @@
 
     <main class="main-content">
       <a class="top-link" href="../index.html">← 返回行政及費用申請首頁</a>
-
       <section class="module-top">
         <div class="module-eyebrow">Tax Declaration</div>
         <h2>貨品報稅資料上傳</h2>
-        <p>輸入案件資料、上傳 4 類文件圖片，並自動檢查文件是否齊全及金額是否一致。</p>
+        <p>案件編號會按填表當刻自動生成；完成上傳後，可一鍵讀取附件內容並自動填寫。</p>
       </section>
 
       <div class="module-layout">
         <section class="form-card">
           <h3>案件資料</h3>
           <div class="form-grid">
-            <div class="field">
-              <label for="caseNo">案件編號</label>
-              <input id="caseNo" placeholder="例如 TAX-202603-001" />
-            </div>
-            <div class="field">
-              <label for="status">案件狀態</label>
-              <select id="status">
-                <option>待提交</option>
-                <option>待核對</option>
-                <option>待付款</option>
-                <option>已付款</option>
-                <option>已完成</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="invoiceNo">Invoice No.</label>
-              <input id="invoiceNo" placeholder="例如 BA5/2026/004" />
-            </div>
-            <div class="field">
-              <label for="invoiceDate">Invoice 日期</label>
-              <input id="invoiceDate" type="date" />
-            </div>
-            <div class="field full">
-              <label for="consignee">收貨公司 / Importer</label>
-              <input id="consignee" placeholder="例如 SHING HEI GLOBAL TRADING CO., LTD." />
-            </div>
-            <div class="field">
-              <label for="destination">目的地</label>
-              <input id="destination" placeholder="例如 Bangkok" />
-            </div>
-            <div class="field">
-              <label for="jobNo">Job No.</label>
-              <input id="jobNo" placeholder="例如 297009" />
-            </div>
-            <div class="field">
-              <label for="invoiceAmount">Invoice 金額</label>
-              <input id="invoiceAmount" type="number" step="0.01" placeholder="例如 9458174.00" />
-            </div>
-            <div class="field">
-              <label for="currency">幣別</label>
-              <select id="currency">
-                <option>THB</option>
-                <option>HKD</option>
-                <option>USD</option>
-                <option>RMB</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="taxAmount">稅款金額</label>
-              <input id="taxAmount" type="number" step="0.01" />
-            </div>
-            <div class="field">
-              <label for="paymentAmount">付款金額</label>
-              <input id="paymentAmount" type="number" step="0.01" />
-            </div>
-            <div class="field">
-              <label for="paymentDate">付款日期</label>
-              <input id="paymentDate" type="date" />
-            </div>
-            <div class="field">
-              <label for="transactionId">Transaction ID</label>
-              <input id="transactionId" placeholder="例如 016084115758BOR09046" />
-            </div>
-            <div class="field full">
-              <label for="remark">備註</label>
-              <textarea id="remark" placeholder="可填寫特殊情況或補充說明"></textarea>
-            </div>
+            <div class="field"><label for="caseNo">案件編號</label><input id="caseNo" readonly /></div>
+            <div class="field"><label for="status">案件狀態</label><select id="status"><option>待提交</option><option>待核對</option><option>待付款</option><option>已付款</option><option>已完成</option></select></div>
+            <div class="field"><label for="invoiceNo">Invoice No.</label><input id="invoiceNo" placeholder="例如 INV-2026-001" /></div>
+            <div class="field"><label for="invoiceDate">Invoice 日期</label><input id="invoiceDate" type="date" /></div>
+            <div class="field full"><label for="consignee">收貨公司 / Importer</label><input id="consignee" placeholder="例如 ABC Global Trading Co., Ltd." /></div>
+            <div class="field"><label for="destination">目的地</label><input id="destination" placeholder="例如 Bangkok" /></div>
+            <div class="field"><label for="jobNo">Job No.</label><input id="jobNo" placeholder="例如 JOB-1001" /></div>
+            <div class="field"><label for="invoiceAmount">Invoice 金額</label><input id="invoiceAmount" type="number" step="0.01" /></div>
+            <div class="field"><label for="currency">幣別</label><select id="currency"><option>THB</option><option>HKD</option><option>USD</option><option>RMB</option></select></div>
+            <div class="field"><label for="taxAmount">稅款金額</label><input id="taxAmount" type="number" step="0.01" /></div>
+            <div class="field"><label for="paymentAmount">付款金額</label><input id="paymentAmount" type="number" step="0.01" /></div>
+            <div class="field"><label for="paymentDate">付款日期</label><input id="paymentDate" type="date" /></div>
+            <div class="field"><label for="transactionId">Transaction ID</label><input id="transactionId" placeholder="例如 TX123456789" /></div>
+            <div class="field full"><label for="remark">備註</label><textarea id="remark" placeholder="可填寫特殊情況或補充說明"></textarea></div>
           </div>
 
           <div class="upload-grid">
             <div class="upload-box">
               <h4>1. Commercial Invoice / Packing List</h4>
               <p>建議上傳清晰正面照片或掃描圖。</p>
-              <input id="invoiceFile" type="file" accept="image/*" multiple />
+              <input id="invoiceFile" type="file" accept="image/*,.pdf" multiple />
               <div class="preview-grid" id="invoicePreview"></div>
             </div>
             <div class="upload-box">
               <h4>2. 報關 / 稅單</h4>
               <p>需見到報單號碼及稅款金額。</p>
-              <input id="customsFile" type="file" accept="image/*" multiple />
+              <input id="customsFile" type="file" accept="image/*,.pdf" multiple />
               <div class="preview-grid" id="customsPreview"></div>
             </div>
             <div class="upload-box">
               <h4>3. 收款戶口證明</h4>
               <p>需見到戶口名稱及帳號尾數。</p>
-              <input id="bankFile" type="file" accept="image/*" multiple />
+              <input id="bankFile" type="file" accept="image/*,.pdf" multiple />
               <div class="preview-grid" id="bankPreview"></div>
             </div>
             <div class="upload-box">
               <h4>4. 轉帳完成記錄</h4>
               <p>需見到付款時間、金額及交易編號。</p>
-              <input id="paymentFile" type="file" accept="image/*" multiple />
+              <input id="paymentFile" type="file" accept="image/*,.pdf" multiple />
               <div class="preview-grid" id="paymentPreview"></div>
             </div>
           </div>
 
           <div class="button-row">
+            <button class="btn btn-secondary" id="ocrBtn" type="button">按附件自動讀取並填寫</button>
             <button class="btn btn-primary" id="saveBtn">儲存本地記錄</button>
             <button class="btn btn-secondary" id="submitBtn">送出到自動流程</button>
             <button class="btn btn-secondary" id="exportBtn">匯出 CSV</button>
             <button class="btn btn-secondary" id="resetBtn">清空表格</button>
           </div>
-
-          <div class="note">正式版建議接駁 SharePoint 私有文件庫、Excel Table `tblAdminExpenseCases` 及 Power Automate。</div>
+          <div class="note" id="ocrStatus">初版會按圖片內容自動讀取英文 / 中文資料，請在提交前再次核對。</div>
         </section>
 
         <aside class="status-card">
           <h3>即時核對</h3>
           <div class="summary-grid">
-            <div class="summary-box">
-              <span>文件齊全度</span>
-              <strong id="docStatusText">未檢查</strong>
-            </div>
-            <div class="summary-box">
-              <span>金額核對</span>
-              <strong id="amountStatusText">未檢查</strong>
-            </div>
+            <div class="summary-box"><span>文件齊全度</span><strong id="docStatusText">未檢查</strong></div>
+            <div class="summary-box"><span>金額核對</span><strong id="amountStatusText">未檢查</strong></div>
           </div>
-
           <div class="status-list">
             <div class="status-item"><div><strong>Commercial Invoice / Packing List</strong><span id="invoiceMeta">未上傳</span></div><div id="invoiceBadge" class="badge warn">待上傳</div></div>
             <div class="status-item"><div><strong>報關 / 稅單</strong><span id="customsMeta">未上傳</span></div><div id="customsBadge" class="badge warn">待上傳</div></div>
             <div class="status-item"><div><strong>收款戶口證明</strong><span id="bankMeta">未上傳</span></div><div id="bankBadge" class="badge warn">待上傳</div></div>
             <div class="status-item"><div><strong>轉帳完成記錄</strong><span id="paymentMeta">未上傳</span></div><div id="paymentBadge" class="badge warn">待上傳</div></div>
           </div>
-
-          <div style="margin-top:16px;">
-            <div id="summaryBadge" class="badge warn">目前未達完成條件</div>
-          </div>
+          <div style="margin-top:16px;"><div id="summaryBadge" class="badge warn">目前未達完成條件</div></div>
           <div class="note" id="summaryNote">當 4 份文件都已上傳，且稅款金額等於付款金額時，可自動標示為已核對。</div>
         </aside>
       </div>
@@ -174,20 +110,7 @@
         <h3>本地記錄</h3>
         <div class="table-wrap">
           <table>
-            <thead>
-              <tr>
-                <th>案件編號</th>
-                <th>Invoice No.</th>
-                <th>收貨公司</th>
-                <th>目的地</th>
-                <th>Invoice 金額</th>
-                <th>稅款</th>
-                <th>付款</th>
-                <th>文件齊全</th>
-                <th>對帳結果</th>
-                <th>狀態</th>
-              </tr>
-            </thead>
+            <thead><tr><th>案件編號</th><th>Invoice No.</th><th>收貨公司</th><th>目的地</th><th>Invoice 金額</th><th>稅款</th><th>付款</th><th>文件齊全</th><th>對帳結果</th><th>狀態</th></tr></thead>
             <tbody id="recordsBody"><tr><td colspan="10" class="empty-cell">暫時未有記錄</td></tr></tbody>
           </table>
         </div>
@@ -197,129 +120,76 @@
 
   <script src="../assets/js/app.js"></script>
   <script>
+    const MODULE_LABEL = '貨品報稅';
+    const MODULE_KEY = 'tax';
     const fileStore = { invoice: [], customs: [], bank: [], payment: [] };
-    const form = {
-      caseNo: document.getElementById('caseNo'),
-      status: document.getElementById('status'),
-      invoiceNo: document.getElementById('invoiceNo'),
-      invoiceDate: document.getElementById('invoiceDate'),
-      consignee: document.getElementById('consignee'),
-      destination: document.getElementById('destination'),
-      jobNo: document.getElementById('jobNo'),
-      invoiceAmount: document.getElementById('invoiceAmount'),
-      currency: document.getElementById('currency'),
-      taxAmount: document.getElementById('taxAmount'),
-      paymentAmount: document.getElementById('paymentAmount'),
-      paymentDate: document.getElementById('paymentDate'),
-      transactionId: document.getElementById('transactionId'),
-      remark: document.getElementById('remark')
-    };
-
-    const fileInputs = {
-      invoice: document.getElementById('invoiceFile'),
-      customs: document.getElementById('customsFile'),
-      bank: document.getElementById('bankFile'),
-      payment: document.getElementById('paymentFile')
-    };
-
-    const previewEls = {
-      invoice: document.getElementById('invoicePreview'),
-      customs: document.getElementById('customsPreview'),
-      bank: document.getElementById('bankPreview'),
-      payment: document.getElementById('paymentPreview')
-    };
-
-    const metaEls = {
-      invoice: document.getElementById('invoiceMeta'),
-      customs: document.getElementById('customsMeta'),
-      bank: document.getElementById('bankMeta'),
-      payment: document.getElementById('paymentMeta')
-    };
-
-    const badgeEls = {
-      invoice: document.getElementById('invoiceBadge'),
-      customs: document.getElementById('customsBadge'),
-      bank: document.getElementById('bankBadge'),
-      payment: document.getElementById('paymentBadge')
-    };
-
+    const form = { caseNo: document.getElementById('caseNo'), status: document.getElementById('status'), invoiceNo: document.getElementById('invoiceNo'), invoiceDate: document.getElementById('invoiceDate'), consignee: document.getElementById('consignee'), destination: document.getElementById('destination'), jobNo: document.getElementById('jobNo'), invoiceAmount: document.getElementById('invoiceAmount'), currency: document.getElementById('currency'), taxAmount: document.getElementById('taxAmount'), paymentAmount: document.getElementById('paymentAmount'), paymentDate: document.getElementById('paymentDate'), transactionId: document.getElementById('transactionId'), remark: document.getElementById('remark') };
+    const fileInputs = { invoice: document.getElementById('invoiceFile'), customs: document.getElementById('customsFile'), bank: document.getElementById('bankFile'), payment: document.getElementById('paymentFile') };
+    const previewEls = { invoice: document.getElementById('invoicePreview'), customs: document.getElementById('customsPreview'), bank: document.getElementById('bankPreview'), payment: document.getElementById('paymentPreview') };
+    const metaEls = { invoice: document.getElementById('invoiceMeta'), customs: document.getElementById('customsMeta'), bank: document.getElementById('bankMeta'), payment: document.getElementById('paymentMeta') };
+    const badgeEls = { invoice: document.getElementById('invoiceBadge'), customs: document.getElementById('customsBadge'), bank: document.getElementById('bankBadge'), payment: document.getElementById('paymentBadge') };
     const recordsBody = document.getElementById('recordsBody');
     const docStatusText = document.getElementById('docStatusText');
     const amountStatusText = document.getElementById('amountStatusText');
     const summaryBadge = document.getElementById('summaryBadge');
     const summaryNote = document.getElementById('summaryNote');
+    const ocrStatus = document.getElementById('ocrStatus');
 
-    function setBadge(el, text, type) {
-      el.className = `badge ${type}`;
-      el.textContent = text;
-    }
-
-    function readFileAsDataURL(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
+    function setBadge(el, text, type) { el.className = `badge ${type}`; el.textContent = text; }
+    function readFileAsDataURL(file) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); }); }
     async function handleFiles(type, files) {
       const items = [];
-      for (const file of files) {
-        const dataUrl = await readFileAsDataURL(file);
-        items.push({ name: file.name, type: file.type, size: file.size, dataUrl });
-      }
+      for (const file of files) items.push({ name: file.name, dataUrl: await readFileAsDataURL(file) });
       fileStore[type] = items;
       renderPreview(type);
       refreshChecks();
     }
-
     function renderPreview(type) {
       previewEls[type].innerHTML = '';
       const rows = fileStore[type];
-      if (!rows.length) {
-        metaEls[type].textContent = '未上傳';
-        setBadge(badgeEls[type], '待上傳', 'warn');
-        return;
-      }
-      rows.forEach(row => {
-        const img = document.createElement('img');
-        img.src = row.dataUrl;
-        img.alt = row.name;
-        previewEls[type].appendChild(img);
-      });
-      metaEls[type].textContent = `${rows.length} 張圖片`;
+      if (!rows.length) { metaEls[type].textContent = '未上傳'; setBadge(badgeEls[type], '待上傳', 'warn'); return; }
+      rows.forEach(row => { const img = document.createElement('img'); img.src = row.dataUrl; img.alt = row.name; previewEls[type].appendChild(img); });
+      metaEls[type].textContent = `${rows.length} 個檔案`;
       setBadge(badgeEls[type], '已上傳', 'ok');
     }
 
+    function parseTaxData(invoiceText, customsText, paymentText) {
+      const data = {};
+      const invoiceNo = invoiceText.match(/(?:Ref\s*no\.?|Invoice\s*No\.?|เลขที่บัญชี)\s*[:：]?\s*([A-Z0-9\/\-]+)/i);
+      if (invoiceNo) data.invoiceNo = invoiceNo[1];
+      const invoiceDate = invoiceText.match(/Date\s*[:：]?\s*((?:20\d{2}[\/\-]\d{1,2}[\/\-]\d{1,2})|(?:\d{1,2}[\/\-]\d{1,2}[\/\-]20\d{2}))/i);
+      if (invoiceDate) data.invoiceDate = AppUtils.normalizeDateString(invoiceDate[1]);
+      const consignee = invoiceText.match(/(?:Consignee|Importer)\s*[:：]?\s*([A-Z][A-Z0-9 .,&()'-]{8,})/i) || invoiceText.match(/([A-Z][A-ZA-Z0-9 .,&()'-]{8,}LIMITED)/i);
+      if (consignee) data.consignee = consignee[1].trim();
+      const destination = invoiceText.match(/Destination\s*[:：]?\s*([A-Za-z ]{3,30})/i);
+      if (destination) data.destination = destination[1].trim();
+      const jobNo = customsText.match(/Job\s*No\s*[:：]?\s*([A-Z0-9\-]+)/i);
+      if (jobNo) data.jobNo = jobNo[1];
+      const invoiceMoney = AppUtils.findMoneyByKeywords(invoiceText, ['total thb', 'cif', 'amount (thb)']) || AppUtils.largestMoney(invoiceText);
+      if (invoiceMoney) { data.currency = invoiceMoney.currency; data.invoiceAmount = invoiceMoney.amount; }
+      const taxMoney = AppUtils.findMoneyByKeywords(customsText, ['vat', 'ภาษีมูลค่าเพิ่ม', 'รวมทั้งสิ้น']) || AppUtils.largestMoney(customsText);
+      if (taxMoney) data.taxAmount = taxMoney.amount;
+      const paymentMoney = AppUtils.findMoneyByKeywords(paymentText, ['amount', '總金額', 'transaction']) || AppUtils.largestMoney(paymentText);
+      if (paymentMoney) data.paymentAmount = paymentMoney.amount;
+      const txId = paymentText.match(/Transaction\s*ID\s*[:：]?\s*([A-Z0-9]+)/i);
+      if (txId) data.transactionId = txId[1];
+      const payDate = paymentText.match(/(20\d{2}[\/\-]\d{1,2}[\/\-]\d{1,2})/);
+      if (payDate) data.paymentDate = AppUtils.normalizeDateString(payDate[1]);
+      return data;
+    }
+
+    function applyTaxData(data) {
+      Object.entries(data).forEach(([key, value]) => { if (form[key]) AppUtils.setInputValue(form[key], value); });
+      refreshChecks();
+    }
+
     function buildPayload() {
+      AppUtils.ensureRequestNo(form.caseNo, MODULE_LABEL, MODULE_KEY);
       const docsComplete = ['invoice', 'customs', 'bank', 'payment'].every(k => fileStore[k].length > 0);
       const taxAmount = Number(form.taxAmount.value || 0);
       const paymentAmount = Number(form.paymentAmount.value || 0);
       const amountMatched = taxAmount > 0 && paymentAmount > 0 && Math.abs(taxAmount - paymentAmount) < 0.005;
-
-      return {
-        moduleType: '貨品報稅',
-        caseNo: form.caseNo.value.trim(),
-        status: form.status.value,
-        invoiceNo: form.invoiceNo.value.trim(),
-        invoiceDate: form.invoiceDate.value,
-        consignee: form.consignee.value.trim(),
-        destination: form.destination.value.trim(),
-        jobNo: form.jobNo.value.trim(),
-        invoiceAmount: Number(form.invoiceAmount.value || 0),
-        currency: form.currency.value,
-        taxAmount,
-        paymentAmount,
-        paymentDate: form.paymentDate.value,
-        transactionId: form.transactionId.value.trim(),
-        remark: form.remark.value.trim(),
-        docsComplete,
-        amountMatched,
-        checkStatus: docsComplete && amountMatched ? '已核對' : '待核對',
-        files: fileStore,
-        createdAt: new Date().toISOString()
-      };
+      return { moduleType: MODULE_LABEL, caseNo: form.caseNo.value.trim(), status: form.status.value, invoiceNo: form.invoiceNo.value.trim(), invoiceDate: form.invoiceDate.value, consignee: form.consignee.value.trim(), destination: form.destination.value.trim(), jobNo: form.jobNo.value.trim(), invoiceAmount: Number(form.invoiceAmount.value || 0), currency: form.currency.value, taxAmount, paymentAmount, paymentDate: form.paymentDate.value, transactionId: form.transactionId.value.trim(), remark: form.remark.value.trim(), docsComplete, amountMatched, checkStatus: docsComplete && amountMatched ? '已核對' : '待核對', files: fileStore, createdAt: new Date().toISOString() };
     }
 
     function refreshChecks() {
@@ -327,72 +197,36 @@
       const taxAmount = Number(form.taxAmount.value || 0);
       const paymentAmount = Number(form.paymentAmount.value || 0);
       const amountMatched = taxAmount > 0 && paymentAmount > 0 && Math.abs(taxAmount - paymentAmount) < 0.005;
-
       docStatusText.textContent = docsComplete ? '文件齊全' : '文件未齊';
       amountStatusText.textContent = amountMatched ? '金額一致' : '金額未對';
-
-      if (docsComplete && amountMatched) {
-        setBadge(summaryBadge, '可標示為已核對', 'ok');
-        summaryNote.textContent = '4 份文件已齊，且稅款金額與付款金額一致。';
-      } else if (docsComplete || amountMatched) {
-        setBadge(summaryBadge, '尚有項目未完成', 'warn');
-        summaryNote.textContent = '現時只完成部分條件，建議補齊缺少文件或再次核對金額。';
-      } else {
-        setBadge(summaryBadge, '目前未達完成條件', 'bad');
-        summaryNote.textContent = '請先上傳 4 份文件，並填寫稅款與付款金額。';
-      }
+      if (docsComplete && amountMatched) { setBadge(summaryBadge, '可標示為已核對', 'ok'); summaryNote.textContent = '4 份文件已齊，且稅款金額與付款金額一致。'; }
+      else if (docsComplete || amountMatched) { setBadge(summaryBadge, '尚有項目未完成', 'warn'); summaryNote.textContent = '現時只完成部分條件，建議補齊缺少文件或再次核對金額。'; }
+      else { setBadge(summaryBadge, '目前未達完成條件', 'bad'); summaryNote.textContent = '請先上傳 4 份文件，並填寫稅款與付款金額。'; }
     }
 
     function renderRecords() {
-      const rows = AppUtils.loadRecords('tax');
-      recordsBody.innerHTML = rows.length ? rows.map(row => `
-        <tr>
-          <td>${AppUtils.escapeHtml(row.caseNo || '')}</td>
-          <td>${AppUtils.escapeHtml(row.invoiceNo || '')}</td>
-          <td>${AppUtils.escapeHtml(row.consignee || '')}</td>
-          <td>${AppUtils.escapeHtml(row.destination || '')}</td>
-          <td>${AppUtils.escapeHtml(AppUtils.money(row.invoiceAmount))} ${AppUtils.escapeHtml(row.currency || '')}</td>
-          <td>${AppUtils.escapeHtml(AppUtils.money(row.taxAmount))}</td>
-          <td>${AppUtils.escapeHtml(AppUtils.money(row.paymentAmount))}</td>
-          <td>${row.docsComplete ? '是' : '否'}</td>
-          <td>${row.amountMatched ? '一致' : '未對'}</td>
-          <td>${AppUtils.escapeHtml(row.status || '')} / ${AppUtils.escapeHtml(row.checkStatus || '')}</td>
-        </tr>`).join('') : '<tr><td colspan="10" class="empty-cell">暫時未有記錄</td></tr>';
+      const rows = AppUtils.loadRecords(MODULE_KEY);
+      recordsBody.innerHTML = rows.length ? rows.map(row => `<tr><td>${AppUtils.escapeHtml(row.caseNo || '')}</td><td>${AppUtils.escapeHtml(row.invoiceNo || '')}</td><td>${AppUtils.escapeHtml(row.consignee || '')}</td><td>${AppUtils.escapeHtml(row.destination || '')}</td><td>${AppUtils.escapeHtml(AppUtils.money(row.invoiceAmount))} ${AppUtils.escapeHtml(row.currency || '')}</td><td>${AppUtils.escapeHtml(AppUtils.money(row.taxAmount))}</td><td>${AppUtils.escapeHtml(AppUtils.money(row.paymentAmount))}</td><td>${row.docsComplete ? '是' : '否'}</td><td>${row.amountMatched ? '一致' : '未對'}</td><td>${AppUtils.escapeHtml(row.status || '')} / ${AppUtils.escapeHtml(row.checkStatus || '')}</td></tr>`).join('') : '<tr><td colspan="10" class="empty-cell">暫時未有記錄</td></tr>';
     }
 
     document.querySelectorAll('input, select, textarea').forEach(el => el.addEventListener('input', refreshChecks));
-    Object.keys(fileInputs).forEach(type => {
-      fileInputs[type].addEventListener('change', async e => handleFiles(type, e.target.files));
-      renderPreview(type);
-    });
-
-    document.getElementById('saveBtn').addEventListener('click', () => {
-      const payload = buildPayload();
-      AppUtils.saveRecord('tax', payload);
-      renderRecords();
-      alert('已儲存到本地記錄。');
-    });
-
-    document.getElementById('submitBtn').addEventListener('click', async () => {
+    Object.keys(fileInputs).forEach(type => { fileInputs[type].addEventListener('change', async e => handleFiles(type, e.target.files)); renderPreview(type); });
+    document.getElementById('ocrBtn').addEventListener('click', async () => {
+      if (!fileStore.invoice.length && !fileStore.customs.length && !fileStore.payment.length) { ocrStatus.textContent = '請先上傳附件，再進行自動讀取。'; return; }
       try {
-        await AppUtils.postToWebhook(buildPayload());
-        alert('已送出到自動流程。');
-      } catch (err) {
-        alert('尚未設定 webhook，或送出失敗。');
-      }
+        const invoiceResults = await AppUtils.recognizeFiles(fileStore.invoice, ocrStatus);
+        const customsResults = await AppUtils.recognizeFiles(fileStore.customs, ocrStatus);
+        const paymentResults = await AppUtils.recognizeFiles(fileStore.payment, ocrStatus);
+        const data = parseTaxData(invoiceResults.map(r => r.text).join('\n'), customsResults.map(r => r.text).join('\n'), paymentResults.map(r => r.text).join('\n'));
+        applyTaxData(data);
+      } catch (error) { ocrStatus.textContent = '自動讀取失敗，請檢查網絡或稍後再試。'; }
     });
-
-    document.getElementById('exportBtn').addEventListener('click', () => {
-      const rows = AppUtils.loadRecords('tax');
-      if (!rows.length) {
-        alert('未有記錄可以匯出。');
-        return;
-      }
-      AppUtils.exportCsv('tax-records.csv', ['案件編號','Invoice No.','收貨公司','目的地','Invoice 金額','幣別','稅款金額','付款金額','文件齊全','金額一致','案件狀態','核對狀態','建立時間'], rows.map(row => [row.caseNo,row.invoiceNo,row.consignee,row.destination,row.invoiceAmount,row.currency,row.taxAmount,row.paymentAmount,row.docsComplete ? '是' : '否',row.amountMatched ? '是' : '否',row.status,row.checkStatus,row.createdAt]));
-      });
-
+    document.getElementById('saveBtn').addEventListener('click', () => { AppUtils.ensureRequestNo(form.caseNo, MODULE_LABEL, MODULE_KEY); AppUtils.saveRecord(MODULE_KEY, buildPayload()); renderRecords(); alert('已儲存到本地記錄。'); });
+    document.getElementById('submitBtn').addEventListener('click', async () => { try { await AppUtils.postToWebhook(buildPayload()); alert('已送出到自動流程。'); } catch (err) { alert('尚未設定 webhook，或送出失敗。'); } });
+    document.getElementById('exportBtn').addEventListener('click', () => { const rows = AppUtils.loadRecords(MODULE_KEY); if (!rows.length) return alert('未有記錄可以匯出。'); AppUtils.exportCsv('tax-records.csv', ['案件編號','Invoice No.','收貨公司','目的地','Invoice 金額','幣別','稅款金額','付款金額','文件齊全','金額一致','案件狀態','核對狀態','建立時間'], rows.map(row => [row.caseNo,row.invoiceNo,row.consignee,row.destination,row.invoiceAmount,row.currency,row.taxAmount,row.paymentAmount,row.docsComplete ? '是' : '否',row.amountMatched ? '是' : '否',row.status,row.checkStatus,row.createdAt])); });
     document.getElementById('resetBtn').addEventListener('click', () => location.reload());
 
+    AppUtils.ensureRequestNo(form.caseNo, MODULE_LABEL, MODULE_KEY);
     refreshChecks();
     renderRecords();
   </script>
