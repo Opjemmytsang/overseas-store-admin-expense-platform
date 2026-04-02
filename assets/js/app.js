@@ -6,17 +6,23 @@ window.APP_CONFIG = {
 const AppUtils = {
   _tesseractLoader: null,
   _pdfJsLoader: null,
+  _sheetJsLoader: null,
 
   storageKey(moduleKey) {
     return `${window.APP_CONFIG.storagePrefix}:${moduleKey}`;
   },
 
+  saveRaw(moduleKey, rows) {
+    localStorage.setItem(this.storageKey(moduleKey), JSON.stringify(rows));
+  },
+
   saveRecord(moduleKey, payload) {
     const key = this.storageKey(moduleKey);
     const rows = JSON.parse(localStorage.getItem(key) || '[]');
-    const idKey = payload.caseNo || payload.requestNo || payload.recordNo || payload.id || `${moduleKey}-${Date.now()}`;
-    const index = rows.findIndex(row => (row.caseNo || row.requestNo || row.recordNo || row.id) === idKey);
-    const nextRow = { ...payload, id: idKey, createdAt: payload.createdAt || new Date().toISOString() };
+    const idKey = payload.caseNo || payload.requestNo || payload.recordNo || payload.batchNo || payload.lineNo || payload.id || `${moduleKey}-${Date.now()}`;
+    const index = rows.findIndex(row => (row.caseNo || row.requestNo || row.recordNo || row.batchNo || row.lineNo || row.id) === idKey);
+    const now = new Date().toISOString();
+    const nextRow = { ...payload, id: idKey, createdAt: payload.createdAt || now, updatedAt: now };
 
     if (index >= 0) {
       rows[index] = nextRow;
@@ -90,7 +96,7 @@ const AppUtils = {
     const day = this.pad(now.getDate());
     const rows = this.loadRecords(moduleKey);
     const prefix = `${moduleLabel}_${year}/${month}/`;
-    const monthlyCount = rows.filter(row => String(row.requestNo || row.caseNo || '').startsWith(prefix)).length + 1;
+    const monthlyCount = rows.filter(row => String(row.requestNo || row.caseNo || row.batchNo || '').startsWith(prefix)).length + 1;
     return `${moduleLabel}_${year}/${month}/${day}_${this.pad(monthlyCount, 3)}`;
   },
 
@@ -99,6 +105,10 @@ const AppUtils = {
     if (!inputEl.value.trim()) {
       inputEl.value = this.generateRequestNo(moduleLabel, moduleKey);
     }
+  },
+
+  generateLineNo(batchNo, seq) {
+    return `${batchNo}-${this.pad(seq, 2)}`;
   },
 
   setInputValue(inputEl, value) {
@@ -227,6 +237,22 @@ const AppUtils = {
     return this._pdfJsLoader;
   },
 
+  async ensureSheetJs() {
+    if (window.XLSX) return window.XLSX;
+    if (this._sheetJsLoader) return this._sheetJsLoader;
+
+    this._sheetJsLoader = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+      script.async = true;
+      script.onload = () => resolve(window.XLSX);
+      script.onerror = () => reject(new Error('Excel library failed to load'));
+      document.head.appendChild(script);
+    });
+
+    return this._sheetJsLoader;
+  },
+
   async readDataUrlAsArrayBuffer(dataUrl) {
     const res = await fetch(dataUrl);
     return await res.arrayBuffer();
@@ -287,5 +313,72 @@ const AppUtils = {
     }
     if (statusEl) statusEl.textContent = '讀取完成，請核對自動填寫結果。';
     return results;
+  },
+
+  async readExcelRows(file, statusEl) {
+    const XLSX = await this.ensureSheetJs();
+    if (statusEl) statusEl.textContent = '正在讀取 Excel...';
+    const arrayBuffer = await this.readDataUrlAsArrayBuffer(file.dataUrl);
+    const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+    const sheetName = workbook.SheetNames[0];
+    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: '' });
+    if (statusEl) statusEl.textContent = 'Excel 讀取完成，請核對匯入結果。';
+    return rows;
+  },
+
+  normalizeHeaderName(value) {
+    return String(value || '')
+      .trim()
+      .toLowerCase()
+      .replace(/[\s_\-\/]+/g, '');
+  },
+
+  loadBatches() {
+    return this.loadRecords('expense-batches');
+  },
+
+  loadLines() {
+    return this.loadRecords('expense-lines');
+  },
+
+  loadLinesByBatch(batchNo) {
+    return this.loadLines()
+      .filter(row => row.batchNo === batchNo)
+      .sort((a, b) => Number(a.lineSeq || 0) - Number(b.lineSeq || 0));
+  },
+
+  replaceLinesForBatch(batchNo, lines) {
+    const now = new Date().toISOString();
+    const existing = this.loadLines().filter(row => row.batchNo !== batchNo);
+    const prepared = lines.map((line, index) => ({
+      ...line,
+      batchNo,
+      lineSeq: this.pad(index + 1),
+      lineNo: line.lineNo || this.generateLineNo(batchNo, index + 1),
+      createdAt: line.createdAt || now,
+      updatedAt: now
+    }));
+    this.saveRaw('expense-lines', [...prepared, ...existing]);
+    return prepared;
+  },
+
+  summarizeLines(lines) {
+    const count = lines.length;
+    const totalAmount = lines.reduce((sum, row) => sum + Number(row.amount || 0), 0);
+    return { count, totalAmount };
+  },
+
+  saveExpenseBatch(batch, lines) {
+    const nextLines = this.replaceLinesForBatch(batch.batchNo, lines);
+    const summary = this.summarizeLines(nextLines);
+    const nextBatch = {
+      ...batch,
+      totalLineCount: summary.count,
+      totalAmount: summary.totalAmount,
+      createdAt: batch.createdAt || new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    this.saveRecord('expense-batches', nextBatch);
+    return { batch: nextBatch, lines: nextLines };
   }
 };

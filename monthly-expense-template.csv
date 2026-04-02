@@ -1,0 +1,4 @@
+ExpenseDate,ExpenseType,Vendor,Description,Amount,Currency,PaymentMethod,PaidBy,AdvancePayerName
+2026-03-02,交通,ABC Taxi,店舖外勤交通,120.00,HKD,現金,申請人,
+2026-03-05,維修,Fix Pro Ltd,更換門市燈箱配件,860.00,HKD,公司卡,公司,
+2026-03-08,文具,Office Supply Co,購買標籤紙及文具,245.50,HKD,轉帳,其他同事代付,Chris Wong
