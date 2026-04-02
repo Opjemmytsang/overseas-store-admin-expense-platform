@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>月度總表申請｜海外分店行政及費用管理平台</title>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand-block">
+        <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
+        <h1>月度總表申請</h1>
+        <p>適用於一個月多筆報銷。可直接匯入 Excel，建立 1 筆 Batch + 多筆 Line。</p>
+      </div>
+      <nav class="menu">
+        <a class="menu-item" href="../index.html">首頁</a>
+        <a class="menu-item" href="tax.html">貨品報稅</a>
+        <a class="menu-item" href="flight.html">機票申請</a>
+        <a class="menu-item" href="hotel.html">酒店申請</a>
+        <a class="menu-item active" href="store-expense.html">費用及報銷入口</a>
+        <a class="menu-item" href="payment-tracking.html">付款及核對追蹤</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <a class="top-link" href="store-expense.html">← 返回費用及報銷入口</a>
+      <section class="module-top">
+        <div class="module-eyebrow">Monthly Batch Upload</div>
+        <h2>月度總表申請</h2>
+        <p>先填批次資料，再匯入 Excel。系統會以第一張工作表建立多條明細，可再人工調整後儲存。</p>
+      </section>
+
+      <div class="module-layout">
+        <section class="form-card">
+          <h3>批次資料</h3>
+          <div class="form-grid">
+            <div class="field"><label for="batchNo">批次編號</label><input id="batchNo" readonly /></div>
+            <div class="field"><label for="status">批次狀態</label><select id="status"><option>待提交</option><option>待審批</option><option>待付款</option><option>已付款</option><option>已完成</option></select></div>
+            <div class="field"><label for="applicant">申請人</label><input id="applicant" placeholder="例如 Alex Wong" /></div>
+            <div class="field"><label for="storeCode">店舖代碼</label><select id="storeCode"><option value="">請選擇店舖</option><option>BA3</option><option>BA5</option><option>BA8</option><option>BA9</option><option>BAA</option><option>BAB</option><option>BAC</option><option>LA1</option><option>AU4</option></select></div>
+            <div class="field"><label for="monthKey">月份</label><input id="monthKey" type="month" /></div>
+            <div class="field"><label for="currency">預設幣別</label><select id="currency"><option>THB</option><option>HKD</option><option>USD</option><option>RMB</option></select></div>
+            <div class="field"><label for="paidBy">預設付款方</label><select id="paidBy"><option>公司</option><option>申請人</option><option>其他同事代付</option></select></div>
+            <div class="field"><label for="reimbursementStatus">還款 / 報銷狀態</label><select id="reimbursementStatus"><option>不適用</option><option>待報銷</option><option>待還款</option><option>已報銷</option><option>已還款</option></select></div>
+            <div class="field"><label for="reimbursementDate">還款 / 報銷日期</label><input id="reimbursementDate" type="date" /></div>
+            <div class="field full"><label for="remarks">批次備註</label><textarea id="remarks" placeholder="例如 2026年3月店舖雜費總表"></textarea></div>
+          </div>
+
+          <div class="upload-grid">
+            <div class="upload-box">
+              <h4>月度 Excel 總表</h4>
+              <p>建議欄名：ExpenseDate、ExpenseType、Vendor、Description、Amount、Currency、PaymentMethod、PaidBy。</p>
+              <input id="excelFile" type="file" accept=".xlsx,.xls,.csv" />
+              <div class="note" id="excelStatus">尚未匯入 Excel。</div>
+            </div>
+            <div class="upload-box">
+              <h4>PDF / 補充附件</h4>
+              <p>例如月度申請表 PDF、付款證明或批核文件。</p>
+              <input id="supportFile" type="file" accept="image/*,.pdf" multiple />
+              <div class="preview-grid" id="supportPreview"></div>
+            </div>
+          </div>
+
+          <div class="button-row">
+            <button class="btn btn-secondary" id="importBtn" type="button">匯入 Excel</button>
+            <button class="btn btn-primary" id="saveBtn">儲存 Batch + Lines</button>
+            <button class="btn btn-secondary" id="exportBtn">匯出 Lines CSV</button>
+          </div>
+        </section>
+
+        <aside class="status-card">
+          <h3>批次摘要</h3>
+          <div class="summary-grid">
+            <div class="summary-box"><span>月份</span><strong id="monthSummary">未選擇</strong></div>
+            <div class="summary-box"><span>明細數量</span><strong id="lineCountSummary">0</strong></div>
+            <div class="summary-box"><span>總金額</span><strong id="amountSummary">0.00</strong></div>
+            <div class="summary-box"><span>店舖</span><strong id="storeSummary">未選擇</strong></div>
+          </div>
+          <div class="status-list">
+            <div class="status-item"><div><strong>Excel 匯入</strong><span id="excelMeta">未匯入</span></div><div id="excelBadge" class="badge warn">待匯入</div></div>
+            <div class="status-item"><div><strong>補充附件</strong><span id="supportMeta">未上傳</span></div><div id="supportBadge" class="badge warn">待上傳</div></div>
+          </div>
+          <div class="note">儲存時會按目前表格順序重建 LineNo：<strong>BatchNo-01、-02、-03...</strong></div>
+        </aside>
+      </div>
+
+      <section class="table-card">
+        <h3>月度明細預覽</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>支出日期</th><th>費用類型</th><th>供應商</th><th>項目說明</th><th>金額</th><th>幣別</th><th>付款方式</th><th>付款方</th></tr></thead>
+            <tbody id="linesBody"><tr><td colspan="9" class="empty-cell">請先匯入 Excel。</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+  <script>
+    const MODULE_LABEL = '月度申請';
+    const BATCH_MODULE_KEY = 'expense-batches';
+    const batchNoEl = document.getElementById('batchNo');
+    const linesBody = document.getElementById('linesBody');
+    const excelStatus = document.getElementById('excelStatus');
+    const monthSummary = document.getElementById('monthSummary');
+    const lineCountSummary = document.getElementById('lineCountSummary');
+    const amountSummary = document.getElementById('amountSummary');
+    const storeSummary = document.getElementById('storeSummary');
+    const excelMeta = document.getElementById('excelMeta');
+    const supportMeta = document.getElementById('supportMeta');
+    const excelBadge = document.getElementById('excelBadge');
+    const supportBadge = document.getElementById('supportBadge');
+    const supportPreview = document.getElementById('supportPreview');
+    let importedRows = [];
+    const supportFiles = [];
+
+    function setBadge(el, text, type) { el.className = `badge ${type}`; el.textContent = text; }
+    function readFileAsDataURL(file) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); }); }
+    function normalizeCell(row, names) {
+      const keys = Object.keys(row || {});
+      const matchKey = keys.find(key => names.includes(AppUtils.normalizeHeaderName(key)));
+      return matchKey ? row[matchKey] : '';
+    }
+    function mapExcelRows(rows) {
+      const defaultCurrency = document.getElementById('currency').value;
+      const defaultPaidBy = document.getElementById('paidBy').value;
+      return rows.map((row, index) => ({
+        lineSeq: AppUtils.pad(index + 1),
+        expenseDate: AppUtils.normalizeDateString(normalizeCell(row, ['expensedate','date','支出日期','費用日期'])),
+        expenseType: String(normalizeCell(row, ['expensetype','type','費用類型'])).trim(),
+        vendor: String(normalizeCell(row, ['vendor','merchant','supplier','供應商','商戶'])).trim(),
+        description: String(normalizeCell(row, ['description','remark','remarks','用途','項目說明','說明'])).trim(),
+        amount: Number(normalizeCell(row, ['amount','金額']) || 0),
+        currency: String(normalizeCell(row, ['currency','幣別'])).trim() || defaultCurrency,
+        paymentMethod: String(normalizeCell(row, ['paymentmethod','付款方式'])).trim(),
+        paidBy: String(normalizeCell(row, ['paidby','付款方','實際付款方'])).trim() || defaultPaidBy,
+        advancePayerName: String(normalizeCell(row, ['advancepayername','代付款人','代付款人姓名'])).trim()
+      })).filter(row => row.expenseDate || row.expenseType || row.vendor || row.description || row.amount > 0);
+    }
+    function refreshSummary() {
+      monthSummary.textContent = document.getElementById('monthKey').value || '未選擇';
+      lineCountSummary.textContent = String(importedRows.length);
+      const total = importedRows.reduce((sum, row) => sum + Number(row.amount || 0), 0);
+      amountSummary.textContent = `${AppUtils.money(total)} ${document.getElementById('currency').value}`;
+      storeSummary.textContent = document.getElementById('storeCode').value || '未選擇';
+      excelMeta.textContent = importedRows.length ? `${importedRows.length} 條明細` : '未匯入';
+      setBadge(excelBadge, importedRows.length ? '已匯入' : '待匯入', importedRows.length ? 'ok' : 'warn');
+      supportMeta.textContent = supportFiles.length ? `${supportFiles.length} 個檔案` : '未上傳';
+      setBadge(supportBadge, supportFiles.length ? '已上傳' : '待上傳', supportFiles.length ? 'ok' : 'warn');
+    }
+    function renderLines() {
+      linesBody.innerHTML = importedRows.length ? importedRows.map((row, index) => `<tr><td>${index + 1}</td><td>${AppUtils.escapeHtml(row.expenseDate || '')}</td><td>${AppUtils.escapeHtml(row.expenseType || '')}</td><td>${AppUtils.escapeHtml(row.vendor || '')}</td><td>${AppUtils.escapeHtml(row.description || '')}</td><td>${AppUtils.escapeHtml(AppUtils.money(row.amount || 0))}</td><td>${AppUtils.escapeHtml(row.currency || '')}</td><td>${AppUtils.escapeHtml(row.paymentMethod || '')}</td><td>${AppUtils.escapeHtml(row.paidBy || '')}</td></tr>`).join('') : '<tr><td colspan="9" class="empty-cell">請先匯入 Excel。</td></tr>';
+    }
+    function buildBatchPayload() {
+      AppUtils.ensureRequestNo(batchNoEl, MODULE_LABEL, BATCH_MODULE_KEY);
+      const total = importedRows.reduce((sum, row) => sum + Number(row.amount || 0), 0);
+      return {
+        moduleType: MODULE_LABEL,
+        batchNo: batchNoEl.value.trim(),
+        status: document.getElementById('status').value,
+        applicant: document.getElementById('applicant').value.trim(),
+        storeCode: document.getElementById('storeCode').value.trim(),
+        monthKey: document.getElementById('monthKey').value,
+        totalAmount: total,
+        currency: document.getElementById('currency').value,
+        paidBy: document.getElementById('paidBy').value,
+        reimbursementStatus: document.getElementById('reimbursementStatus').value,
+        reimbursementDate: document.getElementById('reimbursementDate').value,
+        remarks: document.getElementById('remarks').value.trim(),
+        sourceMode: 'monthly',
+        files: { support: supportFiles },
+        createdAt: new Date().toISOString()
+      };
+    }
+    function buildLinesPayload(batchNo) {
+      return importedRows.map((row, index) => ({
+        ...row,
+        batchNo,
+        lineNo: AppUtils.generateLineNo(batchNo, index + 1),
+        lineSeq: AppUtils.pad(index + 1),
+        attachmentCount: supportFiles.length,
+        createdAt: new Date().toISOString()
+      }));
+    }
+
+    document.querySelectorAll('input, select, textarea').forEach(el => el.addEventListener('input', refreshSummary));
+    document.getElementById('supportFile').addEventListener('change', async e => {
+      supportFiles.length = 0;
+      for (const file of e.target.files) supportFiles.push({ name: file.name, type: file.type, dataUrl: await readFileAsDataURL(file) });
+      supportPreview.innerHTML = supportFiles.map(row => `<img src="${row.dataUrl}" alt="${row.name}">`).join('');
+      refreshSummary();
+    });
+    document.getElementById('importBtn').addEventListener('click', async () => {
+      const file = document.getElementById('excelFile').files[0];
+      if (!file) { excelStatus.textContent = '請先選擇 Excel 檔案。'; return; }
+      try {
+        const dataUrl = await readFileAsDataURL(file);
+        const rows = await AppUtils.readExcelRows({ name: file.name, dataUrl }, excelStatus);
+        importedRows = mapExcelRows(rows);
+        if (!importedRows.length) excelStatus.textContent = '已讀取 Excel，但未找到可用明細。';
+        renderLines();
+        refreshSummary();
+      } catch (error) {
+        excelStatus.textContent = 'Excel 匯入失敗，請檢查檔案格式。';
+      }
+    });
+    document.getElementById('saveBtn').addEventListener('click', () => {
+      if (!importedRows.length) return alert('請先匯入 Excel 明細。');
+      const batch = buildBatchPayload();
+      const lines = buildLinesPayload(batch.batchNo);
+      AppUtils.saveExpenseBatch(batch, lines);
+      alert(`已儲存 ${lines.length} 條明細。`);
+    });
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      if (!importedRows.length) return alert('未有明細可以匯出。');
+      const batch = buildBatchPayload();
+      const lines = buildLinesPayload(batch.batchNo);
+      AppUtils.exportCsv('monthly-expense-lines.csv', ['BatchNo','LineNo','支出日期','費用類型','供應商','項目說明','金額','幣別','付款方式','付款方','代付款人'], lines.map(line => [line.batchNo,line.lineNo,line.expenseDate,line.expenseType,line.vendor,line.description,line.amount,line.currency,line.paymentMethod,line.paidBy,line.advancePayerName]));
+    });
+
+    AppUtils.ensureRequestNo(batchNoEl, MODULE_LABEL, BATCH_MODULE_KEY);
+    refreshSummary();
+    renderLines();
+  </script>
+</body>
+</html>

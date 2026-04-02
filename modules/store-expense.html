@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>鋪頭雜費申請｜海外分店行政及費用管理平台</title>
+  <title>費用及報銷入口｜海外分店行政及費用管理平台</title>
   <link rel="stylesheet" href="../assets/css/styles.css" />
 </head>
 <body>
@@ -11,15 +11,15 @@
     <aside class="sidebar">
       <div class="brand-block">
         <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
-        <h1>鋪頭雜費申請</h1>
-        <p>上傳單據或附件後，可自動讀取常見資料並填入相關欄位。</p>
+        <h1>費用及報銷入口</h1>
+        <p>將店舖雜費拆分為兩種模式：單次申請與月度總表，統一寫入 Batch / Line 結構。</p>
       </div>
       <nav class="menu">
         <a class="menu-item" href="../index.html">首頁</a>
         <a class="menu-item" href="tax.html">貨品報稅</a>
         <a class="menu-item" href="flight.html">機票申請</a>
         <a class="menu-item" href="hotel.html">酒店申請</a>
-        <a class="menu-item active" href="store-expense.html">鋪頭雜費申請</a>
+        <a class="menu-item active" href="store-expense.html">費用及報銷入口</a>
         <a class="menu-item" href="payment-tracking.html">付款及核對追蹤</a>
       </nav>
     </aside>
@@ -27,161 +27,45 @@
     <main class="main-content">
       <a class="top-link" href="../index.html">← 返回行政及費用申請首頁</a>
       <section class="module-top">
-        <div class="module-eyebrow">Store Miscellaneous Expense</div>
-        <h2>鋪頭雜費申請表</h2>
-        <p>申請編號會按填表當刻自動生成；完成上傳後，可一鍵讀取單據常見資料並自動填寫。</p>
+        <div class="module-eyebrow">Expense & Reimbursement Portal</div>
+        <h2>費用及報銷入口</h2>
+        <p>現時雜費模組已改為雙入口架構：<strong>單次申請</strong> 建 1 個 Batch + 1 個 Line；<strong>月度總表</strong> 建 1 個 Batch + 多個 Line。</p>
       </section>
 
-      <div class="module-layout">
-        <section class="form-card">
-          <h3>申請資料</h3>
-          <div class="form-grid">
-            <div class="field"><label for="requestNo">申請編號</label><input id="requestNo" readonly /></div>
-            <div class="field"><label for="status">申請狀態</label><select id="status"><option>待提交</option><option>待審批</option><option>待付款</option><option>已付款</option><option>已完成</option></select></div>
-            <div class="field"><label for="applicant">申請人</label><input id="applicant" placeholder="例如 Alex Wong" /></div>
-            <div class="field"><label for="storeName">店舖代碼</label><select id="storeName"><option value="">請選擇店舖</option><option>BA3</option><option>BA5</option><option>BA8</option><option>BA9</option><option>BAA</option><option>BAB</option><option>BAC</option><option>LA1</option><option>AU4</option></select></div>
-            <div class="field"><label for="expenseType">費用類型</label><input id="expenseType" placeholder="例如 交通、維修、文具、清潔等" /></div>
-            <div class="field"><label for="expenseDate">費用日期</label><input id="expenseDate" type="date" /></div>
-            <div class="field"><label for="amount">金額</label><input id="amount" type="number" step="0.01" /></div>
-            <div class="field"><label for="currency">幣別</label><select id="currency"><option>THB</option><option>HKD</option><option>USD</option><option>RMB</option></select></div>
-            <div class="field"><label for="paymentMethod">付款方式</label><input id="paymentMethod" placeholder="例如 現金 / 公司卡 / 轉帳" /></div>
-            <div class="field"><label for="vendor">供應商 / 收款方</label><input id="vendor" placeholder="例如 Example Services Ltd." /></div>
-            <div class="field full"><label for="purpose">用途說明</label><textarea id="purpose" placeholder="請簡述費用用途"></textarea></div>
-            <div class="field full"><label for="remark">備註</label><textarea id="remark" placeholder="可填寫付款情況、補充說明等"></textarea></div>
-          </div>
+      <section class="feature-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 20px;">
+        <a class="feature-card" href="single-expense.html">
+          <div class="feature-index">01</div>
+          <h3>單次申請</h3>
+          <p>適合一張單據、一筆雜費、一次獨立付款。可上傳收據 / PDF，自動讀取後直接提交。</p>
+        </a>
+        <a class="feature-card" href="monthly-expense.html">
+          <div class="feature-index">02</div>
+          <h3>月度總表申請</h3>
+          <p>適合一個月多筆報銷。先填批次資料，再匯入 Excel 建立多條明細。</p>
+        </a>
+      </section>
 
-          <div class="upload-grid">
-            <div class="upload-box">
-              <h4>單據 / 發票</h4>
-              <p>請上傳清晰單據或收據。</p>
-              <input id="receiptFile" type="file" accept="image/*,.pdf" multiple />
-              <div class="preview-grid" id="receiptPreview"></div>
-            </div>
-            <div class="upload-box">
-              <h4>其他附件</h4>
-              <p>例如報價單、付款證明、批准文件等。</p>
-              <input id="supportFile" type="file" accept="image/*,.pdf" multiple />
-              <div class="preview-grid" id="supportPreview"></div>
-            </div>
-          </div>
-
-          <div class="button-row">
-            <button class="btn btn-secondary" id="ocrBtn" type="button">按附件自動讀取並填寫</button>
-            <button class="btn btn-primary" id="saveBtn">儲存本地記錄</button>
-            <button class="btn btn-secondary" id="exportBtn">匯出 CSV</button>
-          </div>
-          <div class="note" id="ocrStatus">初版可讀取單據上的常見日期、金額、供應商及付款方式，請在提交前再次核對。</div>
-        </section>
-
-        <aside class="status-card">
-          <h3>申請摘要</h3>
-          <div class="summary-grid">
-            <div class="summary-box"><span>店舖代碼</span><strong id="storeSummary">未選擇</strong></div>
-            <div class="summary-box"><span>費用類型</span><strong id="typeSummary">未填寫</strong></div>
-          </div>
-          <div class="status-list">
-            <div class="status-item"><div><strong>單據 / 發票</strong><span id="receiptMeta">未上傳</span></div><div id="receiptBadge" class="badge warn">待上傳</div></div>
-            <div class="status-item"><div><strong>其他附件</strong><span id="supportMeta">未上傳</span></div><div id="supportBadge" class="badge warn">待上傳</div></div>
-          </div>
-        </aside>
-      </div>
-
-      <section class="table-card">
-        <h3>本地記錄</h3>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>申請編號</th><th>申請人</th><th>店舖</th><th>費用類型</th><th>費用日期</th><th>金額</th><th>幣別</th><th>付款方式</th><th>狀態</th></tr></thead>
-            <tbody id="recordsBody"><tr><td colspan="9" class="empty-cell">暫時未有記錄</td></tr></tbody>
-          </table>
+      <section class="panel-grid">
+        <div class="panel-card">
+          <div class="section-eyebrow">Data Model</div>
+          <h3>共用儲存結構</h3>
+          <ul class="clean-list">
+            <li>Batch：主表，存批次資料、店舖、總金額、狀態、月份等。</li>
+            <li>Line：明細表，存每一筆支出日期、費用類型、供應商、金額等。</li>
+            <li>付款及核對追蹤頁會同時讀取 Batch 與 Line。</li>
+          </ul>
+        </div>
+        <div class="panel-card">
+          <div class="section-eyebrow">Recommended Flow</div>
+          <h3>建議落地方式</h3>
+          <ul class="clean-list">
+            <li>前台 HTML：先做原型及本地記錄。</li>
+            <li>Power Automate：之後將 Batch / Line 分開寫入 SharePoint List 或 Excel Table。</li>
+            <li>追蹤頁：按 BatchNo 展示總額、Line 數量及最後更新時間。</li>
+          </ul>
         </div>
       </section>
     </main>
   </div>
-
-  <script src="../assets/js/app.js"></script>
-  <script>
-    const MODULE_LABEL = '鋪頭雜費申請';
-    const MODULE_KEY = 'store-expense';
-    const requestNoEl = document.getElementById('requestNo');
-    const fileStore = { receipt: [], support: [] };
-    const previewMap = { receipt: document.getElementById('receiptPreview'), support: document.getElementById('supportPreview') };
-    const metaMap = { receipt: document.getElementById('receiptMeta'), support: document.getElementById('supportMeta') };
-    const badgeMap = { receipt: document.getElementById('receiptBadge'), support: document.getElementById('supportBadge') };
-    const storeSummary = document.getElementById('storeSummary');
-    const typeSummary = document.getElementById('typeSummary');
-    const recordsBody = document.getElementById('recordsBody');
-    const ocrStatus = document.getElementById('ocrStatus');
-
-    function setBadge(el, text, type) { el.className = `badge ${type}`; el.textContent = text; }
-    function readFileAsDataURL(file) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); }); }
-    async function handleFiles(type, files) {
-      const items = [];
-      for (const file of files) items.push({ name: file.name, dataUrl: await readFileAsDataURL(file) });
-      fileStore[type] = items;
-      previewMap[type].innerHTML = items.map(row => `<img src="${row.dataUrl}" alt="${row.name}">`).join('');
-      metaMap[type].textContent = items.length ? `${items.length} 個檔案` : '未上傳';
-      setBadge(badgeMap[type], items.length ? '已上傳' : '待上傳', items.length ? 'ok' : 'warn');
-    }
-
-    function parseExpenseData(receiptText, supportText) {
-      const data = {};
-      const dates = AppUtils.extractDates(receiptText + '\n' + supportText);
-      if (dates[0]) data.expenseDate = dates[0];
-      const money = AppUtils.findMoneyByKeywords(receiptText, ['total', 'amount', '總額']) || AppUtils.largestMoney(receiptText);
-      if (money) { data.amount = money.amount; data.currency = money.currency; }
-      const vendor = receiptText.match(/([A-Z][A-Za-z0-9 .,&'-]{6,}(?:LIMITED|LTD|CO\.|COMPANY|SERVICES|TRADING))/i);
-      if (vendor) data.vendor = vendor[1].trim();
-      const paymentMethod = supportText.match(/(現金|公司卡|轉帳|cash|credit card|bank transfer)/i);
-      if (paymentMethod) data.paymentMethod = paymentMethod[1];
-      return data;
-    }
-
-    function applyExpenseData(data) {
-      if (data.expenseDate) AppUtils.setInputValue(document.getElementById('expenseDate'), data.expenseDate);
-      if (data.amount) AppUtils.setInputValue(document.getElementById('amount'), data.amount);
-      if (data.currency) AppUtils.setInputValue(document.getElementById('currency'), data.currency);
-      if (data.vendor) AppUtils.setInputValue(document.getElementById('vendor'), data.vendor);
-      if (data.paymentMethod) AppUtils.setInputValue(document.getElementById('paymentMethod'), data.paymentMethod);
-    }
-
-    function buildPayload() {
-      AppUtils.ensureRequestNo(requestNoEl, MODULE_LABEL, MODULE_KEY);
-      return { moduleType: MODULE_LABEL, requestNo: requestNoEl.value.trim(), status: document.getElementById('status').value, applicant: document.getElementById('applicant').value.trim(), storeName: document.getElementById('storeName').value.trim(), expenseType: document.getElementById('expenseType').value.trim(), expenseDate: document.getElementById('expenseDate').value, amount: Number(document.getElementById('amount').value || 0), currency: document.getElementById('currency').value, paymentMethod: document.getElementById('paymentMethod').value.trim(), vendor: document.getElementById('vendor').value.trim(), purpose: document.getElementById('purpose').value.trim(), remark: document.getElementById('remark').value.trim(), files: fileStore, createdAt: new Date().toISOString() };
-    }
-
-    function refreshSummary() {
-      storeSummary.textContent = document.getElementById('storeName').value.trim() || '未選擇';
-      typeSummary.textContent = document.getElementById('expenseType').value.trim() || '未填寫';
-    }
-
-    function renderRecords() {
-      const rows = AppUtils.loadRecords(MODULE_KEY);
-      recordsBody.innerHTML = rows.length ? rows.map(row => `<tr><td>${AppUtils.escapeHtml(row.requestNo || '')}</td><td>${AppUtils.escapeHtml(row.applicant || '')}</td><td>${AppUtils.escapeHtml(row.storeName || '')}</td><td>${AppUtils.escapeHtml(row.expenseType || '')}</td><td>${AppUtils.escapeHtml(row.expenseDate || '')}</td><td>${AppUtils.escapeHtml(AppUtils.money(row.amount))}</td><td>${AppUtils.escapeHtml(row.currency || '')}</td><td>${AppUtils.escapeHtml(row.paymentMethod || '')}</td><td>${AppUtils.escapeHtml(row.status || '')}</td></tr>`).join('') : '<tr><td colspan="9" class="empty-cell">暫時未有記錄</td></tr>';
-    }
-
-    document.querySelectorAll('input, select, textarea').forEach(el => el.addEventListener('input', refreshSummary));
-    document.getElementById('receiptFile').addEventListener('change', e => handleFiles('receipt', e.target.files));
-    document.getElementById('supportFile').addEventListener('change', e => handleFiles('support', e.target.files));
-    document.getElementById('ocrBtn').addEventListener('click', async () => {
-      if (!fileStore.receipt.length && !fileStore.support.length) { ocrStatus.textContent = '請先上傳附件，再進行自動讀取。'; return; }
-      try {
-        const receiptResults = await AppUtils.recognizeFiles(fileStore.receipt, ocrStatus);
-        const supportResults = await AppUtils.recognizeFiles(fileStore.support, ocrStatus);
-        const data = parseExpenseData(receiptResults.map(r => r.text).join('\n'), supportResults.map(r => r.text).join('\n'));
-        applyExpenseData(data);
-        refreshSummary();
-      } catch (error) { ocrStatus.textContent = '自動讀取失敗，請檢查網絡或稍後再試。'; }
-    });
-    document.getElementById('saveBtn').addEventListener('click', () => { AppUtils.ensureRequestNo(requestNoEl, MODULE_LABEL, MODULE_KEY); AppUtils.saveRecord(MODULE_KEY, buildPayload()); renderRecords(); alert('已儲存到本地記錄。'); });
-    document.getElementById('exportBtn').addEventListener('click', () => {
-      const rows = AppUtils.loadRecords(MODULE_KEY);
-      if (!rows.length) return alert('未有記錄可以匯出。');
-      AppUtils.exportCsv('store-expenses.csv', ['申請編號','申請人','店舖','費用類型','費用日期','金額','幣別','付款方式','供應商','狀態','建立時間'], rows.map(row => [row.requestNo,row.applicant,row.storeName,row.expenseType,row.expenseDate,row.amount,row.currency,row.paymentMethod,row.vendor,row.status,row.createdAt]));
-    });
-
-    AppUtils.ensureRequestNo(requestNoEl, MODULE_LABEL, MODULE_KEY);
-    refreshSummary();
-    renderRecords();
-  </script>
 </body>
 </html>
