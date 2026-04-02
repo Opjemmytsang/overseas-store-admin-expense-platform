@@ -12,24 +12,24 @@
       <div class="brand-block">
         <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
         <h1>貨品報稅</h1>
-        <p>上傳發票、報關文件與付款證明後，可自動讀取關鍵資料並填入相關欄位。</p>
+        <p>整理發票、報關文件與付款證明後，可帶入主要欄位，方便後續核對與存檔。</p>
       </div>
       <nav class="menu">
         <a class="menu-item" href="../index.html">首頁</a>
         <a class="menu-item active" href="tax.html">貨品報稅</a>
         <a class="menu-item" href="flight.html">機票申請</a>
         <a class="menu-item" href="hotel.html">酒店申請</a>
-        <a class="menu-item" href="store-expense.html">鋪頭雜費申請</a>
+        <a class="menu-item" href="store-expense.html">費用及報銷入口</a>
         <a class="menu-item" href="payment-tracking.html">付款及核對追蹤</a>
       </nav>
     </aside>
 
     <main class="main-content">
-      <a class="top-link" href="../index.html">← 返回行政及費用申請首頁</a>
+      <a class="top-link" href="../index.html">← 返回行政及費用管理首頁</a>
       <section class="module-top">
         <div class="module-eyebrow">Tax Declaration</div>
-        <h2>貨品報稅資料上傳</h2>
-        <p>案件編號會按填表當刻自動生成；完成上傳後，可一鍵讀取附件內容並自動填寫。</p>
+        <h2>貨品報稅資料整理</h2>
+        <p>案件編號會按填表當刻自動生成；完成上傳後，可整理附件內容並帶入主要欄位。</p>
       </section>
 
       <div class="module-layout">
@@ -37,14 +37,14 @@
           <h3>案件資料</h3>
           <div class="form-grid">
             <div class="field"><label for="caseNo">案件編號</label><input id="caseNo" readonly /></div>
-            <div class="field"><label for="status">案件狀態</label><select id="status"><option>待提交</option><option>待核對</option><option>待付款</option><option>已付款</option><option>已完成</option></select></div>
+            <div class="field"><label for="status">案件狀態</label><select id="status"></select></div>
             <div class="field"><label for="invoiceNo">Invoice No.</label><input id="invoiceNo" placeholder="例如 INV-2026-001" /></div>
             <div class="field"><label for="invoiceDate">Invoice 日期</label><input id="invoiceDate" type="date" /></div>
             <div class="field full"><label for="consignee">收貨公司 / Importer</label><input id="consignee" placeholder="例如 ABC Global Trading Co., Ltd." /></div>
             <div class="field"><label for="destination">目的地</label><input id="destination" placeholder="例如 Bangkok" /></div>
             <div class="field"><label for="jobNo">Job No.</label><input id="jobNo" placeholder="例如 JOB-1001" /></div>
             <div class="field"><label for="invoiceAmount">Invoice 金額</label><input id="invoiceAmount" type="number" step="0.01" /></div>
-            <div class="field"><label for="currency">幣別</label><select id="currency"><option>THB</option><option>HKD</option><option>USD</option><option>RMB</option></select></div>
+            <div class="field"><label for="currency">幣別</label><select id="currency"></select></div>
             <div class="field"><label for="taxAmount">稅款金額</label><input id="taxAmount" type="number" step="0.01" /></div>
             <div class="field"><label for="paymentAmount">付款金額</label><input id="paymentAmount" type="number" step="0.01" /></div>
             <div class="field"><label for="paymentDate">付款日期</label><input id="paymentDate" type="date" /></div>
@@ -80,17 +80,17 @@
           </div>
 
           <div class="button-row">
-            <button class="btn btn-secondary" id="ocrBtn" type="button">按附件自動讀取並填寫</button>
-            <button class="btn btn-primary" id="saveBtn">儲存本地記錄</button>
-            <button class="btn btn-secondary" id="submitBtn">送出到自動流程</button>
-            <button class="btn btn-secondary" id="exportBtn">匯出 CSV</button>
+            <button class="btn btn-secondary" id="ocrBtn" type="button">整理附件內容</button>
+            <button class="btn btn-primary" id="saveBtn">儲存案件記錄</button>
+            <button class="btn btn-secondary" id="submitBtn">送出後續流程</button>
+            <button class="btn btn-secondary" id="exportBtn">匯出案件 CSV</button>
             <button class="btn btn-secondary" id="resetBtn">清空表格</button>
           </div>
-          <div class="note" id="ocrStatus">初版會按圖片內容自動讀取英文 / 中文資料，請在提交前再次核對。</div>
+          <div class="note" id="ocrStatus">系統會按附件內容整理常見資料，請在提交前再次核對。</div>
         </section>
 
         <aside class="status-card">
-          <h3>即時核對</h3>
+          <h3>核對摘要</h3>
           <div class="summary-grid">
             <div class="summary-box"><span>文件齊全度</span><strong id="docStatusText">未檢查</strong></div>
             <div class="summary-box"><span>金額核對</span><strong id="amountStatusText">未檢查</strong></div>
@@ -107,7 +107,7 @@
       </div>
 
       <section class="table-card">
-        <h3>本地記錄</h3>
+        <h3>案件記錄</h3>
         <div class="table-wrap">
           <table>
             <thead><tr><th>案件編號</th><th>Invoice No.</th><th>收貨公司</th><th>目的地</th><th>Invoice 金額</th><th>稅款</th><th>付款</th><th>文件齊全</th><th>對帳結果</th><th>狀態</th></tr></thead>
@@ -119,6 +119,7 @@
   </div>
 
   <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/form-options.js"></script>
   <script>
     const MODULE_LABEL = '貨品報稅';
     const MODULE_KEY = 'tax';
@@ -134,6 +135,8 @@
     const summaryBadge = document.getElementById('summaryBadge');
     const summaryNote = document.getElementById('summaryNote');
     const ocrStatus = document.getElementById('ocrStatus');
+
+    FormOptions.bindSelects({ statusId: 'status', statusGroup: 'tax', currencyId: 'currency' });
 
     function setBadge(el, text, type) { el.className = `badge ${type}`; el.textContent = text; }
     function readFileAsDataURL(file) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); }); }
@@ -212,17 +215,17 @@
     document.querySelectorAll('input, select, textarea').forEach(el => el.addEventListener('input', refreshChecks));
     Object.keys(fileInputs).forEach(type => { fileInputs[type].addEventListener('change', async e => handleFiles(type, e.target.files)); renderPreview(type); });
     document.getElementById('ocrBtn').addEventListener('click', async () => {
-      if (!fileStore.invoice.length && !fileStore.customs.length && !fileStore.payment.length) { ocrStatus.textContent = '請先上傳附件，再進行自動讀取。'; return; }
+      if (!fileStore.invoice.length && !fileStore.customs.length && !fileStore.payment.length) { ocrStatus.textContent = '請先上傳附件，再開始整理。'; return; }
       try {
         const invoiceResults = await AppUtils.recognizeFiles(fileStore.invoice, ocrStatus);
         const customsResults = await AppUtils.recognizeFiles(fileStore.customs, ocrStatus);
         const paymentResults = await AppUtils.recognizeFiles(fileStore.payment, ocrStatus);
         const data = parseTaxData(invoiceResults.map(r => r.text).join('\n'), customsResults.map(r => r.text).join('\n'), paymentResults.map(r => r.text).join('\n'));
         applyTaxData(data);
-      } catch (error) { ocrStatus.textContent = '自動讀取失敗，請檢查網絡或稍後再試。'; }
+      } catch (error) { ocrStatus.textContent = '內容整理未完成，請稍後再試或手動補回。'; }
     });
-    document.getElementById('saveBtn').addEventListener('click', () => { AppUtils.ensureRequestNo(form.caseNo, MODULE_LABEL, MODULE_KEY); AppUtils.saveRecord(MODULE_KEY, buildPayload()); renderRecords(); alert('已儲存到本地記錄。'); });
-    document.getElementById('submitBtn').addEventListener('click', async () => { try { await AppUtils.postToWebhook(buildPayload()); alert('已送出到自動流程。'); } catch (err) { alert('尚未設定 webhook，或送出失敗。'); } });
+    document.getElementById('saveBtn').addEventListener('click', () => { AppUtils.ensureRequestNo(form.caseNo, MODULE_LABEL, MODULE_KEY); AppUtils.saveRecord(MODULE_KEY, buildPayload()); renderRecords(); alert('已儲存案件記錄。'); });
+    document.getElementById('submitBtn').addEventListener('click', async () => { try { await AppUtils.postToWebhook(buildPayload()); alert('已送出到後續流程。'); } catch (err) { alert('尚未設定 webhook，或送出失敗。'); } });
     document.getElementById('exportBtn').addEventListener('click', () => { const rows = AppUtils.loadRecords(MODULE_KEY); if (!rows.length) return alert('未有記錄可以匯出。'); AppUtils.exportCsv('tax-records.csv', ['案件編號','Invoice No.','收貨公司','目的地','Invoice 金額','幣別','稅款金額','付款金額','文件齊全','金額一致','案件狀態','核對狀態','建立時間'], rows.map(row => [row.caseNo,row.invoiceNo,row.consignee,row.destination,row.invoiceAmount,row.currency,row.taxAmount,row.paymentAmount,row.docsComplete ? '是' : '否',row.amountMatched ? '是' : '否',row.status,row.checkStatus,row.createdAt])); });
     document.getElementById('resetBtn').addEventListener('click', () => location.reload());
 

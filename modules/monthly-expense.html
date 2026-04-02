@@ -12,7 +12,7 @@
       <div class="brand-block">
         <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
         <h1>月度總表申請</h1>
-        <p>適用於一個月多筆報銷。可直接匯入 Excel，建立 1 筆 Batch + 多筆 Line。</p>
+        <p>適用於一個月多筆費用整理，可先填批次資料，再匯入總表建立明細。</p>
       </div>
       <nav class="menu">
         <a class="menu-item" href="../index.html">首頁</a>
@@ -37,13 +37,13 @@
           <h3>批次資料</h3>
           <div class="form-grid">
             <div class="field"><label for="batchNo">批次編號</label><input id="batchNo" readonly /></div>
-            <div class="field"><label for="status">批次狀態</label><select id="status"><option>待提交</option><option>待審批</option><option>待付款</option><option>已付款</option><option>已完成</option></select></div>
+            <div class="field"><label for="status">批次狀態</label><select id="status"></select></div>
             <div class="field"><label for="applicant">申請人</label><input id="applicant" placeholder="例如 Alex Wong" /></div>
-            <div class="field"><label for="storeCode">店舖代碼</label><select id="storeCode"><option value="">請選擇店舖</option><option>BA3</option><option>BA5</option><option>BA8</option><option>BA9</option><option>BAA</option><option>BAB</option><option>BAC</option><option>LA1</option><option>AU4</option></select></div>
+            <div class="field"><label for="storeCode">店舖代碼</label><select id="storeCode"></select></div>
             <div class="field"><label for="monthKey">月份</label><input id="monthKey" type="month" /></div>
-            <div class="field"><label for="currency">預設幣別</label><select id="currency"><option>THB</option><option>HKD</option><option>USD</option><option>RMB</option></select></div>
-            <div class="field"><label for="paidBy">預設付款方</label><select id="paidBy"><option>公司</option><option>申請人</option><option>其他同事代付</option></select></div>
-            <div class="field"><label for="reimbursementStatus">還款 / 報銷狀態</label><select id="reimbursementStatus"><option>不適用</option><option>待報銷</option><option>待還款</option><option>已報銷</option><option>已還款</option></select></div>
+            <div class="field"><label for="currency">預設幣別</label><select id="currency"></select></div>
+            <div class="field"><label for="paidBy">預設付款方</label><select id="paidBy"></select></div>
+            <div class="field"><label for="reimbursementStatus">還款 / 報銷狀態</label><select id="reimbursementStatus"></select></div>
             <div class="field"><label for="reimbursementDate">還款 / 報銷日期</label><input id="reimbursementDate" type="date" /></div>
             <div class="field full"><label for="remarks">批次備註</label><textarea id="remarks" placeholder="例如 2026年3月店舖雜費總表"></textarea></div>
           </div>
@@ -65,8 +65,8 @@
 
           <div class="button-row">
             <button class="btn btn-secondary" id="importBtn" type="button">匯入 Excel</button>
-            <button class="btn btn-primary" id="saveBtn">儲存 Batch + Lines</button>
-            <button class="btn btn-secondary" id="exportBtn">匯出 Lines CSV</button>
+            <button class="btn btn-primary" id="saveBtn">儲存批次及明細</button>
+            <button class="btn btn-secondary" id="exportBtn">匯出明細 CSV</button>
           </div>
         </section>
 
@@ -82,7 +82,7 @@
             <div class="status-item"><div><strong>Excel 匯入</strong><span id="excelMeta">未匯入</span></div><div id="excelBadge" class="badge warn">待匯入</div></div>
             <div class="status-item"><div><strong>補充附件</strong><span id="supportMeta">未上傳</span></div><div id="supportBadge" class="badge warn">待上傳</div></div>
           </div>
-          <div class="note">儲存時會按目前表格順序重建 LineNo：<strong>BatchNo-01、-02、-03...</strong></div>
+          <div class="note">儲存時會按目前表格順序重建明細編號：<strong>BatchNo-01、-02、-03...</strong></div>
         </aside>
       </div>
 
@@ -99,6 +99,7 @@
   </div>
 
   <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/form-options.js"></script>
   <script>
     const MODULE_LABEL = '月度申請';
     const BATCH_MODULE_KEY = 'expense-batches';
@@ -116,6 +117,8 @@
     const supportPreview = document.getElementById('supportPreview');
     let importedRows = [];
     const supportFiles = [];
+
+    FormOptions.bindSelects({ statusId: 'status', statusGroup: 'expense', storeId: 'storeCode', currencyId: 'currency', reimbursementId: 'reimbursementStatus', paidById: 'paidBy' });
 
     function setBadge(el, text, type) { el.className = `badge ${type}`; el.textContent = text; }
     function readFileAsDataURL(file) { return new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); }); }
