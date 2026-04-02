@@ -12,14 +12,14 @@
       <div class="brand-block">
         <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
         <h1>機票申請</h1>
-        <p>上傳護照、航班詳情及付款證明後，可自動讀取內容並填入相關欄位。</p>
+        <p>上載護照、行程資料及付款證明後，可先整理附件內容，再核對主要欄位。</p>
       </div>
       <nav class="menu">
         <a class="menu-item" href="../index.html">首頁</a>
         <a class="menu-item" href="tax.html">貨品報稅</a>
         <a class="menu-item active" href="flight.html">機票申請</a>
         <a class="menu-item" href="hotel.html">酒店申請</a>
-        <a class="menu-item" href="store-expense.html">鋪頭雜費申請</a>
+        <a class="menu-item" href="store-expense.html">費用及報銷入口</a>
         <a class="menu-item" href="payment-tracking.html">付款及核對追蹤</a>
       </nav>
     </aside>
@@ -28,8 +28,8 @@
       <a class="top-link" href="../index.html">← 返回行政及費用申請首頁</a>
       <section class="module-top">
         <div class="module-eyebrow">Flight Request</div>
-        <h2>機票申請表</h2>
-        <p>申請編號會按填表當刻自動生成；完成上傳後，可一鍵讀取附件內容並自動填寫。</p>
+        <h2>機票申請</h2>
+        <p>申請編號會按填表時間自動生成；完成上載後，可整理附件內容並帶入主要欄位。</p>
       </section>
 
       <div class="module-layout">
@@ -85,11 +85,11 @@
           </div>
 
           <div class="button-row">
-            <button class="btn btn-secondary" id="ocrBtn" type="button">按附件自動讀取並填寫</button>
-            <button class="btn btn-primary" id="saveBtn">儲存本地記錄</button>
+            <button class="btn btn-secondary" id="ocrBtn" type="button">整理附件內容</button>
+            <button class="btn btn-primary" id="saveBtn">儲存案件記錄</button>
             <button class="btn btn-secondary" id="exportBtn">匯出 CSV</button>
           </div>
-          <div class="note" id="ocrStatus">初版會按圖片內容自動讀取英文 / 中文資料，請在提交前再次核對。</div>
+          <div class="note" id="ocrStatus">系統會按附件內容整理常見資料，提交前請再核對。</div>
         </section>
 
         <aside class="status-card">
@@ -109,7 +109,7 @@
       </div>
 
       <section class="table-card">
-        <h3>本地記錄</h3>
+        <h3>案件記錄</h3>
         <div class="table-wrap">
           <table>
             <thead><tr><th>申請編號</th><th>店舖</th><th>旅客</th><th>參考編號</th><th>行程</th><th>預算</th><th>實付</th><th>付款方</th><th>報銷狀態</th><th>狀態</th></tr></thead>
@@ -217,7 +217,7 @@
     document.getElementById('itineraryFile').addEventListener('change', e => handleFiles('itinerary', e.target.files));
     document.getElementById('paymentFile').addEventListener('change', e => handleFiles('payment', e.target.files));
     document.getElementById('ocrBtn').addEventListener('click', async () => {
-      if (!fileStore.passport.length && !fileStore.itinerary.length && !fileStore.payment.length) { ocrStatus.textContent = '請先上傳附件，再進行自動讀取。'; return; }
+      if (!fileStore.passport.length && !fileStore.itinerary.length && !fileStore.payment.length) { ocrStatus.textContent = '請先上傳附件，再開始整理。'; return; }
       try {
         const passportResults = await AppUtils.recognizeFiles(fileStore.passport, ocrStatus);
         const itineraryResults = await AppUtils.recognizeFiles(fileStore.itinerary, ocrStatus);
@@ -225,9 +225,9 @@
         const data = parseFlightData(passportResults.map(r => r.text).join('\n'), itineraryResults.map(r => r.text).join('\n'), paymentResults.map(r => r.text).join('\n'));
         applyFlightData(data);
         refreshSummary();
-      } catch (error) { ocrStatus.textContent = '自動讀取失敗，請檢查網絡或稍後再試。'; }
+      } catch (error) { ocrStatus.textContent = '內容整理未完成，請稍後再試或手動補回。'; }
     });
-    document.getElementById('saveBtn').addEventListener('click', () => { AppUtils.ensureRequestNo(requestNoEl, MODULE_LABEL, MODULE_KEY); AppUtils.saveRecord(MODULE_KEY, buildPayload()); renderRecords(); alert('已儲存到本地記錄。'); });
+    document.getElementById('saveBtn').addEventListener('click', () => { AppUtils.ensureRequestNo(requestNoEl, MODULE_LABEL, MODULE_KEY); AppUtils.saveRecord(MODULE_KEY, buildPayload()); renderRecords(); alert('已儲存案件記錄。'); });
     document.getElementById('exportBtn').addEventListener('click', () => {
       const rows = AppUtils.loadRecords(MODULE_KEY);
       if (!rows.length) return alert('未有記錄可以匯出。');
