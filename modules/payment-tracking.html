@@ -12,7 +12,7 @@
       <div class="brand-block">
         <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
         <h1>付款及核對追蹤</h1>
-        <p>集中查看各模組記錄，並額外顯示費用批次 Batch / Line 的最新狀態。</p>
+        <p>集中查看各模組案件，以及費用批次與明細的最新進度，方便後續核對與跟進。</p>
       </div>
       <nav class="menu">
         <a class="menu-item" href="../index.html">首頁</a>
@@ -27,49 +27,49 @@
     <main class="main-content">
       <a class="top-link" href="../index.html">← 返回行政及費用申請首頁</a>
       <section class="module-top">
-        <div class="module-eyebrow">Payment & Verification Tracking</div>
+        <div class="module-eyebrow">Payment &amp; Verification Tracking</div>
         <h2>付款及核對追蹤</h2>
-        <p>現版本為靜態前台示範頁，已可同時顯示舊模組本地資料，以及新加入的費用批次與明細統計。</p>
+        <p>此頁集中展示主要模組案件，以及費用資料摘要，讓整體進度更清楚。</p>
       </section>
 
       <section class="panel-grid" style="margin-top:20px;">
         <div class="panel-card">
-          <div class="section-eyebrow">Module Summary</div>
+          <div class="section-eyebrow">Module Overview</div>
           <h3>現有模組摘要</h3>
           <div class="summary-grid">
             <div class="summary-box"><span>貨品報稅</span><strong id="taxCount">0</strong></div>
             <div class="summary-box"><span>機票申請</span><strong id="flightCount">0</strong></div>
             <div class="summary-box"><span>酒店申請</span><strong id="hotelCount">0</strong></div>
-            <div class="summary-box"><span>舊版雜費頁</span><strong id="legacyExpenseCount">0</strong></div>
+            <div class="summary-box"><span>費用及報銷入口</span><strong id="legacyExpenseCount">0</strong></div>
           </div>
         </div>
         <div class="panel-card">
-          <div class="section-eyebrow">Expense Batch Model</div>
-          <h3>Batch / Line 結構摘要</h3>
+          <div class="section-eyebrow">Expense Overview</div>
+          <h3>費用資料摘要</h3>
           <div class="summary-grid">
-            <div class="summary-box"><span>費用 Batch</span><strong id="batchCount">0</strong></div>
-            <div class="summary-box"><span>費用 Lines</span><strong id="lineCount">0</strong></div>
-            <div class="summary-box"><span>單次批次</span><strong id="singleBatchCount">0</strong></div>
-            <div class="summary-box"><span>月度批次</span><strong id="monthlyBatchCount">0</strong></div>
+            <div class="summary-box"><span>費用批次</span><strong id="batchCount">0</strong></div>
+            <div class="summary-box"><span>費用明細</span><strong id="lineCount">0</strong></div>
+            <div class="summary-box"><span>單次申請</span><strong id="singleBatchCount">0</strong></div>
+            <div class="summary-box"><span>月度總表</span><strong id="monthlyBatchCount">0</strong></div>
           </div>
         </div>
       </section>
 
       <section class="table-card">
-        <h3>費用 Batch 追蹤</h3>
+        <h3>費用批次追蹤</h3>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>BatchNo</th><th>模式</th><th>店舖</th><th>申請人</th><th>Line 數</th><th>總金額</th><th>付款方</th><th>狀態</th><th>最後更新</th></tr></thead>
+            <thead><tr><th>批次編號</th><th>模式</th><th>店舖</th><th>申請人</th><th>明細數量</th><th>總金額</th><th>付款方</th><th>狀態</th><th>最後更新</th></tr></thead>
             <tbody id="batchBody"><tr><td colspan="9" class="empty-cell">暫時未有費用批次</td></tr></tbody>
           </table>
         </div>
       </section>
 
       <section class="table-card">
-        <h3>一般模組本地摘要</h3>
+        <h3>一般模組摘要</h3>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>模組</th><th>本地記錄數</th><th>最後記錄時間</th></tr></thead>
+            <thead><tr><th>模組</th><th>案件數量</th><th>最後更新時間</th></tr></thead>
             <tbody id="recordsBody"><tr><td colspan="3" class="empty-cell">暫時未有記錄</td></tr></tbody>
           </table>
         </div>
@@ -85,7 +85,7 @@
       { key: 'tax', label: '貨品報稅', counter: 'taxCount' },
       { key: 'flight', label: '機票申請', counter: 'flightCount' },
       { key: 'hotel', label: '酒店申請', counter: 'hotelCount' },
-      { key: 'store-expense', label: '舊版雜費頁', counter: 'legacyExpenseCount' }
+      { key: 'store-expense', label: '費用及報銷入口', counter: 'legacyExpenseCount' }
     ];
 
     function renderModuleSummary() {
