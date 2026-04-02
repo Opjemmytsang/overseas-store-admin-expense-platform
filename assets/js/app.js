@@ -5,6 +5,7 @@ window.APP_CONFIG = {
 
 const AppUtils = {
   _tesseractLoader: null,
+  _pdfJsLoader: null,
 
   storageKey(moduleKey) {
     return `${window.APP_CONFIG.storagePrefix}:${moduleKey}`;
@@ -212,14 +213,77 @@ const AppUtils = {
     return this._tesseractLoader;
   },
 
+  async ensurePdfJs() {
+    if (window.__pdfjsLibForAdminExpense) return window.__pdfjsLibForAdminExpense;
+    if (this._pdfJsLoader) return this._pdfJsLoader;
+
+    this._pdfJsLoader = (async () => {
+      const pdfjsLib = await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.624/build/pdf.min.mjs');
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@5.4.624/build/pdf.worker.min.mjs';
+      window.__pdfjsLibForAdminExpense = pdfjsLib;
+      return pdfjsLib;
+    })();
+
+    return this._pdfJsLoader;
+  },
+
+  async readDataUrlAsArrayBuffer(dataUrl) {
+    const res = await fetch(dataUrl);
+    return await res.arrayBuffer();
+  },
+
+  async recognizeImageDataUrl(dataUrl, lang = 'eng+chi_tra') {
+    const Tesseract = await this.ensureTesseract();
+    const result = await Tesseract.recognize(dataUrl, lang);
+    return this.normalizeWhitespace(result.data?.text || '');
+  },
+
+  async extractPdfText(file, statusEl, lang = 'eng+chi_tra') {
+    const pdfjsLib = await this.ensurePdfJs();
+    const arrayBuffer = await this.readDataUrlAsArrayBuffer(file.dataUrl);
+    const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+    const pdf = await loadingTask.promise;
+    const maxPages = Math.min(pdf.numPages, 10);
+    const pageTexts = [];
+
+    for (let pageNo = 1; pageNo <= maxPages; pageNo += 1) {
+      if (statusEl) statusEl.textContent = `正在讀取 PDF ${file.name} 第 ${pageNo}/${maxPages} 頁...`;
+      const page = await pdf.getPage(pageNo);
+      const textContent = await page.getTextContent();
+      const textLayerText = this.normalizeWhitespace(textContent.items.map(item => item.str || '').join(' '));
+
+      if (textLayerText.length >= 20) {
+        pageTexts.push(textLayerText);
+        continue;
+      }
+
+      const viewport = page.getViewport({ scale: 1.6 });
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d', { willReadFrequently: true });
+      canvas.width = Math.ceil(viewport.width);
+      canvas.height = Math.ceil(viewport.height);
+      await page.render({ canvasContext: context, viewport }).promise;
+      const ocrText = await this.recognizeImageDataUrl(canvas.toDataURL('image/png'), lang);
+      pageTexts.push(ocrText);
+    }
+
+    return this.normalizeWhitespace(pageTexts.join('\n'));
+  },
+
   async recognizeFiles(files, statusEl, lang = 'eng+chi_tra') {
     if (!files || !files.length) return [];
-    const Tesseract = await this.ensureTesseract();
     const results = [];
     for (let i = 0; i < files.length; i += 1) {
+      const file = files[i];
       if (statusEl) statusEl.textContent = `正在讀取附件 ${i + 1}/${files.length}...`;
-      const result = await Tesseract.recognize(files[i].dataUrl, lang);
-      results.push({ name: files[i].name, text: this.normalizeWhitespace(result.data?.text || '') });
+      let text = '';
+      const isPdf = String(file.name || '').toLowerCase().endsWith('.pdf') || String(file.type || '').toLowerCase().includes('pdf');
+      if (isPdf) {
+        text = await this.extractPdfText(file, statusEl, lang);
+      } else {
+        text = await this.recognizeImageDataUrl(file.dataUrl, lang);
+      }
+      results.push({ name: file.name, text: this.normalizeWhitespace(text) });
     }
     if (statusEl) statusEl.textContent = '讀取完成，請核對自動填寫結果。';
     return results;
