@@ -11,8 +11,8 @@
     <aside class="sidebar">
       <div class="brand-block">
         <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
-        <h1>行政及費用申請首頁</h1>
-        <p>集中處理海外分店的貨品報稅、機票、酒店、鋪頭雜費，以及付款及核對追蹤。</p>
+        <h1>行政及費用管理首頁</h1>
+        <p>集中統籌海外分店的貨品報稅、差旅安排、店舖費用申請及付款核對，作為內部作業的統一入口。</p>
       </div>
 
       <nav class="menu">
@@ -20,31 +20,53 @@
         <a class="menu-item" href="modules/tax.html">貨品報稅</a>
         <a class="menu-item" href="modules/flight.html">機票申請</a>
         <a class="menu-item" href="modules/hotel.html">酒店申請</a>
-        <a class="menu-item" href="modules/store-expense.html">鋪頭雜費申請</a>
+        <a class="menu-item" href="modules/store-expense.html">費用及報銷入口</a>
         <a class="menu-item" href="modules/payment-tracking.html">付款及核對追蹤</a>
       </nav>
     </aside>
 
     <main class="main-content">
-      <section class="hero-card">
+      <section class="hero-card hero-split">
         <div>
           <div class="eyebrow">Admin &amp; Expense Request Portal</div>
           <h2>海外分店行政及費用管理平台</h2>
-          <p>以一致介面整合海外分店行政事項，作為內部提交、查閱與後續流程接駁的統一入口。</p>
+          <p>此平台用作整合海外分店常見行政流程，讓申請、核對、付款及後續追蹤使用一致介面，方便內部協作及資料交接。</p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="modules/store-expense.html">開始提交申請</a>
+            <a class="btn btn-secondary" href="modules/payment-tracking.html">查看付款追蹤</a>
+          </div>
         </div>
-        <div class="hero-meta-grid">
-          <div class="hero-meta-box">
-            <span>Excel 總表名</span>
-            <strong>海外分店行政及費用總表.xlsx</strong>
+
+        <div class="hero-info-stack">
+          <div class="hero-info-card">
+            <span>今日重點</span>
+            <strong>先提交，再追蹤，再核對</strong>
+            <p>首頁集中提供入口與流程重點，不再顯示建置層資料，讓一般同事一入頁就知道下一步。</p>
           </div>
-          <div class="hero-meta-box">
-            <span>Excel Table 名</span>
-            <strong>tblAdminExpenseCases</strong>
+          <div class="hero-info-card">
+            <span>適用範圍</span>
+            <strong>海外分店常用行政流程</strong>
+            <p>涵蓋貨品報稅、差旅安排、店舖費用申請及付款核對追蹤，可再按需要接入 SharePoint 及 Power Automate。</p>
           </div>
-          <div class="hero-meta-box">
-            <span>SharePoint List 名</span>
-            <strong>行政及費用申請主表</strong>
-          </div>
+        </div>
+      </section>
+
+      <section class="metric-grid">
+        <div class="metric-card">
+          <span>01</span>
+          <strong>先處理申請</strong>
+          <p>由前線同事按情況進入報稅、機票、酒店或費用入口，先把資料整理完整。</p>
+        </div>
+        <div class="metric-card">
+          <span>02</span>
+          <strong>再核對付款</strong>
+          <p>完成申請後，集中於付款及核對追蹤頁查看批次、金額、狀態及更新時間。</p>
+        </div>
+        <div class="metric-card">
+          <span>03</span>
+          <strong>減少重複溝通</strong>
+          <p>將附件、欄位及狀態標準化，方便營運、財務及申請人之間交接。</p>
         </div>
       </section>
 
@@ -52,54 +74,57 @@
         <a class="feature-card" href="modules/tax.html">
           <div class="feature-index">01</div>
           <h3>貨品報稅</h3>
-          <p>上傳報稅文件、稅單、戶口證明及付款記錄，並核對付款金額。</p>
+          <p>整理發票、報關文件、稅單及付款證明，適合需要後續核對與存檔的案件。</p>
+          <div class="feature-foot">報稅文件整理</div>
         </a>
 
         <a class="feature-card" href="modules/flight.html">
           <div class="feature-index">02</div>
           <h3>機票申請</h3>
-          <p>提交出發地、目的地、出發回程日期、旅客資料及預算。</p>
+          <p>集中填寫旅客資料、航班安排、付款方式及報銷狀態，方便後續預訂與跟進。</p>
+          <div class="feature-foot">差旅行程申請</div>
         </a>
 
         <a class="feature-card" href="modules/hotel.html">
           <div class="feature-index">03</div>
           <h3>酒店申請</h3>
-          <p>管理入住日期、酒店地點、房型、人數及住宿安排。</p>
+          <p>整理入住日期、住客資料、酒店確認文件及付款安排，讓住宿資料更完整。</p>
+          <div class="feature-foot">住宿安排申請</div>
         </a>
 
         <a class="feature-card" href="modules/store-expense.html">
           <div class="feature-index">04</div>
-          <h3>鋪頭雜費申請</h3>
-          <p>提交鋪頭行政雜費、用途說明、金額及附件單據。</p>
+          <h3>費用及報銷入口</h3>
+          <p>按單次或月度方式整理店舖費用，統一提交，再帶入批次及明細結構作後續處理。</p>
+          <div class="feature-foot">店舖費用提交</div>
         </a>
 
         <a class="feature-card" href="modules/payment-tracking.html">
           <div class="feature-index">05</div>
           <h3>付款及核對追蹤</h3>
-          <p>集中查看案件進度、付款狀態、核對結果及附件完成度。</p>
+          <p>集中查看案件狀態、付款進度、最近更新及批次明細，方便後續行動與核對。</p>
+          <div class="feature-foot">管理層追蹤頁</div>
         </a>
       </section>
 
       <section class="panel-grid">
         <div class="panel-card">
-          <div class="section-eyebrow">Platform Positioning</div>
-          <h3>內部協作入口</h3>
-          <ul class="clean-list">
-            <li>聚合海外分店常用行政事項，讓提交、跟進及查閱保持一致。</li>
-            <li>涵蓋貨品報稅、差旅安排、店舖雜費及付款核對等日常流程。</li>
-            <li>適合作為公司內部統一入口，配合權限管理及後續流程接駁使用。</li>
-          </ul>
+          <div class="section-eyebrow">Suggested Workflow</div>
+          <h3>建議使用流程</h3>
+          <ol class="clean-list clean-list-numbered">
+            <li>先按申請類型進入對應模組，完成主要欄位及附件整理。</li>
+            <li>若屬店舖費用，可按單次或月度總表模式提交。</li>
+            <li>提交後統一到付款及核對追蹤頁查看狀態、更新時間及待辦項目。</li>
+          </ol>
         </div>
 
         <div class="panel-card">
-          <div class="section-eyebrow">Module Overview</div>
-          <h3>核心功能</h3>
+          <div class="section-eyebrow">Platform Notes</div>
+          <h3>平台定位</h3>
           <ul class="clean-list">
-            <li>貨品報稅與文件核對</li>
-            <li>機票及酒店安排</li>
-            <li>店舖行政費用申請</li>
-            <li>付款進度與核對追蹤</li>
-            <li>可按需要延伸其他海外行政流程</li>
+            <li>首頁只保留對使用者有用的工作入口與流程說明。</li>
+            <li>系統命名、模組名稱及流程語氣會盡量統一，減少 prototype 感。</li>
+            <li>後續可再接入 SharePoint List、文件庫及 Power Automate 流程。</li>
           </ul>
         </div>
       </section>
