@@ -76,6 +76,17 @@
             </div>
           </div>
         </div>
+        <div class="highlight-card">
+          <div class="section-eyebrow">Overdue Follow-up</div>
+          <h3>逾期待辦</h3>
+          <div class="summary-grid" style="grid-template-columns: 1fr;">
+            <div class="summary-box"><span>逾期批次</span><strong id="overdueCount">0</strong></div>
+          </div>
+          <ul class="clean-list" id="overdueList">
+            <li>暫時未有逾期待辦。</li>
+          </ul>
+          <div class="note" id="overdueNote">以超過 7 天仍屬「待付款 / 待審批 / 待提交」的批次計算。</div>
+        </div>
       </section>
 
       <section class="panel-grid" style="margin-top:20px;">
@@ -141,6 +152,7 @@
     const recordsBody = document.getElementById('recordsBody');
     const batchBody = document.getElementById('batchBody');
     const focusList = document.getElementById('focusList');
+    const overdueList = document.getElementById('overdueList');
     const modules = [
       { key: 'tax', label: '貨品報稅', counter: 'taxCount' },
       { key: 'flight', label: '機票申請', counter: 'flightCount' },
@@ -163,6 +175,18 @@
       if (text.includes('已付款')) return '核對付款證明';
       if (text.includes('已完成')) return '存檔完成';
       return '檢查最新狀態';
+    }
+
+    function getRowTimestamp(row) {
+      const value = row.updatedAt || row.createdAt || '';
+      const date = new Date(value);
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+
+    function getAgeDays(row) {
+      const date = getRowTimestamp(row);
+      if (!date) return null;
+      return Math.floor((Date.now() - date.getTime()) / 86400000);
     }
 
     function renderModuleSummary() {
@@ -192,6 +216,10 @@
       const lines = AppUtils.loadLines ? AppUtils.loadLines() : [];
       const pendingStatuses = ['待付款', '待審批', '待提交'];
       const pendingBatches = batches.filter(row => pendingStatuses.some(status => String(row.status || '').includes(status)));
+      const overdueBatches = pendingBatches.filter(row => {
+        const ageDays = getAgeDays(row);
+        return ageDays !== null && ageDays >= 7;
+      }).sort((a, b) => (getAgeDays(b) || 0) - (getAgeDays(a) || 0));
       const totalAmount = batches.reduce((sum, row) => sum + Number(row.totalAmount || 0), 0);
 
       document.getElementById('batchCount').textContent = String(batches.length);
@@ -201,6 +229,11 @@
       document.getElementById('pendingBatchCount').textContent = String(pendingBatches.length);
       document.getElementById('totalAmountValue').textContent = AppUtils.money(totalAmount);
       document.getElementById('latestBatchStatus').textContent = batches[0]?.status || '未有資料';
+      document.getElementById('overdueCount').textContent = String(overdueBatches.length);
+
+      overdueList.innerHTML = overdueBatches.length
+        ? overdueBatches.slice(0, 5).map(row => `<li>批次 ${AppUtils.escapeHtml(row.batchNo || '-')} 已逾期 ${getAgeDays(row)} 天，現況為「${AppUtils.escapeHtml(row.status || '待跟進')}」。</li>`).join('')
+        : '<li>暫時未有逾期待辦。</li>';
 
       batchBody.innerHTML = batches.length
         ? batches.map(row => {
@@ -221,12 +254,16 @@
           }).join('')
         : '<tr><td colspan="10" class="empty-cell">暫時未有費用批次</td></tr>';
 
-      return { batches, pendingBatches };
+      return { batches, pendingBatches, overdueBatches };
     }
 
     function renderFocusArea(moduleRows, batchSummary) {
       const focusItems = [];
       const latestCandidates = [];
+
+      batchSummary.overdueBatches.slice(0, 2).forEach(row => {
+        focusItems.unshift(`批次 ${row.batchNo || '-'} 已逾期 ${getAgeDays(row)} 天，建議立即處理。`);
+      });
 
       moduleRows.forEach(row => {
         if (row.latest) {
@@ -248,7 +285,7 @@
       if (!focusItems.length) {
         focusList.innerHTML = '<li>暫時未有待跟進項目。</li>';
       } else {
-        focusList.innerHTML = focusItems.slice(0, 4).map(item => `<li>${AppUtils.escapeHtml(item)}</li>`).join('');
+        focusList.innerHTML = focusItems.slice(0, 5).map(item => `<li>${AppUtils.escapeHtml(item)}</li>`).join('');
       }
 
       batchSummary.batches.slice(0, 1).forEach(row => {

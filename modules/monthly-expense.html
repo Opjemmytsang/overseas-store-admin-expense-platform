@@ -32,6 +32,30 @@
         <p>先填批次資料，再匯入 Excel。系統會以第一張工作表建立多條明細，可再人工調整後儲存。</p>
       </section>
 
+      <section class="panel-grid" style="margin-top:20px;">
+        <div class="panel-card">
+          <div class="section-eyebrow">Form Notes</div>
+          <h3>填表須知</h3>
+          <ul class="clean-list">
+            <li>建議以「每月 × 每店舖」作為一個批次，避免不同月份或店舖混在同一批次。</li>
+            <li>匯入前先填好批次資料，特別是店舖、月份、預設幣別及預設付款方。</li>
+            <li>若 Excel 欄位中已提供幣別或付款方，系統會優先使用明細內的值；否則沿用批次預設值。</li>
+          </ul>
+        </div>
+        <div class="panel-card">
+          <div class="section-eyebrow">Template &amp; Import Guide</div>
+          <h3>範本與匯入規格</h3>
+          <ul class="clean-list">
+            <li>建議欄名：ExpenseDate、ExpenseType、Vendor、Description、Amount、Currency、PaymentMethod、PaidBy。</li>
+            <li>日期請盡量使用標準日期格式，金額請保留純數字，避免混入貨幣符號。</li>
+            <li>如只需參考欄位結構，可先下載範本，再按實際需要增減欄位。</li>
+          </ul>
+          <div class="button-row">
+            <a class="btn btn-secondary" href="../monthly-expense-template.csv" download>下載 Excel 範本</a>
+          </div>
+        </div>
+      </section>
+
       <div class="module-layout">
         <section class="form-card">
           <h3>批次資料</h3>

@@ -32,6 +32,28 @@
         <p>案件編號會按填表當刻自動生成；完成上傳後，可整理附件內容並帶入主要欄位。</p>
       </section>
 
+      <section class="panel-grid" style="margin-top:20px;">
+        <div class="panel-card">
+          <div class="section-eyebrow">Form Notes</div>
+          <h3>填表須知</h3>
+          <ul class="clean-list">
+            <li>請先確認 Invoice No.、收貨公司、目的地及 Job No. 是否與報關文件一致。</li>
+            <li>稅款金額與付款金額建議按單據逐一核對；若有差異，請在備註欄補充原因。</li>
+            <li>儲存前建議先上傳齊 4 類附件，之後再進行提交或送出後續流程。</li>
+          </ul>
+        </div>
+        <div class="panel-card">
+          <div class="section-eyebrow">Required Attachments</div>
+          <h3>建議附件</h3>
+          <ul class="clean-list">
+            <li>Commercial Invoice / Packing List</li>
+            <li>報關 / 稅單</li>
+            <li>收款戶口證明</li>
+            <li>轉帳完成記錄</li>
+          </ul>
+        </div>
+      </section>
+
       <div class="module-layout">
         <section class="form-card">
           <h3>案件資料</h3>
@@ -225,7 +247,7 @@
       } catch (error) { ocrStatus.textContent = '內容整理未完成，請稍後再試或手動補回。'; }
     });
     document.getElementById('saveBtn').addEventListener('click', () => { AppUtils.ensureRequestNo(form.caseNo, MODULE_LABEL, MODULE_KEY); AppUtils.saveRecord(MODULE_KEY, buildPayload()); renderRecords(); alert('已儲存案件記錄。'); });
-    document.getElementById('submitBtn').addEventListener('click', async () => { try { await AppUtils.postToWebhook(buildPayload()); alert('已送出到後續流程。'); } catch (err) { alert('尚未設定 webhook，或送出失敗。'); } });
+    document.getElementById('submitBtn').addEventListener('click', async () => { try { await AppUtils.postToWebhook(buildPayload()); alert('已送出後續流程。'); } catch (err) { alert('尚未設定 webhook，或送出失敗。'); } });
     document.getElementById('exportBtn').addEventListener('click', () => { const rows = AppUtils.loadRecords(MODULE_KEY); if (!rows.length) return alert('未有記錄可以匯出。'); AppUtils.exportCsv('tax-records.csv', ['案件編號','Invoice No.','收貨公司','目的地','Invoice 金額','幣別','稅款金額','付款金額','文件齊全','金額一致','案件狀態','核對狀態','建立時間'], rows.map(row => [row.caseNo,row.invoiceNo,row.consignee,row.destination,row.invoiceAmount,row.currency,row.taxAmount,row.paymentAmount,row.docsComplete ? '是' : '否',row.amountMatched ? '是' : '否',row.status,row.checkStatus,row.createdAt])); });
     document.getElementById('resetBtn').addEventListener('click', () => location.reload());
 
