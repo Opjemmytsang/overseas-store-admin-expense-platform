@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>出差申請｜海外分店行政及費用管理平台</title>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand-block">
+        <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
+        <h1>出差申請</h1>
+        <p>先提出出差需求，再由系統通知審批及訂購跟進人，減少來回溝通時間。</p>
+      </div>
+      <nav class="menu">
+        <a class="menu-item" href="../index.html">首頁</a>
+        <a class="menu-item" href="tax.html">貨品報稅</a>
+        <a class="menu-item active" href="travel-request.html">出差申請</a>
+        <a class="menu-item" href="travel-approval-booking.html">出差審批及訂購</a>
+        <a class="menu-item" href="hotel.html">酒店申請</a>
+        <a class="menu-item" href="store-expense.html">費用及報銷入口</a>
+        <a class="menu-item" href="payment-tracking.html">付款及核對追蹤</a>
+      </nav>
+    </aside>
+
+    <main class="main-content" id="travelRequestPage">
+      <a class="top-link" href="../index.html">← 返回行政及費用管理首頁</a>
+
+      <section class="module-top">
+        <div class="module-eyebrow">Travel Request</div>
+        <h2>第一頁：出差需求提出</h2>
+        <p>申請人只需填寫最少資料。送出後，系統可即時以 webhook 方式通知企業微信 / 跟進流程；待上司批准後，再由第二頁立即跟進訂購。</p>
+      </section>
+
+      <section class="panel-grid" style="margin-top:20px;">
+        <div class="panel-card">
+          <div class="section-eyebrow">Step 1</div>
+          <h3>申請人只填基本需求</h3>
+          <ul class="clean-list">
+            <li>起點、終點、出發日期、寄艙行李、出差原因。</li>
+            <li>上傳護照 / 證件圖片，由系統自動讀取旅客資料。</li>
+            <li>提交後直接進入待審批狀態。</li>
+          </ul>
+        </div>
+        <div class="panel-card">
+          <div class="section-eyebrow">Step 2</div>
+          <h3>系統代為通知及串流程</h3>
+          <ul class="clean-list">
+            <li>自動產生申請編號。</li>
+            <li>自動發通知到 webhook / 企業微信流程。</li>
+            <li>批准後於第二頁立即處理 Trip.com 查價及訂購。</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="module-layout">
+        <section class="form-card">
+          <h3>出差申請表</h3>
+          <div class="form-grid">
+            <div class="field"><label for="requestNo">申請編號</label><input id="requestNo" readonly /></div>
+            <div class="field"><label for="status">狀態</label><input id="status" readonly value="待提交" /></div>
+
+            <div class="field"><label for="applicant">申請人</label><input id="applicant" placeholder="例如 Alex Wong" /></div>
+            <div class="field"><label for="storeDept">店舖 / 部門</label><select id="storeDept"></select></div>
+
+            <div class="field"><label for="origin">起點</label><input id="origin" placeholder="例如 HKG" /></div>
+            <div class="field"><label for="destination">終點</label><input id="destination" placeholder="例如 NRT" /></div>
+
+            <div class="field"><label for="departureDate">出發日期</label><input id="departureDate" type="date" /></div>
+            <div class="field">
+              <label for="hasCheckedBaggage">寄艙行李</label>
+              <div class="summary-box" style="display:flex;align-items:center;gap:10px;">
+                <input id="hasCheckedBaggage" type="checkbox" style="width:auto;" />
+                <span style="margin:0;">需要寄艙行李</span>
+              </div>
+            </div>
+
+            <div class="field full"><label for="purpose">出差原因</label><textarea id="purpose" placeholder="例如 巡店 / 開舖支援 / 會議 / 培訓"></textarea></div>
+          </div>
+
+          <div class="section-eyebrow" style="margin-top:20px;">Document OCR</div>
+          <h3 style="margin-top:8px;">證件資料自動帶入</h3>
+          <div class="upload-grid" style="grid-template-columns:1fr;">
+            <div class="upload-box">
+              <h4>護照 / 證件圖片</h4>
+              <p>上傳後可按「讀取證件資料」，系統會嘗試自動帶入旅客英文名、證件號碼、國籍及有效期。</p>
+              <input id="documentFile" type="file" accept="image/*,.pdf" multiple />
+              <div class="preview-grid" id="documentPreview"></div>
+            </div>
+          </div>
+
+          <div class="form-grid" style="margin-top:16px;">
+            <div class="field"><label for="travelerEnglishName">旅客英文名</label><input id="travelerEnglishName" placeholder="自動帶入後可手動修正" /></div>
+            <div class="field"><label for="documentType">證件類型</label><input id="documentType" placeholder="例如 護照" /></div>
+
+            <div class="field"><label for="documentNumber">證件號碼</label><input id="documentNumber" placeholder="例如 K1234567" /></div>
+            <div class="field"><label for="nationality">國籍</label><input id="nationality" placeholder="例如 CHN / HKG" /></div>
+
+            <div class="field"><label for="birthDate">出生日期</label><input id="birthDate" type="date" /></div>
+            <div class="field"><label for="expiryDate">到期日</label><input id="expiryDate" type="date" /></div>
+          </div>
+
+          <div class="button-row">
+            <button class="btn btn-secondary" id="readDocumentBtn" type="button">讀取證件資料</button>
+            <button class="btn btn-secondary" id="saveDraftBtn" type="button">儲存草稿</button>
+            <button class="btn btn-primary" id="submitRequestBtn" type="button">提交出差申請</button>
+          </div>
+          <div class="note" id="ocrStatus">尚未開始讀取證件資料。</div>
+          <div class="note" id="webhookStatus">提交後會嘗試呼叫 webhook / 企業微信流程。</div>
+        </section>
+
+        <aside class="status-card">
+          <h3>申請摘要</h3>
+          <div class="summary-grid">
+            <div class="summary-box"><span>申請人</span><strong id="summaryApplicant">未填寫</strong></div>
+            <div class="summary-box"><span>行程</span><strong id="summaryRoute">未填寫</strong></div>
+            <div class="summary-box"><span>出發日期</span><strong id="summaryDate">未填寫</strong></div>
+            <div class="summary-box"><span>行李</span><strong id="summaryBaggage">未填寫</strong></div>
+          </div>
+
+          <div class="status-list">
+            <div class="status-item">
+              <div><strong>流程狀態</strong><span id="statusHint">目前狀態：待提交</span></div>
+              <div class="badge warn">待提交</div>
+            </div>
+            <div class="status-item">
+              <div><strong>下一步</strong><span>提交後通知審批人及跟進人</span></div>
+              <div class="badge ok">自動通知</div>
+            </div>
+            <div class="status-item">
+              <div><strong>第二頁用途</strong><span>批准後直接做查價及訂購</span></div>
+              <div class="badge ok">可串流程</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <section class="table-card">
+        <h3>已儲存的出差申請</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>申請編號</th>
+                <th>申請人</th>
+                <th>店舖 / 部門</th>
+                <th>行程</th>
+                <th>出發日期</th>
+                <th>寄艙</th>
+                <th>狀態</th>
+              </tr>
+            </thead>
+            <tbody id="requestRecordsBody">
+              <tr><td colspan="7" class="empty-cell">暫時未有記錄</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/form-options.js"></script>
+  <script src="../assets/js/travel-workflow.js"></script>
+</body>
+</html>
