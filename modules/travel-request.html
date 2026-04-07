@@ -40,7 +40,7 @@
           <h3>申請人只填基本需求</h3>
           <ul class="clean-list">
             <li>起點、終點、出發日期、寄艙行李、出差原因。</li>
-            <li>上傳護照 / 證件圖片，由系統自動讀取旅客資料。</li>
+            <li>上傳護照 / 證件圖片，由系統先讀可見文字，不足時再 fallback 至機讀區。</li>
             <li>提交後直接進入待審批狀態。</li>
           </ul>
         </div>
@@ -68,7 +68,16 @@
             <div class="field"><label for="origin">起點</label><input id="origin" placeholder="例如 HKG" /></div>
             <div class="field"><label for="destination">終點</label><input id="destination" placeholder="例如 NRT" /></div>
 
-            <div class="field"><label for="departureDate">出發日期</label><input id="departureDate" type="date" /></div>
+            <div class="field">
+              <label>出發日期</label>
+              <input id="departureDate" type="hidden" />
+              <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;">
+                <select id="departureYear"></select>
+                <select id="departureMonth"></select>
+                <select id="departureDay"></select>
+              </div>
+              <div class="note" style="margin-top:8px;">請以年 / 月 / 日逐項選擇，減少日期誤判。</div>
+            </div>
             <div class="field">
               <label for="hasCheckedBaggage">寄艙行李</label>
               <div class="summary-box" style="display:flex;align-items:center;gap:10px;">
@@ -85,7 +94,7 @@
           <div class="upload-grid" style="grid-template-columns:1fr;">
             <div class="upload-box">
               <h4>護照 / 證件圖片</h4>
-              <p>上傳後可按「讀取證件資料」，系統會嘗試自動帶入旅客英文名、證件號碼、國籍及有效期。</p>
+              <p>上傳後可按「讀取證件資料」，系統會先嘗試從可見文字讀取姓名、證件號碼、國籍及日期；如資料不足，再 fallback 到護照底部機讀區。</p>
               <input id="documentFile" type="file" accept="image/*,.pdf" multiple />
               <div class="preview-grid" id="documentPreview"></div>
             </div>
