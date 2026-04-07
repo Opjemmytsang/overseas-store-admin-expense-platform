@@ -122,6 +122,10 @@ window.TravelWorkflow = (() => {
     return String(value || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
   }
 
+  function escapeRegex(text) {
+    return String(text || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
   function inferCenturyForBirth(yy) {
     const currentYY = new Date().getFullYear() % 100;
     return Number(yy) > currentYY ? '19' : '20';
@@ -140,6 +144,67 @@ window.TravelWorkflow = (() => {
     return `${century}${yy}-${mm}-${dd}`;
   }
 
+  function parseVisibleField(text, labels, pattern = '([A-Z0-9<\\/\\- ]{2,40})') {
+    const escapedLabels = labels.map(label => escapeRegex(label)).join('|');
+    const regex = new RegExp(`(?:${escapedLabels})[\\s:：]*${pattern}`, 'i');
+    const match = String(text || '').match(regex);
+    return match ? normalizeText(match[1].replace(/</g, ' ')) : '';
+  }
+
+  function parseLabeledDate(text, labels) {
+    const escapedLabels = labels.map(label => escapeRegex(label)).join('|');
+    const regex = new RegExp(`(?:${escapedLabels})[\\s:：]*([0-9A-Z\\/\\-\\. ]{6,20})`, 'i');
+    const match = String(text || '').match(regex);
+    if (!match) return '';
+
+    const value = normalizeText(match[1]).replace(/\./g, '/').toUpperCase();
+    let token = value.match(/\b(\d{4})[\/\-](\d{2})[\/\-](\d{2})\b/);
+    if (token) return `${token[1]}-${token[2]}-${token[3]}`;
+
+    token = value.match(/\b(\d{2})[\/\-](\d{2})[\/\-](\d{4})\b/);
+    if (token) return `${token[3]}-${token[2]}-${token[1]}`;
+
+    const months = { JAN:'01', FEB:'02', MAR:'03', APR:'04', MAY:'05', JUN:'06', JUL:'07', AUG:'08', SEP:'09', OCT:'10', NOV:'11', DEC:'12' };
+    token = value.match(/\b(\d{1,2})\s*([A-Z]{3})\s*(\d{4})\b/);
+    if (token && months[token[2]]) {
+      return `${token[3]}-${months[token[2]]}-${String(token[1]).padStart(2, '0')}`;
+    }
+
+    return '';
+  }
+
+  function parseVisiblePassportFields(text) {
+    const normalized = String(text || '').replace(/\r/g, '\n');
+    const surname = parseVisibleField(normalized, ['Surname', '姓'], '([A-Z< ]{2,50})');
+    const given = parseVisibleField(normalized, ['Given Names', 'Given Name', '名'], '([A-Z< ]{2,80})');
+    let fullName = '';
+    if (surname || given) {
+      fullName = normalizeText(`${surname} ${given}`);
+    }
+    if (!fullName) {
+      fullName = parseVisibleField(normalized, ['Name', '姓名', 'Holder'], '([A-Z][A-Z< \/]{4,80})');
+    }
+
+    const documentNumber = normalizeCode(
+      parseVisibleField(normalized, ['Passport No', 'Passport Number', 'Document No', 'Document Number', '護照號碼', '證件號碼'], '([A-Z0-9<\- ]{5,20})')
+    );
+    const nationality = normalizeText(
+      parseVisibleField(normalized, ['Nationality', '國籍'], '([A-Z]{3}|[A-Z ]{2,30})')
+    ).toUpperCase();
+
+    const birthDate = parseLabeledDate(normalized, ['Date of Birth', 'Birth Date', 'DOB', '出生日期']);
+    const expiryDate = parseLabeledDate(normalized, ['Date of Expiry', 'Expiry Date', 'Expiration Date', 'Date of Expiration', '到期日', '有效期']);
+
+    return {
+      travelerEnglishName: fullName,
+      documentType: /passport|護照/i.test(normalized) ? '護照' : '',
+      documentNumber,
+      nationality,
+      birthDate,
+      expiryDate
+    };
+  }
+
   function normalizeMrzDigits(value) {
     return String(value || '')
       .toUpperCase()
@@ -151,33 +216,6 @@ window.TravelWorkflow = (() => {
       .replace(/S/g, '5')
       .replace(/B/g, '8')
       .replace(/G/g, '6');
-  }
-
-  function parseLabeledDate(text, labels) {
-    const escapedLabels = labels.map(label => label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
-    const regex = new RegExp(`(?:${escapedLabels})[\\s:：]*([0-9A-Z\\/\\-\\. ]{6,20})`, 'i');
-    const match = String(text || '').match(regex);
-    if (!match) return '';
-    const value = normalizeText(match[1]).replace(/\./g, '/');
-    const direct = AppUtils.normalizeDateString(value);
-    if (direct) return direct;
-
-    const yyyymmdd = value.match(/\b(\d{4})[\/\-](\d{2})[\/\-](\d{2})\b/);
-    if (yyyymmdd) return `${yyyymmdd[1]}-${yyyymmdd[2]}-${yyyymmdd[3]}`;
-
-    const ddmmyyyy = value.match(/\b(\d{2})[\/\-](\d{2})[\/\-](\d{4})\b/);
-    if (ddmmyyyy) return `${ddmmyyyy[3]}-${ddmmyyyy[2]}-${ddmmyyyy[1]}`;
-
-    const monthNames = {
-      JAN: '01', FEB: '02', MAR: '03', APR: '04', MAY: '05', JUN: '06',
-      JUL: '07', AUG: '08', SEP: '09', OCT: '10', NOV: '11', DEC: '12'
-    };
-    const ddMonYyyy = value.toUpperCase().match(/\b(\d{1,2})\s*([A-Z]{3})\s*(\d{4})\b/);
-    if (ddMonYyyy && monthNames[ddMonYyyy[2]]) {
-      return `${ddMonYyyy[3]}-${monthNames[ddMonYyyy[2]]}-${String(ddMonYyyy[1]).padStart(2, '0')}`;
-    }
-
-    return '';
   }
 
   function findMrzLines(text) {
@@ -192,8 +230,8 @@ window.TravelWorkflow = (() => {
 
     const firstIndex = compactLines.indexOf(firstLine);
     const afterFirst = compactLines.slice(firstIndex + 1);
-
     let secondLine = afterFirst.find(line => line.length >= 24 && /\d{6}/.test(normalizeMrzDigits(line)));
+
     if (!secondLine && afterFirst.length >= 2) {
       for (let i = 0; i < afterFirst.length - 1; i += 1) {
         const merged = `${afterFirst[i]}${afterFirst[i + 1]}`;
@@ -230,16 +268,14 @@ window.TravelWorkflow = (() => {
     let expiryDate = toIsoDateFromMrz(paddedSecond.slice(21, 27), 'expiry');
 
     if (!documentNumber || !birthDate || !expiryDate) {
-      const mrzPattern = cleanSecond.match(/([A-Z0-9<]{7,10})[0-9<]([A-Z<]{3})([0-9OILSQBG]{6})[0-9<][MFX<]([0-9OILSQBG]{6})/);
-      if (mrzPattern) {
-        if (!documentNumber) documentNumber = mrzPattern[1].replace(/<+/g, '').trim();
-        if (!nationality) nationality = mrzPattern[2].replace(/<+/g, '').trim();
-        if (!birthDate) birthDate = toIsoDateFromMrz(normalizeMrzDigits(mrzPattern[3]), 'birth');
-        if (!expiryDate) expiryDate = toIsoDateFromMrz(normalizeMrzDigits(mrzPattern[4]), 'expiry');
+      const pattern = cleanSecond.match(/([A-Z0-9<]{7,10})[0-9<]([A-Z<]{3})([0-9OILSQBG]{6})[0-9<][MFX<]([0-9OILSQBG]{6})/);
+      if (pattern) {
+        if (!documentNumber) documentNumber = pattern[1].replace(/<+/g, '').trim();
+        if (!nationality) nationality = pattern[2].replace(/<+/g, '').trim();
+        if (!birthDate) birthDate = toIsoDateFromMrz(normalizeMrzDigits(pattern[3]), 'birth');
+        if (!expiryDate) expiryDate = toIsoDateFromMrz(normalizeMrzDigits(pattern[4]), 'expiry');
       }
     }
-
-    if (!fullName && !documentNumber && !birthDate && !expiryDate) return null;
 
     return {
       travelerEnglishName: fullName,
@@ -251,61 +287,123 @@ window.TravelWorkflow = (() => {
     };
   }
 
+  function pickFirstValue(...values) {
+    return values.find(value => String(value || '').trim()) || '';
+  }
+
   function parseTravelDocumentText(text) {
     const normalized = String(text || '').replace(/\r/g, '\n');
-    const fromMrz = parseMrzBlock(normalized);
+    const visible = parseVisiblePassportFields(normalized);
+    const mrz = parseMrzBlock(normalized) || {};
 
-    const data = {
-      travelerEnglishName: fromMrz?.travelerEnglishName || '',
-      documentType: fromMrz?.documentType || '',
-      documentNumber: fromMrz?.documentNumber || '',
-      nationality: fromMrz?.nationality || '',
-      birthDate: fromMrz?.birthDate || '',
-      expiryDate: fromMrz?.expiryDate || ''
+    const fallbackDocMatch = normalized.match(/\b([A-Z]\d{6,8}|\d{8,10}[A-Z]?)\b/);
+    const fallbackDates = AppUtils.extractDates(normalized);
+
+    return {
+      travelerEnglishName: pickFirstValue(visible.travelerEnglishName, mrz.travelerEnglishName, AppUtils.parseMrzName(normalized)),
+      documentType: pickFirstValue(visible.documentType, mrz.documentType, /identity|hkid|身份證/i.test(normalized) ? '身份證' : ''),
+      documentNumber: pickFirstValue(visible.documentNumber, mrz.documentNumber, fallbackDocMatch ? normalizeCode(fallbackDocMatch[1]) : ''),
+      nationality: pickFirstValue(visible.nationality, mrz.nationality, parseVisibleField(normalized, ['Nationality', '國籍'], '([A-Z]{3}|[A-Z ]{2,30})').toUpperCase()),
+      birthDate: pickFirstValue(visible.birthDate, mrz.birthDate, fallbackDates[0] || ''),
+      expiryDate: pickFirstValue(visible.expiryDate, mrz.expiryDate, fallbackDates[1] || '')
     };
+  }
 
-    const nameMatch = normalized.match(/(?:Surname|Given\s*Name|Name|姓名)[\s:：]*([A-Z][A-Z\s\/<]{4,})/i);
-    if (!data.travelerEnglishName) {
-      if (nameMatch) {
-        data.travelerEnglishName = normalizeText(nameMatch[1].replace(/</g, ' '));
-      } else {
-        data.travelerEnglishName = AppUtils.parseMrzName(normalized) || '';
-      }
+  function populateSelect(selectEl, values, placeholder) {
+    if (!selectEl) return;
+    const existing = selectEl.value;
+    selectEl.innerHTML = [`<option value="">${placeholder}</option>`]
+      .concat(values.map(item => `<option value="${item.value}">${item.label}</option>`))
+      .join('');
+    if (existing) selectEl.value = existing;
+  }
+
+  function daysInMonth(year, month) {
+    if (!year || !month) return 31;
+    return new Date(Number(year), Number(month), 0).getDate();
+  }
+
+  function syncDepartureDateHidden() {
+    const year = qs('departureYear')?.value || '';
+    const month = qs('departureMonth')?.value || '';
+    const day = qs('departureDay')?.value || '';
+    const hidden = qs('departureDate');
+    if (!hidden) return;
+    hidden.value = year && month && day ? `${year}-${month}-${day}` : '';
+  }
+
+  function refreshDepartureDayOptions() {
+    const year = qs('departureYear')?.value || '';
+    const month = qs('departureMonth')?.value || '';
+    const daySelect = qs('departureDay');
+    if (!daySelect) return;
+
+    const maxDays = daysInMonth(year, month);
+    const values = Array.from({ length: maxDays }, (_, index) => {
+      const val = pad(index + 1);
+      return { value: val, label: `${val} 日` };
+    });
+    const previousDay = daySelect.value;
+    populateSelect(daySelect, values, '日');
+    if (previousDay && Number(previousDay) <= maxDays) {
+      daySelect.value = previousDay;
+    }
+  }
+
+  function applyDepartureDateToSelects(dateStr) {
+    const yearEl = qs('departureYear');
+    const monthEl = qs('departureMonth');
+    const dayEl = qs('departureDay');
+    const hidden = qs('departureDate');
+    if (!yearEl || !monthEl || !dayEl || !hidden) return;
+
+    if (!dateStr) {
+      yearEl.value = '';
+      monthEl.value = '';
+      refreshDepartureDayOptions();
+      dayEl.value = '';
+      hidden.value = '';
+      return;
     }
 
-    if (/passport|護照/i.test(normalized)) data.documentType = '護照';
-    if (/identity|hkid|身份證/i.test(normalized) && !data.documentType) data.documentType = '身份證';
-
-    if (!data.documentNumber) {
-      const docMatch = normalized.match(/\b([A-Z]\d{6,8}|\d{8,10}[A-Z]?)\b/);
-      if (docMatch) data.documentNumber = normalizeCode(docMatch[1]);
+    const parts = String(dateStr).split('-');
+    if (parts.length === 3) {
+      yearEl.value = parts[0];
+      monthEl.value = parts[1];
+      refreshDepartureDayOptions();
+      dayEl.value = parts[2];
+      hidden.value = dateStr;
     }
+  }
 
-    if (!data.documentNumber) {
-      const mrzDocMatch = normalizeMrzDigits(normalized.replace(/\s+/g, '')).match(/([A-Z0-9<]{7,10})[0-9<][A-Z<]{3}[0-9]{6}/);
-      if (mrzDocMatch) data.documentNumber = mrzDocMatch[1].replace(/<+/g, '').trim();
-    }
+  function initializeDepartureDateControls() {
+    const yearEl = qs('departureYear');
+    const monthEl = qs('departureMonth');
+    const dayEl = qs('departureDay');
+    if (!yearEl || !monthEl || !dayEl) return;
 
-    if (!data.nationality) {
-      const nationalityMatch = normalized.match(/(?:Nationality|國籍)[\s:：]*([A-Z]{3}|[A-Za-z ]{2,30})/i);
-      if (nationalityMatch) data.nationality = normalizeText(nationalityMatch[1]).toUpperCase();
-    }
+    const currentYear = new Date().getFullYear();
+    const yearValues = Array.from({ length: 5 }, (_, index) => {
+      const year = String(currentYear - 1 + index);
+      return { value: year, label: `${year} 年` };
+    });
+    const monthValues = Array.from({ length: 12 }, (_, index) => {
+      const month = pad(index + 1);
+      return { value: month, label: `${month} 月` };
+    });
 
-    if (!data.birthDate) {
-      data.birthDate =
-        parseLabeledDate(normalized, ['Date of Birth', 'Birth Date', 'DOB', '出生日期']) ||
-        AppUtils.extractDates(normalized)[0] ||
-        '';
-    }
+    populateSelect(yearEl, yearValues, '年');
+    populateSelect(monthEl, monthValues, '月');
+    refreshDepartureDayOptions();
 
-    if (!data.expiryDate) {
-      data.expiryDate =
-        parseLabeledDate(normalized, ['Date of Expiry', 'Expiry Date', 'Expiration Date', 'Date of Expiration', '到期日', '有效期']) ||
-        AppUtils.extractDates(normalized)[1] ||
-        '';
-    }
+    [yearEl, monthEl].forEach(el => {
+      el.addEventListener('change', () => {
+        refreshDepartureDayOptions();
+        syncDepartureDateHidden();
+      });
+    });
 
-    return data;
+    dayEl.addEventListener('change', syncDepartureDateHidden);
   }
 
   function buildSearchUrl(record, mode = 'all') {
@@ -491,6 +589,7 @@ window.TravelWorkflow = (() => {
   function collectRequestForm(fileStore) {
     const requestNoEl = qs('requestNo');
     ensureTravelRequestNo(requestNoEl);
+    syncDepartureDateHidden();
 
     return mergeRecord(baseRecord(), {
       requestNo: requestNoEl.value.trim(),
@@ -537,6 +636,7 @@ window.TravelWorkflow = (() => {
 
     FormOptions.fillSelect(requestStatusEl, [STATUS.DRAFT, STATUS.PENDING, STATUS.RETURNED, STATUS.TO_BOOK, STATUS.BOOKED, STATUS.COMPLETED]);
     FormOptions.fillSelect(qs('storeDept'), window.FORM_OPTIONS.storeCodes, { placeholder: '請選擇店舖' });
+    initializeDepartureDateControls();
 
     function applyRecord(record) {
       fillForm(record, {
@@ -555,6 +655,7 @@ window.TravelWorkflow = (() => {
         birthDate: 'birthDate',
         expiryDate: 'expiryDate'
       });
+      applyDepartureDateToSelects(record.departureDate || '');
       qs('hasCheckedBaggage').checked = !!record.hasCheckedBaggage;
       fileStore.document = (record.files && record.files.document) ? record.files.document : [];
       renderPreview(qs('documentPreview'), fileStore.document);
@@ -567,6 +668,7 @@ window.TravelWorkflow = (() => {
       applyRecord(existing);
     } else {
       ensureTravelRequestNo(requestNoEl);
+      applyDepartureDateToSelects('');
       refreshRequestSummary();
       renderPreview(qs('documentPreview'), []);
     }
@@ -593,7 +695,7 @@ window.TravelWorkflow = (() => {
           birthDate: 'birthDate',
           expiryDate: 'expiryDate'
         });
-        ocrStatusEl.textContent = '已完成讀取證件資料，請再核對。';
+        ocrStatusEl.textContent = '已完成讀取證件資料，會先採用可見文字，資料不足時再補機讀區。';
       } catch (error) {
         ocrStatusEl.textContent = '未能完成讀取，請手動補回資料。';
       }
