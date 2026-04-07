@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>機票申請｜海外分店行政及費用管理平台</title>
+  <meta http-equiv="refresh" content="1; url=travel-request.html" />
+  <title>機票申請入口已更新｜海外分店行政及費用管理平台</title>
   <link rel="stylesheet" href="../assets/css/styles.css" />
 </head>
 <body>
@@ -11,13 +12,14 @@
     <aside class="sidebar">
       <div class="brand-block">
         <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
-        <h1>機票申請</h1>
-        <p>整理旅客資料、航班附件、訂票要求及報價記錄，方便後續預訂、審批與報銷跟進。</p>
+        <h1>機票申請入口已更新</h1>
+        <p>舊有機票申請頁已改為兩頁式出差流程，方便申請、審批及訂購跟進。</p>
       </div>
       <nav class="menu">
         <a class="menu-item" href="../index.html">首頁</a>
         <a class="menu-item" href="tax.html">貨品報稅</a>
-        <a class="menu-item active" href="flight.html">機票申請</a>
+        <a class="menu-item active" href="travel-request.html">出差申請</a>
+        <a class="menu-item" href="travel-approval-booking.html">出差審批及訂購</a>
         <a class="menu-item" href="hotel.html">酒店申請</a>
         <a class="menu-item" href="store-expense.html">費用及報銷入口</a>
         <a class="menu-item" href="payment-tracking.html">付款及核對追蹤</a>
@@ -28,639 +30,62 @@
       <a class="top-link" href="../index.html">← 返回行政及費用管理首頁</a>
 
       <section class="module-top">
-        <div class="module-eyebrow">Flight Request</div>
-        <h2>機票申請表</h2>
-        <p>申請編號會按填表當刻自動生成；完成上傳後，可整理附件內容並帶入主要欄位，同時可記錄 Trip.com / 攜程報價。</p>
+        <div class="module-eyebrow">Travel Workflow Updated</div>
+        <h2>機票申請入口已搬到新流程</h2>
+        <p>系統正在自動跳轉到「出差申請」頁。如未自動跳轉，可按下方按鈕繼續。</p>
       </section>
 
       <section class="panel-grid" style="margin-top:20px;">
         <div class="panel-card">
-          <div class="section-eyebrow">Booking Notes</div>
-          <h3>填表須知</h3>
+          <div class="section-eyebrow">Page 1</div>
+          <h3>出差申請</h3>
           <ul class="clean-list">
-            <li>請先填寫旅客資料、出發地、目的地及日期，之後再補充訂票要求。</li>
-            <li>如對直航、轉機、行李或時間有特別要求，請在「訂票要求」內填清楚。</li>
-            <li>查價後建議即時回填報價、航空公司及查價時間，方便後續比價與審批。</li>
+            <li>填寫起點、終點、出發日期、寄艙需求及出差原因。</li>
+            <li>上傳護照 / 證件圖片，系統可自動讀取基本資料。</li>
+            <li>提交後即進入待審批狀態。</li>
           </ul>
+          <div class="button-row">
+            <a class="btn btn-primary" href="travel-request.html">前往出差申請</a>
+          </div>
         </div>
+
         <div class="panel-card">
-          <div class="section-eyebrow">Trip.com Workflow</div>
-          <h3>Trip.com / 攜程查價流程</h3>
+          <div class="section-eyebrow">Page 2</div>
+          <h3>出差審批及訂購</h3>
           <ul class="clean-list">
-            <li>先在此頁填好航線、日期及訂票要求。</li>
-            <li>按「產生查價摘要」後，再按「打開 Trip.com 航班頁」。</li>
-            <li>查價完成後，把票價、航空公司、是否直航及查價時間回填到「報價記錄」。</li>
+            <li>查看申請摘要與證件附件。</li>
+            <li>批准後可直接打開 Trip.com 做直航 / 轉機查價。</li>
+            <li>完成訂購後可再通知相關跟進人。</li>
           </ul>
+          <div class="button-row">
+            <a class="btn btn-secondary" href="travel-approval-booking.html">前往審批及訂購</a>
+          </div>
         </div>
       </section>
 
-      <div class="module-layout">
-        <section class="form-card">
-          <h3>申請資料</h3>
-          <div class="form-grid">
-            <div class="field"><label for="requestNo">申請編號</label><input id="requestNo" readonly /></div>
-            <div class="field"><label for="status">申請狀態</label><select id="status"></select></div>
-
-            <div class="field"><label for="applicant">申請人</label><input id="applicant" placeholder="例如 Alex Wong" /></div>
-            <div class="field"><label for="storeDept">店舖代碼</label><select id="storeDept"></select></div>
-
-            <div class="field"><label for="traveler">旅客姓名</label><input id="traveler" placeholder="例如 Kelly Lau" /></div>
-            <div class="field"><label for="passportName">護照英文名</label><input id="passportName" placeholder="例如 KELLY LAU" /></div>
-
-            <div class="field"><label for="passportNo">護照號碼</label><input id="passportNo" placeholder="例如 P1234567" /></div>
-            <div class="field"><label for="bookingReference">航空公司參考編號</label><input id="bookingReference" placeholder="例如 AB12CD" /></div>
-
-            <div class="field"><label for="airline">航空公司</label><input id="airline" placeholder="例如 Example Air" /></div>
-            <div class="field"><label for="cabinClass">艙等</label><input id="cabinClass" placeholder="例如 Economy" /></div>
-
-            <div class="field"><label for="outboundFlightNo">去程航班號</label><input id="outboundFlightNo" placeholder="例如 EX101" /></div>
-            <div class="field"><label for="returnFlightNo">回程航班號</label><input id="returnFlightNo" placeholder="例如 EX102" /></div>
-
-            <div class="field"><label for="fromCity">出發地</label><input id="fromCity" placeholder="例如 Hong Kong" /></div>
-            <div class="field"><label for="toCity">目的地</label><input id="toCity" placeholder="例如 Bangkok" /></div>
-
-            <div class="field"><label for="departDate">出發日期</label><input id="departDate" type="date" /></div>
-            <div class="field"><label for="returnDate">回程日期</label><input id="returnDate" type="date" /></div>
-
-            <div class="field"><label for="budget">預算金額</label><input id="budget" type="number" step="0.01" /></div>
-            <div class="field"><label for="currency">幣別</label><select id="currency"></select></div>
-
-            <div class="field"><label for="paymentOwner">實際付款方</label><select id="paymentOwner"></select></div>
-            <div class="field"><label for="advancePayerName">代付款人姓名</label><input id="advancePayerName" placeholder="例如 Mason Lee" /></div>
-
-            <div class="field"><label for="paidAmount">實際支付金額</label><input id="paidAmount" type="number" step="0.01" /></div>
-            <div class="field"><label for="reimbursementStatus">還款 / 報銷狀態</label><select id="reimbursementStatus"></select></div>
-
-            <div class="field"><label for="reimbursementDate">還款 / 報銷日期</label><input id="reimbursementDate" type="date" /></div>
-            <div class="field"><label for="paymentMethod">付款方式</label><input id="paymentMethod" placeholder="例如 公司卡" /></div>
-
-            <div class="field full"><label for="purpose">用途說明</label><textarea id="purpose" placeholder="例如 探店、開舖、支援工作等"></textarea></div>
-          </div>
-
-          <div class="section-eyebrow" style="margin-top:20px;">Booking Preference</div>
-          <h3 style="margin-top:8px;">訂票要求</h3>
-          <div class="form-grid">
-            <div class="field"><label for="tripType">旅程類型</label><select id="tripType"></select></div>
-            <div class="field"><label for="directnessPreference">直航要求</label><select id="directnessPreference"></select></div>
-
-            <div class="field"><label for="maxStops">可接受轉機次數</label><select id="maxStops"></select></div>
-            <div class="field"><label for="dateFlexibility">日期彈性</label><select id="dateFlexibility"></select></div>
-
-            <div class="field"><label for="departTimePreference">出發時段</label><select id="departTimePreference"></select></div>
-            <div class="field"><label for="returnTimePreference">回程時段</label><select id="returnTimePreference"></select></div>
-
-            <div class="field"><label for="baggageRequirement">寄艙行李</label><select id="baggageRequirement"></select></div>
-            <div class="field"><label for="baggageWeight">行李重量 / 備註</label><input id="baggageWeight" placeholder="例如 20kg / 23kg / 樣板箱" /></div>
-
-            <div class="field"><label for="preferredAirline">優先航空公司</label><input id="preferredAirline" placeholder="例如 CX / TG" /></div>
-            <div class="field"><label for="avoidAirline">避免航空公司</label><input id="avoidAirline" placeholder="例如 避免某航空公司" /></div>
-
-            <div class="field"><label for="latestArrivalTime">最晚到達時間</label><input id="latestArrivalTime" type="time" /></div>
-            <div class="field"><label for="redEyeAllowed">可否乘搭紅眼航班</label><select id="redEyeAllowed"></select></div>
-
-            <div class="field"><label for="ticketFlexibility">改票 / 退票要求</label><select id="ticketFlexibility"></select></div>
-            <div class="field full"><label for="bookingPreferenceNote">訂票要求備註</label><textarea id="bookingPreferenceNote" placeholder="例如 只限直航、上午內到埗、要包 1 件 23kg 行李，不接受過夜轉機"></textarea></div>
-          </div>
-
-          <div class="section-eyebrow" style="margin-top:20px;">Trip.com Search</div>
-          <h3 style="margin-top:8px;">Trip.com / 攜程查價摘要</h3>
-          <div class="form-grid">
-            <div class="field full"><label for="tripSearchSummary">查價摘要</label><textarea id="tripSearchSummary" readonly placeholder="按下方按鈕自動整理查價摘要"></textarea></div>
-            <div class="field full"><label for="tripSearchUrl">Trip.com 查價連結</label><input id="tripSearchUrl" readonly placeholder="系統會提供建議入口連結" /></div>
-          </div>
-          <div class="button-row">
-            <button class="btn btn-secondary" id="buildTripSummaryBtn" type="button">產生查價摘要</button>
-            <button class="btn btn-secondary" id="copyTripSummaryBtn" type="button">複製查價摘要</button>
-            <button class="btn btn-secondary" id="openTripBtn" type="button">打開 Trip.com 航班頁</button>
-          </div>
-          <div class="note" id="tripHint">打開前建議先產生摘要並複製，方便貼到 Trip.com / 攜程進行即時查價。</div>
-
-          <div class="section-eyebrow" style="margin-top:20px;">Quote Record</div>
-          <h3 style="margin-top:8px;">報價記錄</h3>
-          <div class="form-grid">
-            <div class="field"><label for="quotePlatform">報價平台</label><select id="quotePlatform"></select></div>
-            <div class="field"><label for="quoteTripType">報價類型</label><select id="quoteTripType"></select></div>
-
-            <div class="field"><label for="quoteAirline">報價航空公司</label><input id="quoteAirline" placeholder="例如 國泰航空" /></div>
-            <div class="field"><label for="quoteAmount">報價金額</label><input id="quoteAmount" type="number" step="0.01" /></div>
-
-            <div class="field"><label for="quoteCurrency">報價幣別</label><select id="quoteCurrency"></select></div>
-            <div class="field"><label for="quoteCheckedAt">查價時間</label><input id="quoteCheckedAt" type="datetime-local" /></div>
-
-            <div class="field"><label for="quoteBaggageIncluded">是否包含寄艙行李</label><select id="quoteBaggageIncluded"></select></div>
-            <div class="field"><label for="quoteRefundability">退改條款</label><input id="quoteRefundability" placeholder="例如 可改不可退 / 不可退改" /></div>
-
-            <div class="field full"><label for="quoteUrl">報價連結</label><input id="quoteUrl" placeholder="可貼上 Trip.com / 攜程 查價連結" /></div>
-            <div class="field full"><label for="quoteRemark">報價備註</label><textarea id="quoteRemark" placeholder="例如 直航、包 1 件 23kg 行李、凌晨機、不含手續費用等"></textarea></div>
-          </div>
-
-          <div class="upload-grid">
-            <div class="upload-box">
-              <h4>護照 / 身份證明</h4>
-              <p>供訂票核對旅客資料。</p>
-              <input id="passportFile" type="file" accept="image/*,.pdf" multiple />
-              <div class="preview-grid" id="passportPreview"></div>
-            </div>
-
-            <div class="upload-box">
-              <h4>航班詳情 / 行程附件</h4>
-              <p>例如航班截圖、行程單、批准文件等。</p>
-              <input id="itineraryFile" type="file" accept="image/*,.pdf" multiple />
-              <div class="preview-grid" id="itineraryPreview"></div>
-            </div>
-
-            <div class="upload-box">
-              <h4>付款證明</h4>
-              <p>例如付款頁面截圖或交易證明。</p>
-              <input id="paymentFile" type="file" accept="image/*,.pdf" multiple />
-              <div class="preview-grid" id="paymentPreview"></div>
-            </div>
-          </div>
-
-          <div class="button-row">
-            <button class="btn btn-secondary" id="ocrBtn" type="button">整理附件內容</button>
-            <button class="btn btn-primary" id="saveBtn" type="button">儲存案件記錄</button>
-            <button class="btn btn-secondary" id="exportBtn" type="button">匯出案件 CSV</button>
-          </div>
-          <div class="note" id="ocrStatus">系統會按附件內容整理常見資料，請在提交前再次核對。</div>
-        </section>
-
-        <aside class="status-card">
-          <h3>申請摘要</h3>
-          <div class="summary-grid">
-            <div class="summary-box"><span>旅客</span><strong id="travelerSummary">未填寫</strong></div>
-            <div class="summary-box"><span>行程</span><strong id="tripSummary">未填寫</strong></div>
-            <div class="summary-box"><span>付款</span><strong id="paymentSummary">未填寫</strong></div>
-            <div class="summary-box"><span>參考編號</span><strong id="bookingSummary">未填寫</strong></div>
-          </div>
-          <div class="status-list">
-            <div class="status-item">
-              <div><strong>護照 / 身份證明</strong><span id="passportMeta">未上傳</span></div>
-              <div id="passportBadge" class="badge warn">待上傳</div>
-            </div>
-            <div class="status-item">
-              <div><strong>航班詳情 / 行程附件</strong><span id="itineraryMeta">未上傳</span></div>
-              <div id="itineraryBadge" class="badge warn">待上傳</div>
-            </div>
-            <div class="status-item">
-              <div><strong>付款證明</strong><span id="paymentMeta">未上傳</span></div>
-              <div id="paymentBadge" class="badge warn">待上傳</div>
-            </div>
-          </div>
-        </aside>
-      </div>
-
-      <section class="table-card">
-        <h3>案件記錄</h3>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>申請編號</th>
-                <th>店舖</th>
-                <th>旅客</th>
-                <th>參考編號</th>
-                <th>行程</th>
-                <th>預算</th>
-                <th>實付</th>
-                <th>付款方</th>
-                <th>報銷狀態</th>
-                <th>狀態</th>
-              </tr>
-            </thead>
-            <tbody id="recordsBody">
-              <tr><td colspan="10" class="empty-cell">暫時未有記錄</td></tr>
-            </tbody>
-          </table>
+      <section class="panel-grid">
+        <div class="panel-card">
+          <div class="section-eyebrow">Why changed</div>
+          <h3>改動原因</h3>
+          <ul class="clean-list">
+            <li>申請人不需要再一次過填太多欄位。</li>
+            <li>上司批准後即可立即進入訂購，不用再來回溝通。</li>
+            <li>流程更適合之後接 webhook、Power Automate 及企業微信通知。</li>
+          </ul>
+        </div>
+        <div class="panel-card">
+          <div class="section-eyebrow">Redirect</div>
+          <h3>自動轉址</h3>
+          <p class="note">此頁會於 1 秒後自動前往 <strong>travel-request.html</strong>。如瀏覽器阻止轉址，可手動按上方按鈕。</p>
         </div>
       </section>
     </main>
   </div>
 
-  <script src="../assets/js/app.js"></script>
-  <script src="../assets/js/form-options.js"></script>
   <script>
-    const MODULE_LABEL = '機票申請';
-    const MODULE_KEY = 'flight';
-
-    const requestNoEl = document.getElementById('requestNo');
-    const recordsBody = document.getElementById('recordsBody');
-    const ocrStatus = document.getElementById('ocrStatus');
-
-    const travelerSummary = document.getElementById('travelerSummary');
-    const tripSummary = document.getElementById('tripSummary');
-    const paymentSummary = document.getElementById('paymentSummary');
-    const bookingSummary = document.getElementById('bookingSummary');
-
-    const fileStore = { passport: [], itinerary: [], payment: [] };
-    const previewMap = {
-      passport: document.getElementById('passportPreview'),
-      itinerary: document.getElementById('itineraryPreview'),
-      payment: document.getElementById('paymentPreview')
-    };
-    const metaMap = {
-      passport: document.getElementById('passportMeta'),
-      itinerary: document.getElementById('itineraryMeta'),
-      payment: document.getElementById('paymentMeta')
-    };
-    const badgeMap = {
-      passport: document.getElementById('passportBadge'),
-      itinerary: document.getElementById('itineraryBadge'),
-      payment: document.getElementById('paymentBadge')
-    };
-
-    FormOptions.bindSelects({
-      statusId: 'status',
-      statusGroup: 'flight',
-      storeId: 'storeDept',
-      currencyId: 'currency',
-      reimbursementId: 'reimbursementStatus',
-      paymentOwnerId: 'paymentOwner'
-    });
-
-    function fillSimpleSelect(id, items, placeholder = null) {
-      FormOptions.fillSelect(document.getElementById(id), items, { placeholder });
-    }
-
-    fillSimpleSelect('tripType', ['單程', '來回', '多程']);
-    fillSimpleSelect('directnessPreference', ['不限', '優先直航', '只限直航']);
-    fillSimpleSelect('maxStops', ['不限', '不接受轉機', '最多 1 次', '最多 2 次']);
-    fillSimpleSelect('dateFlexibility', ['固定日期', '前後 1 天可接受', '前後 2 天可接受']);
-    fillSimpleSelect('departTimePreference', ['不限', '上午', '下午', '晚上', '避免凌晨']);
-    fillSimpleSelect('returnTimePreference', ['不限', '上午', '下午', '晚上', '避免凌晨']);
-    fillSimpleSelect('baggageRequirement', ['不需要', '需要寄艙行李', '可後補購買']);
-    fillSimpleSelect('redEyeAllowed', ['可以', '不可以', '盡量避免']);
-    fillSimpleSelect('ticketFlexibility', ['不限', '可改票優先', '可退票優先']);
-    fillSimpleSelect('quotePlatform', ['Trip.com', '攜程', '航空公司官網', '其他']);
-    fillSimpleSelect('quoteTripType', ['單程', '來回', '多程']);
-    fillSimpleSelect('quoteCurrency', window.FORM_OPTIONS.currencies);
-    fillSimpleSelect('quoteBaggageIncluded', ['未知', '是', '否']);
-
-    function setBadge(el, text, type) {
-      el.className = `badge ${type}`;
-      el.textContent = text;
-    }
-
-    function readFileAsDataURL(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
-    }
-
-    async function handleFiles(type, files) {
-      const items = [];
-      for (const file of files) {
-        items.push({ name: file.name, dataUrl: await readFileAsDataURL(file) });
-      }
-      fileStore[type] = items;
-      previewMap[type].innerHTML = items.map(row => `<img src="${row.dataUrl}" alt="${row.name}">`).join('');
-      metaMap[type].textContent = items.length ? `${items.length} 個檔案` : '未上傳';
-      setBadge(badgeMap[type], items.length ? '已上傳' : '待上傳', items.length ? 'ok' : 'warn');
-    }
-
-    function parseFlightData(passportText, itineraryText, paymentText) {
-      const data = {};
-
-      const mrzName = AppUtils.parseMrzName(passportText);
-      if (mrzName) {
-        data.passportName = mrzName;
-        data.traveler = mrzName;
-      }
-
-      const passportNo = passportText.match(/\b([A-Z]\d{7,8})\b/);
-      if (passportNo) data.passportNo = passportNo[1];
-
-      const booking = itineraryText.match(/(?:參考編號|reference|booking|pnr)\s*[:：]?\s*([A-Z0-9]{5,8})/i);
-      if (booking) data.bookingReference = booking[1].toUpperCase();
-
-      const airlineLine = itineraryText.match(/([A-Z][A-Za-z .&-]{2,40})\s+([A-Z]{1,3}\s?\d{2,4})\s+(Economy|Business|Premium Economy|First)/i);
-      if (airlineLine) {
-        data.airline = airlineLine[1].trim();
-        data.outboundFlightNo = airlineLine[2].replace(/\s+/g, '');
-        data.cabinClass = airlineLine[3];
-      }
-
-      const flightNos = [...itineraryText.matchAll(/\b([A-Z]{1,3}\s?\d{2,4})\b/g)].map(match => match[1].replace(/\s+/g, ''));
-      if (flightNos[0]) data.outboundFlightNo = flightNos[0];
-      if (flightNos[1]) data.returnFlightNo = flightNos[1];
-
-      const routeMatches = AppUtils.uniqueBy(
-        [...itineraryText.matchAll(/([A-Za-z\u4e00-\u9fff]{2,20})\s*\(([A-Z]{3})\)/g)].map(match => ({
-          city: match[1],
-          code: match[2]
-        })),
-        item => item.code
-      );
-      if (routeMatches[0]) data.fromCity = routeMatches[0].city;
-      if (routeMatches[1]) data.toCity = routeMatches[1].city;
-
-      const dates = AppUtils.extractDates(itineraryText);
-      if (dates[0]) data.departDate = dates[0];
-      if (dates[1]) data.returnDate = dates[1];
-
-      const cabin = itineraryText.match(/\b(Economy|Business|Premium Economy|First)\b/i);
-      if (cabin) data.cabinClass = cabin[1];
-
-      const totalMoney = AppUtils.findMoneyByKeywords(paymentText, ['總金額', 'total', 'amount']) || AppUtils.largestMoney(paymentText);
-      if (totalMoney) {
-        data.currency = totalMoney.currency;
-        data.paidAmount = totalMoney.amount;
-      }
-
-      return data;
-    }
-
-    function applyFlightData(data) {
-      AppUtils.setInputValue(document.getElementById('passportName'), data.passportName);
-      AppUtils.setInputValue(document.getElementById('traveler'), data.traveler);
-      AppUtils.setInputValue(document.getElementById('passportNo'), data.passportNo);
-      AppUtils.setInputValue(document.getElementById('bookingReference'), data.bookingReference);
-      AppUtils.setInputValue(document.getElementById('airline'), data.airline);
-      AppUtils.setInputValue(document.getElementById('cabinClass'), data.cabinClass);
-      AppUtils.setInputValue(document.getElementById('outboundFlightNo'), data.outboundFlightNo);
-      AppUtils.setInputValue(document.getElementById('returnFlightNo'), data.returnFlightNo);
-      AppUtils.setInputValue(document.getElementById('fromCity'), data.fromCity);
-      AppUtils.setInputValue(document.getElementById('toCity'), data.toCity);
-      AppUtils.setInputValue(document.getElementById('departDate'), data.departDate);
-      AppUtils.setInputValue(document.getElementById('returnDate'), data.returnDate);
-      AppUtils.setInputValue(document.getElementById('currency'), data.currency);
-      AppUtils.setInputValue(document.getElementById('paidAmount'), data.paidAmount);
-
-      if (!document.getElementById('budget').value && data.paidAmount) {
-        AppUtils.setInputValue(document.getElementById('budget'), data.paidAmount);
-      }
-    }
-
-    function buildTripSearchSummary() {
-      const tripType = document.getElementById('tripType').value;
-      const fromCity = document.getElementById('fromCity').value.trim();
-      const toCity = document.getElementById('toCity').value.trim();
-      const departDate = document.getElementById('departDate').value;
-      const returnDate = document.getElementById('returnDate').value;
-      const directnessPreference = document.getElementById('directnessPreference').value;
-      const maxStops = document.getElementById('maxStops').value;
-      const departTimePreference = document.getElementById('departTimePreference').value;
-      const returnTimePreference = document.getElementById('returnTimePreference').value;
-      const baggageRequirement = document.getElementById('baggageRequirement').value;
-      const baggageWeight = document.getElementById('baggageWeight').value.trim();
-      const preferredAirline = document.getElementById('preferredAirline').value.trim();
-      const avoidAirline = document.getElementById('avoidAirline').value.trim();
-      const latestArrivalTime = document.getElementById('latestArrivalTime').value;
-      const redEyeAllowed = document.getElementById('redEyeAllowed').value;
-      const ticketFlexibility = document.getElementById('ticketFlexibility').value;
-      const bookingPreferenceNote = document.getElementById('bookingPreferenceNote').value.trim();
-
-      const lines = [
-        `旅程類型：${tripType || '未填寫'}`,
-        `航線：${fromCity || '未填'} → ${toCity || '未填'}`,
-        `出發日期：${departDate || '未填寫'}`,
-      ];
-
-      if (tripType !== '單程') {
-        lines.push(`回程日期：${returnDate || '未填寫'}`);
-      }
-
-      lines.push(
-        `直航要求：${directnessPreference || '未填寫'}`,
-        `可接受轉機次數：${maxStops || '未填寫'}`,
-        `出發時段：${departTimePreference || '未填寫'}`,
-        `回程時段：${returnTimePreference || '未填寫'}`,
-        `寄艙行李：${baggageRequirement || '未填寫'}${baggageWeight ? `（${baggageWeight}）` : ''}`,
-        `可否乘搭紅眼航班：${redEyeAllowed || '未填寫'}`,
-        `改票 / 退票要求：${ticketFlexibility || '未填寫'}`
-      );
-
-      if (latestArrivalTime) lines.push(`最晚到達時間：${latestArrivalTime}`);
-      if (preferredAirline) lines.push(`優先航空公司：${preferredAirline}`);
-      if (avoidAirline) lines.push(`避免航空公司：${avoidAirline}`);
-      if (bookingPreferenceNote) lines.push(`備註：${bookingPreferenceNote}`);
-
-      const text = lines.join('\n');
-      document.getElementById('tripSearchSummary').value = text;
-      return text;
-    }
-
-    function buildTripSearchUrl() {
-      const fromCity = document.getElementById('fromCity').value.trim();
-      const toCity = document.getElementById('toCity').value.trim();
-      const departDate = document.getElementById('departDate').value;
-      const returnDate = document.getElementById('returnDate').value;
-      const tripType = document.getElementById('tripType').value;
-
-      const params = new URLSearchParams();
-      if (fromCity) params.set('from', fromCity);
-      if (toCity) params.set('to', toCity);
-      if (departDate) params.set('departDate', departDate);
-      if (returnDate) params.set('returnDate', returnDate);
-      if (tripType) params.set('tripType', tripType);
-
-      const url = `https://hk.trip.com/flights/?${params.toString()}`;
-      document.getElementById('tripSearchUrl').value = url;
-      return url;
-    }
-
-    function buildPayload() {
-      AppUtils.ensureRequestNo(requestNoEl, MODULE_LABEL, MODULE_KEY);
-
-      return {
-        moduleType: MODULE_LABEL,
-        requestNo: requestNoEl.value.trim(),
-        status: document.getElementById('status').value,
-        applicant: document.getElementById('applicant').value.trim(),
-        storeDept: document.getElementById('storeDept').value.trim(),
-
-        traveler: document.getElementById('traveler').value.trim(),
-        passportName: document.getElementById('passportName').value.trim(),
-        passportNo: document.getElementById('passportNo').value.trim(),
-        bookingReference: document.getElementById('bookingReference').value.trim(),
-        airline: document.getElementById('airline').value.trim(),
-        cabinClass: document.getElementById('cabinClass').value.trim(),
-        outboundFlightNo: document.getElementById('outboundFlightNo').value.trim(),
-        returnFlightNo: document.getElementById('returnFlightNo').value.trim(),
-        fromCity: document.getElementById('fromCity').value.trim(),
-        toCity: document.getElementById('toCity').value.trim(),
-        departDate: document.getElementById('departDate').value,
-        returnDate: document.getElementById('returnDate').value,
-        budget: Number(document.getElementById('budget').value || 0),
-        currency: document.getElementById('currency').value,
-
-        paymentOwner: document.getElementById('paymentOwner').value,
-        advancePayerName: document.getElementById('advancePayerName').value.trim(),
-        paidAmount: Number(document.getElementById('paidAmount').value || 0),
-        reimbursementStatus: document.getElementById('reimbursementStatus').value,
-        reimbursementDate: document.getElementById('reimbursementDate').value,
-        paymentMethod: document.getElementById('paymentMethod').value.trim(),
-        purpose: document.getElementById('purpose').value.trim(),
-
-        tripType: document.getElementById('tripType').value,
-        directnessPreference: document.getElementById('directnessPreference').value,
-        maxStops: document.getElementById('maxStops').value,
-        dateFlexibility: document.getElementById('dateFlexibility').value,
-        departTimePreference: document.getElementById('departTimePreference').value,
-        returnTimePreference: document.getElementById('returnTimePreference').value,
-        baggageRequirement: document.getElementById('baggageRequirement').value,
-        baggageWeight: document.getElementById('baggageWeight').value.trim(),
-        preferredAirline: document.getElementById('preferredAirline').value.trim(),
-        avoidAirline: document.getElementById('avoidAirline').value.trim(),
-        latestArrivalTime: document.getElementById('latestArrivalTime').value,
-        redEyeAllowed: document.getElementById('redEyeAllowed').value,
-        ticketFlexibility: document.getElementById('ticketFlexibility').value,
-        bookingPreferenceNote: document.getElementById('bookingPreferenceNote').value.trim(),
-
-        tripSearchSummary: document.getElementById('tripSearchSummary').value.trim(),
-        tripSearchUrl: document.getElementById('tripSearchUrl').value.trim(),
-
-        quotePlatform: document.getElementById('quotePlatform').value,
-        quoteTripType: document.getElementById('quoteTripType').value,
-        quoteAirline: document.getElementById('quoteAirline').value.trim(),
-        quoteAmount: Number(document.getElementById('quoteAmount').value || 0),
-        quoteCurrency: document.getElementById('quoteCurrency').value,
-        quoteCheckedAt: document.getElementById('quoteCheckedAt').value,
-        quoteBaggageIncluded: document.getElementById('quoteBaggageIncluded').value,
-        quoteRefundability: document.getElementById('quoteRefundability').value.trim(),
-        quoteUrl: document.getElementById('quoteUrl').value.trim(),
-        quoteRemark: document.getElementById('quoteRemark').value.trim(),
-
-        files: fileStore,
-        createdAt: new Date().toISOString()
-      };
-    }
-
-    function refreshSummary() {
-      travelerSummary.textContent = document.getElementById('traveler').value.trim() || '未填寫';
-
-      const fromCity = document.getElementById('fromCity').value.trim();
-      const toCity = document.getElementById('toCity').value.trim();
-      tripSummary.textContent = fromCity && toCity ? `${fromCity} → ${toCity}` : '未填寫';
-
-      const paymentOwner = document.getElementById('paymentOwner').value;
-      const paidAmount = Number(document.getElementById('paidAmount').value || 0);
-      paymentSummary.textContent = paidAmount > 0 ? `${paymentOwner} / ${AppUtils.money(paidAmount)}` : (paymentOwner || '未填寫');
-
-      bookingSummary.textContent = document.getElementById('bookingReference').value.trim() || '未填寫';
-    }
-
-    function renderRecords() {
-      const rows = AppUtils.loadRecords(MODULE_KEY);
-      recordsBody.innerHTML = rows.length
-        ? rows.map(row => `
-          <tr>
-            <td>${AppUtils.escapeHtml(row.requestNo || '')}</td>
-            <td>${AppUtils.escapeHtml(row.storeDept || '')}</td>
-            <td>${AppUtils.escapeHtml(row.traveler || '')}</td>
-            <td>${AppUtils.escapeHtml(row.bookingReference || '')}</td>
-            <td>${AppUtils.escapeHtml(row.fromCity || '')} → ${AppUtils.escapeHtml(row.toCity || '')}</td>
-            <td>${AppUtils.escapeHtml(AppUtils.money(row.budget))} ${AppUtils.escapeHtml(row.currency || '')}</td>
-            <td>${AppUtils.escapeHtml(AppUtils.money(row.paidAmount || 0))}</td>
-            <td>${AppUtils.escapeHtml(row.paymentOwner || '')}</td>
-            <td>${AppUtils.escapeHtml(row.reimbursementStatus || '')}</td>
-            <td>${AppUtils.escapeHtml(row.status || '')}</td>
-          </tr>
-        `).join('')
-        : '<tr><td colspan="10" class="empty-cell">暫時未有記錄</td></tr>';
-    }
-
-    document.querySelectorAll('input, select, textarea').forEach(el => {
-      el.addEventListener('input', refreshSummary);
-      el.addEventListener('change', refreshSummary);
-    });
-
-    document.getElementById('passportFile').addEventListener('change', e => handleFiles('passport', e.target.files));
-    document.getElementById('itineraryFile').addEventListener('change', e => handleFiles('itinerary', e.target.files));
-    document.getElementById('paymentFile').addEventListener('change', e => handleFiles('payment', e.target.files));
-
-    document.getElementById('ocrBtn').addEventListener('click', async () => {
-      if (!fileStore.passport.length && !fileStore.itinerary.length && !fileStore.payment.length) {
-        ocrStatus.textContent = '請先上傳附件，再開始整理。';
-        return;
-      }
-
-      try {
-        const passportResults = await AppUtils.recognizeFiles(fileStore.passport, ocrStatus);
-        const itineraryResults = await AppUtils.recognizeFiles(fileStore.itinerary, ocrStatus);
-        const paymentResults = await AppUtils.recognizeFiles(fileStore.payment, ocrStatus);
-
-        const data = parseFlightData(
-          passportResults.map(r => r.text).join('\n'),
-          itineraryResults.map(r => r.text).join('\n'),
-          paymentResults.map(r => r.text).join('\n')
-        );
-
-        applyFlightData(data);
-        refreshSummary();
-        ocrStatus.textContent = '內容整理完成，請再核對資料。';
-      } catch (error) {
-        ocrStatus.textContent = '內容整理未完成，請稍後再試或手動補回。';
-      }
-    });
-
-    document.getElementById('buildTripSummaryBtn').addEventListener('click', () => {
-      buildTripSearchSummary();
-      buildTripSearchUrl();
-      document.getElementById('tripHint').textContent = '已更新查價摘要及建議連結。';
-    });
-
-    document.getElementById('copyTripSummaryBtn').addEventListener('click', async () => {
-      const text = document.getElementById('tripSearchSummary').value || buildTripSearchSummary();
-      try {
-        await navigator.clipboard.writeText(text);
-        document.getElementById('tripHint').textContent = '已複製查價摘要。';
-      } catch (error) {
-        document.getElementById('tripHint').textContent = '未能直接複製，請手動複製文字。';
-      }
-    });
-
-    document.getElementById('openTripBtn').addEventListener('click', () => {
-      const url = document.getElementById('tripSearchUrl').value || buildTripSearchUrl();
-      window.open(url, '_blank');
-    });
-
-    document.getElementById('saveBtn').addEventListener('click', () => {
-      buildTripSearchSummary();
-      buildTripSearchUrl();
-      AppUtils.ensureRequestNo(requestNoEl, MODULE_LABEL, MODULE_KEY);
-      AppUtils.saveRecord(MODULE_KEY, buildPayload());
-      renderRecords();
-      alert('已儲存案件記錄。');
-    });
-
-    document.getElementById('exportBtn').addEventListener('click', () => {
-      const rows = AppUtils.loadRecords(MODULE_KEY);
-      if (!rows.length) {
-        alert('未有記錄可以匯出。');
-        return;
-      }
-
-      AppUtils.exportCsv(
-        'flight-requests.csv',
-        [
-          '申請編號','店舖代碼','申請人','旅客','護照英文名','護照號碼','航空公司','參考編號',
-          '去程航班號','回程航班號','出發地','目的地','出發日期','回程日期','預算','幣別',
-          '實際付款方','代付款人姓名','實際支付金額','還款/報銷狀態','還款/報銷日期',
-          '付款方式','旅程類型','直航要求','可接受轉機次數','寄艙行李','行李重量/備註',
-          '查價摘要','查價連結','報價平台','報價航空公司','報價金額','報價幣別','查價時間',
-          '是否包含寄艙行李','退改條款','報價連結','報價備註','狀態','建立時間'
-        ],
-        rows.map(row => [
-          row.requestNo, row.storeDept, row.applicant, row.traveler, row.passportName, row.passportNo,
-          row.airline, row.bookingReference, row.outboundFlightNo, row.returnFlightNo, row.fromCity,
-          row.toCity, row.departDate, row.returnDate, row.budget, row.currency, row.paymentOwner,
-          row.advancePayerName, row.paidAmount, row.reimbursementStatus, row.reimbursementDate,
-          row.paymentMethod, row.tripType, row.directnessPreference, row.maxStops, row.baggageRequirement,
-          row.baggageWeight, row.tripSearchSummary, row.tripSearchUrl, row.quotePlatform, row.quoteAirline,
-          row.quoteAmount, row.quoteCurrency, row.quoteCheckedAt, row.quoteBaggageIncluded,
-          row.quoteRefundability, row.quoteUrl, row.quoteRemark, row.status, row.createdAt
-        ])
-      );
-    });
-
-    AppUtils.ensureRequestNo(requestNoEl, MODULE_LABEL, MODULE_KEY);
-    buildTripSearchUrl();
-    refreshSummary();
-    renderRecords();
+    setTimeout(function () {
+      window.location.replace('travel-request.html');
+    }, 1000);
   </script>
 </body>
 </html>
