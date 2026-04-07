@@ -218,6 +218,10 @@ window.TravelWorkflow = (() => {
       .replace(/G/g, '6');
   }
 
+  function normalizeMrzNumericField(value) {
+    return normalizeMrzDigits(String(value || '').replace(/[^A-Z0-9<]/gi, ''));
+  }
+
   function findMrzLines(text) {
     const compactLines = String(text || '')
       .toUpperCase()
@@ -259,21 +263,21 @@ window.TravelWorkflow = (() => {
     const given = (nameParts[1] || '').replace(/<+/g, ' ').trim();
     const fullName = `${surname} ${given}`.trim();
 
-    const cleanSecond = normalizeMrzDigits(secondLine);
-    const paddedSecond = `${cleanSecond}${'<'.repeat(44)}`.slice(0, 44);
+    const rawSecond = String(secondLine || '').toUpperCase().replace(/[^A-Z0-9<]/g, '');
+    const paddedSecond = `${rawSecond}${'<'.repeat(44)}`.slice(0, 44);
 
     let documentNumber = paddedSecond.slice(0, 9).replace(/<+/g, '').trim();
     let nationality = paddedSecond.slice(10, 13).replace(/<+/g, '').trim();
-    let birthDate = toIsoDateFromMrz(paddedSecond.slice(13, 19), 'birth');
-    let expiryDate = toIsoDateFromMrz(paddedSecond.slice(21, 27), 'expiry');
+    let birthDate = toIsoDateFromMrz(normalizeMrzNumericField(paddedSecond.slice(13, 19)), 'birth');
+    let expiryDate = toIsoDateFromMrz(normalizeMrzNumericField(paddedSecond.slice(21, 27)), 'expiry');
 
     if (!documentNumber || !birthDate || !expiryDate) {
-      const pattern = cleanSecond.match(/([A-Z0-9<]{7,10})[0-9<]([A-Z<]{3})([0-9OILSQBG]{6})[0-9<][MFX<]([0-9OILSQBG]{6})/);
+      const pattern = rawSecond.match(/([A-Z0-9<]{7,10})[0-9<]([A-Z<]{3})([0-9OILSQBG]{6})[0-9<][MFX<]([0-9OILSQBG]{6})/);
       if (pattern) {
         if (!documentNumber) documentNumber = pattern[1].replace(/<+/g, '').trim();
         if (!nationality) nationality = pattern[2].replace(/<+/g, '').trim();
-        if (!birthDate) birthDate = toIsoDateFromMrz(normalizeMrzDigits(pattern[3]), 'birth');
-        if (!expiryDate) expiryDate = toIsoDateFromMrz(normalizeMrzDigits(pattern[4]), 'expiry');
+        if (!birthDate) birthDate = toIsoDateFromMrz(normalizeMrzNumericField(pattern[3]), 'birth');
+        if (!expiryDate) expiryDate = toIsoDateFromMrz(normalizeMrzNumericField(pattern[4]), 'expiry');
       }
     }
 
@@ -316,6 +320,14 @@ window.TravelWorkflow = (() => {
       .concat(values.map(item => `<option value="${item.value}">${item.label}</option>`))
       .join('');
     if (existing) selectEl.value = existing;
+  }
+
+  function ensureSelectOption(selectEl, value, label) {
+    if (!selectEl || !value) return;
+    const exists = Array.from(selectEl.options).some(option => option.value === value);
+    if (!exists) {
+      selectEl.insertAdjacentHTML('beforeend', `<option value="${value}">${label}</option>`);
+    }
   }
 
   function daysInMonth(year, month) {
@@ -368,6 +380,7 @@ window.TravelWorkflow = (() => {
 
     const parts = String(dateStr).split('-');
     if (parts.length === 3) {
+      ensureSelectOption(yearEl, parts[0], `${parts[0]} 年`);
       yearEl.value = parts[0];
       monthEl.value = parts[1];
       refreshDepartureDayOptions();
