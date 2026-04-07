@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>出差審批及訂購｜海外分店行政及費用管理平台</title>
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand-block">
+        <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
+        <h1>出差審批及訂購</h1>
+        <p>第二頁集中做審批、通知及訂購執行。批准後即可直接完成查價與訂票，不用再來回溝通。</p>
+      </div>
+      <nav class="menu">
+        <a class="menu-item" href="../index.html">首頁</a>
+        <a class="menu-item" href="tax.html">貨品報稅</a>
+        <a class="menu-item" href="travel-request.html">出差申請</a>
+        <a class="menu-item active" href="travel-approval-booking.html">出差審批及訂購</a>
+        <a class="menu-item" href="hotel.html">酒店申請</a>
+        <a class="menu-item" href="store-expense.html">費用及報銷入口</a>
+        <a class="menu-item" href="payment-tracking.html">付款及核對追蹤</a>
+      </nav>
+    </aside>
+
+    <main class="main-content" id="travelApprovalPage">
+      <a class="top-link" href="../index.html">← 返回行政及費用管理首頁</a>
+
+      <section class="module-top">
+        <div class="module-eyebrow">Approval &amp; Booking</div>
+        <h2>第二頁：審批後立即執行訂購</h2>
+        <p>此頁集中查看申請摘要、批准 / 退回、以及 Trip.com 查價與訂購記錄。建議由上司、行政或跟票同事使用。</p>
+      </section>
+
+      <section class="panel-grid" style="margin-top:20px;">
+        <div class="panel-card">
+          <div class="section-eyebrow">Approval</div>
+          <h3>先審批，再解鎖訂購</h3>
+          <ul class="clean-list">
+            <li>查看申請資料及證件附件。</li>
+            <li>批准後自動通知跟進人。</li>
+            <li>退回時可直接寫明補資料原因。</li>
+          </ul>
+        </div>
+        <div class="panel-card">
+          <div class="section-eyebrow">Booking</div>
+          <h3>批准後立即進入查價</h3>
+          <ul class="clean-list">
+            <li>分開直航與轉機入口。</li>
+            <li>套用方案後填入最終航班及票價。</li>
+            <li>完成後再自動通知申請人及相關人。</li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="module-layout">
+        <section class="form-card">
+          <h3>審批及訂購工作台</h3>
+          <div class="form-grid">
+            <div class="field"><label for="requestSelector">申請編號</label><select id="requestSelector"></select></div>
+            <div class="field"><label>目前狀態</label><div class="summary-box"><strong id="approvalCurrentStatus">—</strong></div></div>
+          </div>
+
+          <div class="section-eyebrow" style="margin-top:20px;">Request Summary</div>
+          <div class="summary-grid" style="margin-top:10px;">
+            <div class="summary-box"><span>申請編號</span><strong id="viewRequestNo">—</strong></div>
+            <div class="summary-box"><span>申請人</span><strong id="viewApplicant">—</strong></div>
+            <div class="summary-box"><span>店舖 / 部門</span><strong id="viewStoreDept">—</strong></div>
+            <div class="summary-box"><span>目前狀態</span><strong id="viewStatus">—</strong></div>
+            <div class="summary-box"><span>行程</span><strong id="viewRoute">—</strong></div>
+            <div class="summary-box"><span>出發日期</span><strong id="viewDepartureDate">—</strong></div>
+            <div class="summary-box"><span>寄艙</span><strong id="viewBaggage">—</strong></div>
+            <div class="summary-box"><span>出差原因</span><strong id="viewPurpose">—</strong></div>
+          </div>
+
+          <div class="section-eyebrow" style="margin-top:20px;">Traveler Info</div>
+          <div class="form-grid" style="margin-top:10px;">
+            <div class="field"><label>旅客英文名</label><div class="summary-box"><strong id="viewTravelerEnglishName">—</strong></div></div>
+            <div class="field"><label>證件類型</label><div class="summary-box"><strong id="viewDocumentType">—</strong></div></div>
+            <div class="field"><label>證件號碼</label><div class="summary-box"><strong id="viewDocumentNumber">—</strong></div></div>
+            <div class="field"><label>國籍</label><div class="summary-box"><strong id="viewNationality">—</strong></div></div>
+            <div class="field"><label>出生日期</label><div class="summary-box"><strong id="viewBirthDate">—</strong></div></div>
+            <div class="field"><label>到期日</label><div class="summary-box"><strong id="viewExpiryDate">—</strong></div></div>
+          </div>
+
+          <div class="upload-grid" style="grid-template-columns:1fr;margin-top:18px;">
+            <div class="upload-box">
+              <h4>證件附件</h4>
+              <p>供審批及訂購核對使用。</p>
+              <div class="preview-grid" id="approvalDocumentPreview"></div>
+            </div>
+          </div>
+
+          <div class="section-eyebrow" style="margin-top:20px;">Approval Action</div>
+          <div class="form-grid" style="margin-top:10px;">
+            <div class="field"><label for="approver">審批人</label><input id="approver" placeholder="例如 Nancy" /></div>
+            <div class="field"><label for="approvalComment">審批備註 / 退回原因</label><input id="approvalComment" placeholder="批准時可留空；退回時請寫原因" /></div>
+          </div>
+          <div class="button-row">
+            <button class="btn btn-primary" id="approveBtn" type="button">批准並通知跟進人</button>
+            <button class="btn btn-secondary" id="returnBtn" type="button">退回申請人補資料</button>
+          </div>
+          <div class="note" id="approvalActionStatus">尚未執行審批動作。</div>
+
+          <section id="bookingSection" style="display:none;margin-top:24px;">
+            <div class="section-eyebrow">Booking Section</div>
+            <h3 style="margin-top:8px;">Trip.com 查價及訂購</h3>
+
+            <div class="panel-grid" style="margin-top:14px;">
+              <div class="panel-card">
+                <div class="section-eyebrow">Direct Flight</div>
+                <h3 style="margin-top:8px;">直航方案</h3>
+                <div id="directCardSummary" class="note">—</div>
+                <div class="field" style="margin-top:12px;"><label for="directUrl">查價連結</label><input id="directUrl" readonly /></div>
+                <div class="button-row">
+                  <button class="btn btn-secondary" id="openDirectBtn" type="button">打開 Trip.com 直航查價</button>
+                  <button class="btn btn-secondary" id="applyDirectBtn" type="button">套用直航方案</button>
+                </div>
+              </div>
+
+              <div class="panel-card">
+                <div class="section-eyebrow">Transfer Flight</div>
+                <h3 style="margin-top:8px;">轉機方案</h3>
+                <div id="transferCardSummary" class="note">—</div>
+                <div class="field" style="margin-top:12px;"><label for="transferUrl">查價連結</label><input id="transferUrl" readonly /></div>
+                <div class="button-row">
+                  <button class="btn btn-secondary" id="openTransferBtn" type="button">打開 Trip.com 轉機查價</button>
+                  <button class="btn btn-secondary" id="applyTransferBtn" type="button">套用轉機方案</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-grid" style="margin-top:18px;">
+              <div class="field"><label for="bookingHandler">訂購人</label><input id="bookingHandler" placeholder="例如 行政同事 / 跟票同事" /></div>
+              <div class="field"><label for="selectedType">已選方案</label><select id="selectedType"></select></div>
+
+              <div class="field full"><label for="flightSummary">航班摘要</label><textarea id="flightSummary" placeholder="例如 CX450 HKG→NRT 08:15-13:20，包 23kg 行李"></textarea></div>
+
+              <div class="field"><label for="bookingPnr">PNR / 訂單編號</label><input id="bookingPnr" placeholder="例如 AB12CD" /></div>
+              <div class="field"><label for="tripUrl">最終查價 / 訂購連結</label><input id="tripUrl" placeholder="貼上最終使用的 Trip.com 連結" /></div>
+
+              <div class="field"><label for="ticketAmount">最終票價</label><input id="ticketAmount" type="number" step="0.01" /></div>
+              <div class="field"><label for="ticketCurrency">幣別</label><select id="ticketCurrency"></select></div>
+
+              <div class="field"><label for="bookedAt">訂購時間</label><input id="bookedAt" type="datetime-local" /></div>
+              <div class="field"><label>訂購狀態</label><div class="summary-box"><strong id="bookingStatusText">未開始訂購</strong></div></div>
+            </div>
+
+            <div class="button-row">
+              <button class="btn btn-primary" id="saveBookingBtn" type="button">完成訂購並發通知</button>
+              <button class="btn btn-secondary" id="markCompletedBtn" type="button">標記整個流程完成</button>
+            </div>
+          </section>
+        </section>
+
+        <aside class="status-card">
+          <h3>流程重點</h3>
+          <div class="status-list">
+            <div class="status-item">
+              <div><strong>審批前</strong><span>先核對行程與證件資料</span></div>
+              <div class="badge warn">待審批</div>
+            </div>
+            <div class="status-item">
+              <div><strong>批准後</strong><span>即時開 Trip.com 做查價與訂購</span></div>
+              <div class="badge ok">待訂購</div>
+            </div>
+            <div class="status-item">
+              <div><strong>訂購完成</strong><span>系統可再通知申請人及相關人</span></div>
+              <div class="badge ok">已訂票</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <section class="table-card">
+        <h3>全部出差申請記錄</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>申請編號</th>
+                <th>申請人</th>
+                <th>店舖 / 部門</th>
+                <th>行程</th>
+                <th>出發日期</th>
+                <th>寄艙</th>
+                <th>狀態</th>
+              </tr>
+            </thead>
+            <tbody id="approvalRecordsBody">
+              <tr><td colspan="7" class="empty-cell">暫時未有記錄</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="../assets/js/app.js"></script>
+  <script src="../assets/js/form-options.js"></script>
+  <script src="../assets/js/travel-workflow.js"></script>
+</body>
+</html>

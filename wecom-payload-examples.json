@@ -1,0 +1,85 @@
+{
+  "internalWebhookExamples": {
+    "submitRequest": {
+      "moduleType": "出差申請",
+      "eventType": "travel.request.submitted",
+      "requestNo": "TRAVEL_2026/04/07_001",
+      "status": "待審批",
+      "eventTime": "2026-04-07T10:35:00.000Z",
+      "applicant": "Alex Wong",
+      "storeDept": "BA3",
+      "origin": "HKG",
+      "destination": "NRT",
+      "departureDate": "2026-04-20",
+      "hasCheckedBaggage": true,
+      "purpose": "東京巡店",
+      "travelerEnglishName": "CHAN TAI MAN",
+      "documentNumber": "K1234567",
+      "approvalPageUrl": "https://your-domain/modules/travel-approval-booking.html?requestNo=TRAVEL_2026/04/07_001",
+      "requestPageUrl": "https://your-domain/modules/travel-request.html?requestNo=TRAVEL_2026/04/07_001"
+    },
+    "approveRequest": {
+      "moduleType": "出差申請",
+      "eventType": "travel.request.approved",
+      "requestNo": "TRAVEL_2026/04/07_001",
+      "status": "待訂購",
+      "eventTime": "2026-04-07T11:05:00.000Z",
+      "applicant": "Alex Wong",
+      "storeDept": "BA3",
+      "origin": "HKG",
+      "destination": "NRT",
+      "departureDate": "2026-04-20",
+      "hasCheckedBaggage": true,
+      "purpose": "東京巡店",
+      "travelerEnglishName": "CHAN TAI MAN",
+      "documentNumber": "K1234567",
+      "approvalPageUrl": "https://your-domain/modules/travel-approval-booking.html?requestNo=TRAVEL_2026/04/07_001",
+      "requestPageUrl": "https://your-domain/modules/travel-request.html?requestNo=TRAVEL_2026/04/07_001",
+      "approver": "Nancy",
+      "approvalComment": "已批准，請即跟進訂票。"
+    },
+    "completeBooking": {
+      "moduleType": "出差申請",
+      "eventType": "travel.booking.completed",
+      "requestNo": "TRAVEL_2026/04/07_001",
+      "status": "已訂票",
+      "eventTime": "2026-04-07T11:50:00.000Z",
+      "applicant": "Alex Wong",
+      "storeDept": "BA3",
+      "origin": "HKG",
+      "destination": "NRT",
+      "departureDate": "2026-04-20",
+      "hasCheckedBaggage": true,
+      "purpose": "東京巡店",
+      "travelerEnglishName": "CHAN TAI MAN",
+      "documentNumber": "K1234567",
+      "approvalPageUrl": "https://your-domain/modules/travel-approval-booking.html?requestNo=TRAVEL_2026/04/07_001",
+      "requestPageUrl": "https://your-domain/modules/travel-request.html?requestNo=TRAVEL_2026/04/07_001",
+      "bookingHandler": "Mason Lee",
+      "bookingType": "直航",
+      "bookingPnr": "AB12CD",
+      "ticketAmount": 3280,
+      "currency": "HKD"
+    }
+  },
+  "wecomRobotTextExamples": {
+    "submitRequest": {
+      "msgtype": "text",
+      "text": {
+        "content": "【新出差申請】\n申請編號：TRAVEL_2026/04/07_001\n申請人：Alex Wong\n店舖 / 部門：BA3\n行程：HKG → NRT\n出發日期：2026-04-20\n寄艙行李：需要\n出差原因：東京巡店\n請到審批頁跟進：\nhttps://your-domain/modules/travel-approval-booking.html?requestNo=TRAVEL_2026/04/07_001"
+      }
+    },
+    "approveRequest": {
+      "msgtype": "text",
+      "text": {
+        "content": "【出差申請已批准】\n申請編號：TRAVEL_2026/04/07_001\n申請人：Alex Wong\n審批人：Nancy\n行程：HKG → NRT\n出發日期：2026-04-20\n請立即安排查價及訂購：\nhttps://your-domain/modules/travel-approval-booking.html?requestNo=TRAVEL_2026/04/07_001"
+      }
+    },
+    "completeBooking": {
+      "msgtype": "text",
+      "text": {
+        "content": "【出差訂購已完成】\n申請編號：TRAVEL_2026/04/07_001\n申請人：Alex Wong\n訂購人：Mason Lee\n方案：直航\nPNR：AB12CD\n票價：HKD 3280\n請到審批頁查看詳情：\nhttps://your-domain/modules/travel-approval-booking.html?requestNo=TRAVEL_2026/04/07_001"
+      }
+    }
+  }
+}
