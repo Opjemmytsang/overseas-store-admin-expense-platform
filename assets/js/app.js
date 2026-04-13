@@ -40,7 +40,10 @@ const AppUtils = {
   },
 
   exportCsv(filename, headers, rows) {
-    const csv = [headers, ...rows]
+    const localize = value => (window.AppI18n ? window.AppI18n.t(value) : value);
+    const localizedHeaders = (headers || []).map(localize);
+    const localizedRows = (rows || []).map(row => row.map(cell => localize(cell)));
+    const csv = [localizedHeaders, ...localizedRows]
       .map(row => row.map(v => `"${String(v ?? '').replaceAll('"', '""')}"`).join(','))
       .join('\n');
 
@@ -382,3 +385,157 @@ const AppUtils = {
     return { batch: nextBatch, lines: nextLines };
   }
 };
+
+window.AppI18n = (() => {
+  const LANGS = ['zh-Hant', 'zh-Hans', 'en'];
+  const STORAGE_KEY = `${window.APP_CONFIG.storagePrefix}:locale`;
+  const DICT = {
+    '首頁': { 'zh-Hans': '首页', en: 'Home' },
+    '貨品報稅': { 'zh-Hans': '货品报税', en: 'Tax Filing' },
+    '出差申請': { 'zh-Hans': '出差申请', en: 'Travel Request' },
+    '出差審批及訂購': { 'zh-Hans': '出差审批及订购', en: 'Travel Approval & Booking' },
+    '酒店申請': { 'zh-Hans': '酒店申请', en: 'Hotel Request' },
+    '費用及報銷入口': { 'zh-Hans': '费用及报销入口', en: 'Expense & Reimbursement' },
+    '付款及核對追蹤': { 'zh-Hans': '付款及核对追踪', en: 'Payment Tracking' },
+    '返回行政及費用管理首頁': { 'zh-Hans': '返回行政及费用管理首页', en: 'Back to Admin & Expense Home' },
+    '申請編號': { 'zh-Hans': '申请编号', en: 'Request No.' },
+    '案件編號': { 'zh-Hans': '案件编号', en: 'Case No.' },
+    '狀態': { 'zh-Hans': '状态', en: 'Status' },
+    '申請人': { 'zh-Hans': '申请人', en: 'Applicant' },
+    '店舖 / 部門': { 'zh-Hans': '店铺 / 部门', en: 'Store / Department' },
+    '店舖': { 'zh-Hans': '店铺', en: 'Store' },
+    '提交': { 'zh-Hans': '提交', en: 'Submit' },
+    '儲存草稿': { 'zh-Hans': '保存草稿', en: 'Save Draft' },
+    '匯出案件 CSV': { 'zh-Hans': '导出案件 CSV', en: 'Export Case CSV' },
+    '匯出明細 CSV': { 'zh-Hans': '导出明细 CSV', en: 'Export Detail CSV' },
+    '暫時未有記錄': { 'zh-Hans': '暂时没有记录', en: 'No records yet' },
+    '未填寫': { 'zh-Hans': '未填写', en: 'Not filled' },
+    '未有資料': { 'zh-Hans': '暂无资料', en: 'No data' },
+    '待提交': { 'zh-Hans': '待提交', en: 'Draft' },
+    '待審批': { 'zh-Hans': '待审批', en: 'Pending Approval' },
+    '已退回': { 'zh-Hans': '已退回', en: 'Returned' },
+    '待訂購': { 'zh-Hans': '待订购', en: 'To Book' },
+    '已訂票': { 'zh-Hans': '已订票', en: 'Booked' },
+    '待核對': { 'zh-Hans': '待核对', en: 'Pending Check' },
+    '待付款': { 'zh-Hans': '待付款', en: 'Pending Payment' },
+    '已付款': { 'zh-Hans': '已付款', en: 'Paid' },
+    '已完成': { 'zh-Hans': '已完成', en: 'Completed' },
+    '不適用': { 'zh-Hans': '不适用', en: 'N/A' },
+    '待報銷': { 'zh-Hans': '待报销', en: 'Pending Reimbursement' },
+    '待還款': { 'zh-Hans': '待还款', en: 'Pending Repayment' },
+    '已報銷': { 'zh-Hans': '已报销', en: 'Reimbursed' },
+    '已還款': { 'zh-Hans': '已还款', en: 'Repaid' },
+    '公司': { 'zh-Hans': '公司', en: 'Company' },
+    '其他同事代付': { 'zh-Hans': '其他同事代付', en: 'Paid by Colleague' },
+    '請選擇店舖': { 'zh-Hans': '请选择店铺', en: 'Select store' },
+    '語言切換': { 'zh-Hans': '语言切换', en: 'Switch language' },
+    '目前狀態：': { 'zh-Hans': '当前状态：', en: 'Current status: ' },
+    '讀取完成，請核對自動填寫結果。': { 'zh-Hans': '读取完成，请核对自动填写结果。', en: 'Reading done, please verify autofilled fields.' },
+    'Webhook URL not configured': { 'zh-Hans': '尚未設定 Webhook URL', en: 'Webhook URL not configured' }
+  };
+  const textNodeSource = new WeakMap();
+  let documentTitleSource = '';
+
+  function getLang() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return LANGS.includes(saved) ? saved : 'zh-Hant';
+  }
+
+  function setLang(lang) {
+    const next = LANGS.includes(lang) ? lang : 'zh-Hant';
+    localStorage.setItem(STORAGE_KEY, next);
+    document.documentElement.setAttribute('lang', next);
+    applyTranslations();
+  }
+
+  function t(value, lang = getLang()) {
+    if (value === null || value === undefined) return value;
+    const raw = String(value);
+    if (!raw.trim()) return raw;
+    if (lang === 'zh-Hant') return raw;
+    const hit = DICT[raw];
+    if (hit && hit[lang]) return hit[lang];
+    return raw;
+  }
+
+  function translateTextNode(node) {
+    const text = textNodeSource.get(node) ?? node.nodeValue;
+    if (!text || !text.trim()) return;
+    if (!textNodeSource.has(node)) textNodeSource.set(node, text);
+    const trimmed = text.trim();
+    const translated = t(trimmed);
+    if (translated === trimmed) return;
+    node.nodeValue = text.replace(trimmed, translated);
+  }
+
+  function applyTranslations() {
+    documentTitleSource = documentTitleSource || document.title;
+    document.title = t(documentTitleSource);
+    document.querySelectorAll('input[placeholder],textarea[placeholder]').forEach(el => {
+      const source = el.dataset.i18nPlaceholder || el.placeholder;
+      el.dataset.i18nPlaceholder = source;
+      el.placeholder = t(source);
+    });
+    document.querySelectorAll('input[value],button,[title],option').forEach(el => {
+      if (el.tagName === 'OPTION') {
+        const source = el.dataset.i18nSource || el.textContent;
+        el.dataset.i18nSource = source;
+        el.textContent = t(source);
+      }
+      if (el.value && (el.tagName === 'INPUT' || el.tagName === 'BUTTON')) {
+        const source = el.dataset.i18nValue || el.value;
+        el.dataset.i18nValue = source;
+        el.value = t(source);
+      }
+      if (el.textContent && el.tagName === 'BUTTON') {
+        const source = el.dataset.i18nText || el.textContent;
+        el.dataset.i18nText = source;
+        el.textContent = t(source);
+      }
+      if (el.title) {
+        const source = el.dataset.i18nTitle || el.title;
+        el.dataset.i18nTitle = source;
+        el.title = t(source);
+      }
+    });
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        if (!node.parentElement) return NodeFilter.FILTER_REJECT;
+        if (['SCRIPT', 'STYLE'].includes(node.parentElement.tagName)) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(translateTextNode);
+    renderLanguageButton();
+  }
+
+  function nextLang() {
+    const idx = LANGS.indexOf(getLang());
+    return LANGS[(idx + 1) % LANGS.length];
+  }
+
+  function renderLanguageButton() {
+    let btn = document.getElementById('langSwitchBtn');
+    if (!btn) {
+      btn = document.createElement('button');
+      btn.id = 'langSwitchBtn';
+      btn.className = 'lang-switch-btn';
+      btn.type = 'button';
+      btn.addEventListener('click', () => setLang(nextLang()));
+      document.body.appendChild(btn);
+    }
+    btn.textContent = `🌐 ${getLang()}`;
+    btn.title = t('語言切換');
+  }
+
+  return { getLang, setLang, t, applyTranslations };
+})();
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (!window.AppI18n) return;
+  window.AppI18n.setLang(window.AppI18n.getLang());
+  const observer = new MutationObserver(() => window.AppI18n.applyTranslations());
+  observer.observe(document.body, { childList: true, subtree: true });
+});
