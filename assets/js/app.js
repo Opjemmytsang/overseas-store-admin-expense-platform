@@ -39,6 +39,87 @@ const AppUtils = {
     return JSON.parse(localStorage.getItem(key) || '[]');
   },
 
+  listModuleKeys() {
+    const prefix = `${window.APP_CONFIG.storagePrefix}:`;
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i += 1) {
+      const key = localStorage.key(i) || '';
+      if (key.startsWith(prefix)) {
+        keys.push(key.slice(prefix.length));
+      }
+    }
+    return keys.sort((a, b) => a.localeCompare(b));
+  },
+
+  summarizeModule(moduleKey) {
+    const rows = this.loadRecords(moduleKey);
+    const serialized = JSON.stringify(rows);
+    const bytes = new Blob([serialized]).size;
+    return { moduleKey, rows, count: rows.length, bytes };
+  },
+
+  summarizeAllModules() {
+    return this.listModuleKeys().map(moduleKey => this.summarizeModule(moduleKey));
+  },
+
+  createBackupPayload() {
+    const exportedAt = new Date().toISOString();
+    const modules = this.summarizeAllModules().map(item => ({
+      moduleKey: item.moduleKey,
+      rows: item.rows
+    }));
+    return {
+      storagePrefix: window.APP_CONFIG.storagePrefix,
+      exportedAt,
+      moduleCount: modules.length,
+      modules
+    };
+  },
+
+  downloadJson(filename, payload) {
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  },
+
+  exportAllData(filename = `admin-expense-backup-${new Date().toISOString().slice(0, 10)}.json`) {
+    const payload = this.createBackupPayload();
+    this.downloadJson(filename, payload);
+    return payload;
+  },
+
+  async parseJsonFile(file) {
+    const text = await file.text();
+    return JSON.parse(text);
+  },
+
+  restoreFromBackup(payload, options = {}) {
+    const { clearBeforeRestore = false } = options;
+    const modules = Array.isArray(payload?.modules) ? payload.modules : [];
+    if (clearBeforeRestore) {
+      this.listModuleKeys().forEach(moduleKey => localStorage.removeItem(this.storageKey(moduleKey)));
+    }
+
+    modules.forEach(module => {
+      if (!module?.moduleKey || !Array.isArray(module.rows)) return;
+      this.saveRaw(module.moduleKey, module.rows);
+    });
+
+    return {
+      restoredModules: modules.filter(module => module?.moduleKey && Array.isArray(module.rows)).length
+    };
+  },
+
+  clearAllData() {
+    const moduleKeys = this.listModuleKeys();
+    moduleKeys.forEach(moduleKey => localStorage.removeItem(this.storageKey(moduleKey)));
+    return { removedModules: moduleKeys.length };
+  },
+
   exportCsv(filename, headers, rows) {
     const csv = [headers, ...rows]
       .map(row => row.map(v => `"${String(v ?? '').replaceAll('"', '""')}"`).join(','))

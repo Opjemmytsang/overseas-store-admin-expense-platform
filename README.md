@@ -66,6 +66,15 @@ GitHub Repo 名：`overseas-store-admin-expense-platform`
 - 自動 map 常見欄名
 - 建立多條 Line
 
+### 5. 首頁資料中心（備份 / 還原）
+
+首頁新增「系統資料中心」，可直接：
+
+- 顯示各模組的本機資料筆數與估算容量
+- 下載完整 JSON 備份
+- 匯入 JSON 備份並覆蓋原資料
+- 一鍵清空目前 `localStorage` 的系統資料
+
 ## 建議正式架構
 
 - HTML 前台：放於 SharePoint / Teams 內部頁面
