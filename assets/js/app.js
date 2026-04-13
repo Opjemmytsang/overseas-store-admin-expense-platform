@@ -455,7 +455,15 @@ window.AppI18n = (() => {
     if (lang === 'zh-Hant') return raw;
     const hit = DICT[raw];
     if (hit && hit[lang]) return hit[lang];
-    return raw;
+    let next = raw;
+    Object.keys(DICT)
+      .sort((a, b) => b.length - a.length)
+      .forEach(key => {
+        const target = DICT[key]?.[lang];
+        if (!target || !next.includes(key)) return;
+        next = next.replaceAll(key, target);
+      });
+    return next;
   }
 
   function translateTextNode(node) {
