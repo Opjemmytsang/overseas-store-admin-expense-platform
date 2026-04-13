@@ -1,5 +1,16 @@
 window.FORM_OPTIONS = {
   storeCodes: ['BA3', 'BA5', 'BA8', 'BA9', 'BAA', 'BAB', 'BAC', 'LA1', 'AU4'],
+  storeI18n: {
+    BA3: { 'zh-Hant': 'BA3 - 曼谷店', 'zh-Hans': 'BA3 - 曼谷店', en: 'BA3 - Bangkok Store' },
+    BA5: { 'zh-Hant': 'BA5 - 曼谷店', 'zh-Hans': 'BA5 - 曼谷店', en: 'BA5 - Bangkok Store' },
+    BA8: { 'zh-Hant': 'BA8 - 曼谷店', 'zh-Hans': 'BA8 - 曼谷店', en: 'BA8 - Bangkok Store' },
+    BA9: { 'zh-Hant': 'BA9 - 曼谷店', 'zh-Hans': 'BA9 - 曼谷店', en: 'BA9 - Bangkok Store' },
+    BAA: { 'zh-Hant': 'BAA - 曼谷店', 'zh-Hans': 'BAA - 曼谷店', en: 'BAA - Bangkok Store' },
+    BAB: { 'zh-Hant': 'BAB - 曼谷店', 'zh-Hans': 'BAB - 曼谷店', en: 'BAB - Bangkok Store' },
+    BAC: { 'zh-Hant': 'BAC - 曼谷店', 'zh-Hans': 'BAC - 曼谷店', en: 'BAC - Bangkok Store' },
+    LA1: { 'zh-Hant': 'LA1 - 洛杉磯店', 'zh-Hans': 'LA1 - 洛杉矶店', en: 'LA1 - Los Angeles Store' },
+    AU4: { 'zh-Hant': 'AU4 - 澳洲店', 'zh-Hans': 'AU4 - 澳洲店', en: 'AU4 - Australia Store' }
+  },
   currencies: ['HKD', 'THB', 'USD', 'RMB'],
   statusGroups: {
     tax: ['待提交', '待核對', '待付款', '已付款', '已完成'],
@@ -12,6 +23,10 @@ window.FORM_OPTIONS = {
 };
 
 window.FormOptions = {
+  localize(value) {
+    return window.AppI18n ? window.AppI18n.t(value) : value;
+  },
+
   fillSelect(selectEl, items, options = {}) {
     if (!selectEl) return;
     const { placeholder = null, preserveValue = true } = options;
@@ -22,6 +37,7 @@ window.FormOptions = {
       const placeholderOption = document.createElement('option');
       placeholderOption.value = '';
       placeholderOption.textContent = placeholder;
+      placeholderOption.dataset.i18nSource = placeholder;
       selectEl.appendChild(placeholderOption);
     }
 
@@ -29,6 +45,7 @@ window.FormOptions = {
       const option = document.createElement('option');
       option.value = item;
       option.textContent = item;
+      option.dataset.i18nSource = item;
       selectEl.appendChild(option);
     });
 
@@ -53,7 +70,7 @@ window.FormOptions = {
     }
 
     if (config.storeId) {
-      this.fillSelect(document.getElementById(config.storeId), window.FORM_OPTIONS.storeCodes, { placeholder: '請選擇店舖' });
+      this.fillSelect(document.getElementById(config.storeId), window.FORM_OPTIONS.storeCodes, { placeholder: this.localize('請選擇店舖') });
     }
 
     if (config.currencyId) {
