@@ -136,7 +136,119 @@
           </ul>
         </div>
       </section>
+
+      <section class="panel-card data-center-card">
+        <div class="section-eyebrow">System Health</div>
+        <h3>系統資料中心</h3>
+        <p>可直接檢視各模組資料量，並進行本機備份、還原及清空舊資料，減少測試與交接時的資料遺失風險。</p>
+
+        <div class="data-summary-grid">
+          <div class="summary-box">
+            <span>已啟用模組</span>
+            <strong id="moduleCountValue">0</strong>
+          </div>
+          <div class="summary-box">
+            <span>資料筆數</span>
+            <strong id="recordCountValue">0</strong>
+          </div>
+          <div class="summary-box">
+            <span>估算容量</span>
+            <strong id="storageUsageValue">0 KB</strong>
+          </div>
+        </div>
+
+        <div class="button-row">
+          <button class="btn btn-primary" id="backupBtn" type="button">下載備份 JSON</button>
+          <label class="btn btn-secondary file-trigger" for="restoreFile">匯入備份檔</label>
+          <input id="restoreFile" type="file" accept="application/json" hidden />
+          <button class="btn btn-secondary" id="clearDataBtn" type="button">清空系統資料</button>
+        </div>
+
+        <div class="table-wrap data-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>模組 Key</th>
+                <th>筆數</th>
+                <th>容量</th>
+              </tr>
+            </thead>
+            <tbody id="moduleSummaryBody">
+              <tr><td colspan="3" class="empty-cell">目前未有資料。</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="dataCenterNote" class="note">資料中心可用於測試環境快速備份與還原。</div>
+      </section>
     </main>
   </div>
+
+  <script src="assets/js/app.js"></script>
+  <script>
+    (() => {
+      const moduleCountValue = document.getElementById('moduleCountValue');
+      const recordCountValue = document.getElementById('recordCountValue');
+      const storageUsageValue = document.getElementById('storageUsageValue');
+      const moduleSummaryBody = document.getElementById('moduleSummaryBody');
+      const dataCenterNote = document.getElementById('dataCenterNote');
+      const backupBtn = document.getElementById('backupBtn');
+      const restoreFile = document.getElementById('restoreFile');
+      const clearDataBtn = document.getElementById('clearDataBtn');
+
+      function formatBytes(bytes) {
+        if (!Number.isFinite(bytes) || bytes <= 0) return '0 KB';
+        return `${(bytes / 1024).toFixed(1)} KB`;
+      }
+
+      function renderSummary() {
+        const modules = AppUtils.summarizeAllModules();
+        const totalRecords = modules.reduce((sum, item) => sum + item.count, 0);
+        const totalBytes = modules.reduce((sum, item) => sum + item.bytes, 0);
+
+        moduleCountValue.textContent = String(modules.length);
+        recordCountValue.textContent = String(totalRecords);
+        storageUsageValue.textContent = formatBytes(totalBytes);
+
+        if (!modules.length) {
+          moduleSummaryBody.innerHTML = '<tr><td colspan="3" class="empty-cell">目前未有資料。</td></tr>';
+          return;
+        }
+
+        moduleSummaryBody.innerHTML = modules
+          .map(item => `<tr><td>${AppUtils.escapeHtml(item.moduleKey)}</td><td>${item.count}</td><td>${formatBytes(item.bytes)}</td></tr>`)
+          .join('');
+      }
+
+      backupBtn.addEventListener('click', () => {
+        const payload = AppUtils.exportAllData();
+        dataCenterNote.textContent = `備份完成：共 ${payload.moduleCount} 個模組，匯出時間 ${new Date(payload.exportedAt).toLocaleString()}`;
+      });
+
+      restoreFile.addEventListener('change', async event => {
+        const [file] = event.target.files || [];
+        if (!file) return;
+        try {
+          const payload = await AppUtils.parseJsonFile(file);
+          const result = AppUtils.restoreFromBackup(payload, { clearBeforeRestore: true });
+          dataCenterNote.textContent = `已還原備份，共寫入 ${result.restoredModules} 個模組。`;
+          renderSummary();
+        } catch (error) {
+          dataCenterNote.textContent = `匯入失敗：${error.message || '備份檔格式不正確。'}`;
+        } finally {
+          restoreFile.value = '';
+        }
+      });
+
+      clearDataBtn.addEventListener('click', () => {
+        const confirmed = window.confirm('確定要清空所有模組資料？此操作無法復原。');
+        if (!confirmed) return;
+        const result = AppUtils.clearAllData();
+        dataCenterNote.textContent = `已清空資料，共移除 ${result.removedModules} 個模組。`;
+        renderSummary();
+      });
+
+      renderSummary();
+    })();
+  </script>
 </body>
 </html>

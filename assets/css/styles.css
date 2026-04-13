@@ -274,6 +274,29 @@ a { color: inherit; }
   margin-top: 22px;
 }
 
+.data-center-card {
+  margin-top: 22px;
+}
+
+.data-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.data-table-wrap {
+  margin-top: 16px;
+}
+
+.data-table-wrap table {
+  min-width: 560px;
+}
+
+.file-trigger {
+  cursor: pointer;
+}
+
 .clean-list {
   margin: 0;
   padding-left: 18px;
