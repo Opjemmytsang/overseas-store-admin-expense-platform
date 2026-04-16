@@ -335,19 +335,19 @@ window.TravelWorkflow = (() => {
     return new Date(Number(year), Number(month), 0).getDate();
   }
 
-  function syncDepartureDateHidden() {
-    const year = qs('departureYear')?.value || '';
-    const month = qs('departureMonth')?.value || '';
-    const day = qs('departureDay')?.value || '';
-    const hidden = qs('departureDate');
+  function syncDateHidden(prefix) {
+    const year = qs(`${prefix}Year`)?.value || '';
+    const month = qs(`${prefix}Month`)?.value || '';
+    const day = qs(`${prefix}Day`)?.value || '';
+    const hidden = qs(`${prefix}Date`);
     if (!hidden) return;
     hidden.value = year && month && day ? `${year}-${month}-${day}` : '';
   }
 
-  function refreshDepartureDayOptions() {
-    const year = qs('departureYear')?.value || '';
-    const month = qs('departureMonth')?.value || '';
-    const daySelect = qs('departureDay');
+  function refreshDateDayOptions(prefix) {
+    const year = qs(`${prefix}Year`)?.value || '';
+    const month = qs(`${prefix}Month`)?.value || '';
+    const daySelect = qs(`${prefix}Day`);
     if (!daySelect) return;
 
     const maxDays = daysInMonth(year, month);
@@ -362,17 +362,17 @@ window.TravelWorkflow = (() => {
     }
   }
 
-  function applyDepartureDateToSelects(dateStr) {
-    const yearEl = qs('departureYear');
-    const monthEl = qs('departureMonth');
-    const dayEl = qs('departureDay');
-    const hidden = qs('departureDate');
+  function applyDateToSelects(prefix, dateStr) {
+    const yearEl = qs(`${prefix}Year`);
+    const monthEl = qs(`${prefix}Month`);
+    const dayEl = qs(`${prefix}Day`);
+    const hidden = qs(`${prefix}Date`);
     if (!yearEl || !monthEl || !dayEl || !hidden) return;
 
     if (!dateStr) {
       yearEl.value = '';
       monthEl.value = '';
-      refreshDepartureDayOptions();
+      refreshDateDayOptions(prefix);
       dayEl.value = '';
       hidden.value = '';
       return;
@@ -383,21 +383,26 @@ window.TravelWorkflow = (() => {
       ensureSelectOption(yearEl, parts[0], `${parts[0]} 年`);
       yearEl.value = parts[0];
       monthEl.value = parts[1];
-      refreshDepartureDayOptions();
+      refreshDateDayOptions(prefix);
       dayEl.value = parts[2];
       hidden.value = dateStr;
     }
   }
 
-  function initializeDepartureDateControls() {
-    const yearEl = qs('departureYear');
-    const monthEl = qs('departureMonth');
-    const dayEl = qs('departureDay');
+  function initializeDateControls(prefix, options = {}) {
+    const yearEl = qs(`${prefix}Year`);
+    const monthEl = qs(`${prefix}Month`);
+    const dayEl = qs(`${prefix}Day`);
     if (!yearEl || !monthEl || !dayEl) return;
 
     const currentYear = new Date().getFullYear();
-    const yearValues = Array.from({ length: 5 }, (_, index) => {
-      const year = String(currentYear - 1 + index);
+    const startYear = Number(options.startYear ?? currentYear - 1);
+    const endYear = Number(options.endYear ?? currentYear + 3);
+    const step = startYear <= endYear ? 1 : -1;
+    const total = Math.abs(endYear - startYear) + 1;
+
+    const yearValues = Array.from({ length: total }, (_, index) => {
+      const year = String(startYear + index * step);
       return { value: year, label: `${year} 年` };
     });
     const monthValues = Array.from({ length: 12 }, (_, index) => {
@@ -407,16 +412,16 @@ window.TravelWorkflow = (() => {
 
     populateSelect(yearEl, yearValues, '年');
     populateSelect(monthEl, monthValues, '月');
-    refreshDepartureDayOptions();
+    refreshDateDayOptions(prefix);
 
     [yearEl, monthEl].forEach(el => {
       el.addEventListener('change', () => {
-        refreshDepartureDayOptions();
-        syncDepartureDateHidden();
+        refreshDateDayOptions(prefix);
+        syncDateHidden(prefix);
       });
     });
 
-    dayEl.addEventListener('change', syncDepartureDateHidden);
+    dayEl.addEventListener('change', () => syncDateHidden(prefix));
   }
 
   function buildSearchUrl(record, mode = 'all') {
@@ -602,7 +607,9 @@ window.TravelWorkflow = (() => {
   function collectRequestForm(fileStore) {
     const requestNoEl = qs('requestNo');
     ensureTravelRequestNo(requestNoEl);
-    syncDepartureDateHidden();
+    syncDateHidden('departure');
+    syncDateHidden('birth');
+    syncDateHidden('expiry');
 
     return mergeRecord(baseRecord(), {
       requestNo: requestNoEl.value.trim(),
@@ -646,10 +653,13 @@ window.TravelWorkflow = (() => {
     const webhookStatusEl = qs('webhookStatus');
     const fileInputEl = qs('documentFile');
     const fileStore = { document: [] };
+    const currentYear = new Date().getFullYear();
 
     FormOptions.fillSelect(requestStatusEl, [STATUS.DRAFT, STATUS.PENDING, STATUS.RETURNED, STATUS.TO_BOOK, STATUS.BOOKED, STATUS.COMPLETED]);
     FormOptions.fillSelect(qs('storeDept'), window.FORM_OPTIONS.storeCodes, { placeholder: '請選擇店舖' });
-    initializeDepartureDateControls();
+    initializeDateControls('departure', { startYear: currentYear - 1, endYear: currentYear + 3 });
+    initializeDateControls('birth', { startYear: currentYear - 100, endYear: currentYear });
+    initializeDateControls('expiry', { startYear: currentYear - 10, endYear: currentYear + 20 });
 
     function applyRecord(record) {
       fillForm(record, {
@@ -668,7 +678,9 @@ window.TravelWorkflow = (() => {
         birthDate: 'birthDate',
         expiryDate: 'expiryDate'
       });
-      applyDepartureDateToSelects(record.departureDate || '');
+      applyDateToSelects('departure', record.departureDate || '');
+      applyDateToSelects('birth', record.birthDate || '');
+      applyDateToSelects('expiry', record.expiryDate || '');
       qs('hasCheckedBaggage').checked = !!record.hasCheckedBaggage;
       fileStore.document = (record.files && record.files.document) ? record.files.document : [];
       renderPreview(qs('documentPreview'), fileStore.document);
@@ -681,7 +693,9 @@ window.TravelWorkflow = (() => {
       applyRecord(existing);
     } else {
       ensureTravelRequestNo(requestNoEl);
-      applyDepartureDateToSelects('');
+      applyDateToSelects('departure', '');
+      applyDateToSelects('birth', '');
+      applyDateToSelects('expiry', '');
       refreshRequestSummary();
       renderPreview(qs('documentPreview'), []);
     }
@@ -708,6 +722,8 @@ window.TravelWorkflow = (() => {
           birthDate: 'birthDate',
           expiryDate: 'expiryDate'
         });
+        applyDateToSelects('birth', data.birthDate || qs('birthDate')?.value || '');
+        applyDateToSelects('expiry', data.expiryDate || qs('expiryDate')?.value || '');
         ocrStatusEl.textContent = '已完成讀取證件資料，會先採用可見文字，資料不足時再補機讀區。';
       } catch (error) {
         ocrStatusEl.textContent = '未能完成讀取，請手動補回資料。';
