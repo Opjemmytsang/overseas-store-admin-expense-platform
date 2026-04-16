@@ -107,8 +107,26 @@
             <div class="field"><label for="documentNumber">證件號碼</label><input id="documentNumber" placeholder="例如 K1234567" /></div>
             <div class="field"><label for="nationality">國籍</label><input id="nationality" placeholder="例如 CHN / HKG" /></div>
 
-            <div class="field"><label for="birthDate">出生日期</label><input id="birthDate" type="date" /></div>
-            <div class="field"><label for="expiryDate">到期日</label><input id="expiryDate" type="date" /></div>
+            <div class="field">
+              <label>出生日期</label>
+              <input id="birthDate" type="hidden" />
+              <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;">
+                <select id="birthYear"></select>
+                <select id="birthMonth"></select>
+                <select id="birthDay"></select>
+              </div>
+              <div class="note" style="margin-top:8px;">可由 OCR 自動帶入，亦可手動以年 / 月 / 日調整。</div>
+            </div>
+            <div class="field">
+              <label>到期日</label>
+              <input id="expiryDate" type="hidden" />
+              <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;">
+                <select id="expiryYear"></select>
+                <select id="expiryMonth"></select>
+                <select id="expiryDay"></select>
+              </div>
+              <div class="note" style="margin-top:8px;">可由 OCR 自動帶入，亦可手動以年 / 月 / 日調整。</div>
+            </div>
           </div>
 
           <div class="button-row">
