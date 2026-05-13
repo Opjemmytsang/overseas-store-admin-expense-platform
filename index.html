@@ -5,15 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>海外分店行政及費用管理平台</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
-  <script defer src="assets/js/app.js"></script>
 </head>
 <body>
   <div class="shell">
     <aside class="sidebar">
       <div class="brand-block">
-        <div class="brand-en">Overseas Store Admin &amp; Expense Management Platform</div>
-        <h1>行政及費用管理首頁</h1>
-        <p>集中統籌海外分店的貨品報稅、出差申請、酒店安排、店舖費用申請及付款核對，作為內部作業的統一入口。</p>
+        <div class="brand-en">Overseas Admin &amp; Expense Platform</div>
+        <h1>行政及費用管理</h1>
+        <p>海外分店行政流程統一入口，涵蓋報稅、出差、酒店、費用及付款追蹤。</p>
       </div>
 
       <nav class="menu">
@@ -28,51 +27,40 @@
     </aside>
 
     <main class="main-content">
-      <section class="hero-card hero-split">
-        <div>
-          <div class="eyebrow">Admin &amp; Expense Request Portal</div>
-          <h2>海外分店行政及費用管理平台</h2>
-          <p>此平台用作整合海外分店常見行政流程，讓申請、審批、訂購、核對及後續追蹤使用一致介面，方便內部協作及資料交接。現已支援兩頁式出差流程。</p>
 
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="modules/travel-request.html">開始出差申請</a>
-            <a class="btn btn-secondary" href="modules/travel-approval-booking.html">查看審批及訂購</a>
-          </div>
-        </div>
-
-        <div class="hero-info-stack">
-          <div class="hero-info-card">
-            <span>今次更新</span>
-            <strong>出差流程改為兩頁式</strong>
-            <p>申請人先提交基本出差需求，再由上司 / 行政於第二頁即時審批、查價及跟進訂購。</p>
-          </div>
-          <div class="hero-info-card">
-            <span>適用範圍</span>
-            <strong>海外分店常用行政流程</strong>
-            <p>涵蓋貨品報稅、出差申請、酒店安排、店舖費用申請及付款核對追蹤，可再按需要接入 SharePoint 及 Power Automate。</p>
-          </div>
+      <!-- Hero -->
+      <section class="hero-card" style="padding: 32px 36px;">
+        <div class="eyebrow">Admin &amp; Expense Request Portal</div>
+        <h2 style="margin: 12px 0 10px; font-size: 26px;">海外分店行政及費用管理平台</h2>
+        <p style="max-width: 560px; color: var(--text-2); line-height: 1.8;">整合海外分店常用行政流程，讓申請、審批、訂購及核對使用統一介面。支援兩頁式出差流程，並可接入 Power Automate、SharePoint 及企業微信通知。</p>
+        <div class="hero-actions" style="margin-top: 24px;">
+          <a class="btn btn-primary" href="modules/travel-request.html">出差申請</a>
+          <a class="btn btn-secondary" href="modules/travel-approval-booking.html">出差審批及訂購</a>
+          <a class="btn btn-secondary" href="modules/payment-tracking.html">付款及核對追蹤</a>
         </div>
       </section>
 
-      <section class="metric-grid">
+      <!-- 使用步驟 -->
+      <section class="metric-grid" style="grid-template-columns: repeat(3, minmax(0, 1fr));">
         <div class="metric-card">
-          <span>01</span>
-          <strong>先提出需求</strong>
-          <p>由前線同事先提交出差需求、報稅文件、酒店安排或費用資料，減少口頭來回補資料。</p>
+          <span>Step 01</span>
+          <strong>申請人先填最少資料</strong>
+          <p>出差、酒店、費用各有專用表單，申請人只需填寫必要欄位即可提交，無需等待對方在線。</p>
         </div>
         <div class="metric-card">
-          <span>02</span>
-          <strong>再審批及跟進</strong>
-          <p>出差申請可於第二頁即時批准並進入訂購，其他模組則可於付款及核對追蹤頁集中查看狀態。</p>
+          <span>Step 02</span>
+          <strong>上司即時審批及跟進</strong>
+          <p>出差申請送出後，上司可在第二頁批准並直接連到 Trip.com 做查價及訂購，不用來回溝通。</p>
         </div>
         <div class="metric-card">
-          <span>03</span>
-          <strong>減少重複溝通</strong>
-          <p>將附件、欄位及狀態標準化，方便營運、財務、申請人及跟進人之間交接。</p>
+          <span>Step 03</span>
+          <strong>集中追蹤付款狀態</strong>
+          <p>所有案件及費用批次均可在付款及核對追蹤頁集中查看，方便財務及管理層即時掌握進度。</p>
         </div>
       </section>
 
-      <section class="feature-grid five-col">
+      <!-- 模組入口 -->
+      <section class="feature-grid" style="grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 20px;">
         <a class="feature-card" href="modules/tax.html">
           <div class="feature-index">01</div>
           <h3>貨品報稅</h3>
@@ -83,7 +71,7 @@
         <a class="feature-card" href="modules/travel-request.html">
           <div class="feature-index">02</div>
           <h3>出差申請</h3>
-          <p>申請人只需填寫起點、終點、出發日期、寄艙需求及證件圖片，快速提出出差需求。</p>
+          <p>申請人填寫起點、終點、出發日期、寄艙需求及上傳證件圖片，快速提出出差需求。</p>
           <div class="feature-foot">第一頁：需求提出</div>
         </a>
 
@@ -97,51 +85,30 @@
         <a class="feature-card" href="modules/hotel.html">
           <div class="feature-index">04</div>
           <h3>酒店申請</h3>
-          <p>整理入住日期、住客資料、酒店確認文件及付款安排，讓住宿資料更完整。</p>
+          <p>整理入住日期、住客資料、酒店確認文件及付款安排，讓住宿記錄更完整。</p>
           <div class="feature-foot">住宿安排申請</div>
         </a>
 
         <a class="feature-card" href="modules/store-expense.html">
           <div class="feature-index">05</div>
           <h3>費用及報銷入口</h3>
-          <p>按單次或月度方式整理店舖費用，統一提交，再帶入批次及明細結構作後續處理。</p>
+          <p>支援單次申請及月度 Excel 總表兩種方式，統一整理店舖費用及報銷記錄。</p>
           <div class="feature-foot">店舖費用提交</div>
         </a>
 
         <a class="feature-card" href="modules/payment-tracking.html">
           <div class="feature-index">06</div>
           <h3>付款及核對追蹤</h3>
-          <p>集中查看案件狀態、付款進度、最近更新及批次明細，方便後續行動與核對。</p>
+          <p>集中查看案件狀態、付款進度及批次明細，方便管理層及跟進同事掌握全局。</p>
           <div class="feature-foot">管理層追蹤頁</div>
         </a>
       </section>
 
-      <section class="panel-grid">
-        <div class="panel-card">
-          <div class="section-eyebrow">Suggested Workflow</div>
-          <h3>建議使用流程</h3>
-          <ol class="clean-list clean-list-numbered">
-            <li>如屬出差，先進入「出差申請」，提交基本行程及證件資料。</li>
-            <li>上司 / 行政再到「出差審批及訂購」頁批准並直接跟進查價與訂購。</li>
-            <li>其他店舖費用可按單次或月度總表模式提交，完成後統一到付款及核對追蹤頁查看狀態。</li>
-          </ol>
-        </div>
-
-        <div class="panel-card">
-          <div class="section-eyebrow">Platform Notes</div>
-          <h3>平台定位</h3>
-          <ul class="clean-list">
-            <li>首頁只保留對使用者有用的工作入口與流程說明。</li>
-            <li>出差模組已由舊機票頁改為兩頁式流程，減少來回溝通。</li>
-            <li>後續可再接入 SharePoint List、文件庫、Power Automate 及企業微信通知流程。</li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="panel-card data-center-card">
-        <div class="section-eyebrow">System Health</div>
-        <h3>系統資料中心</h3>
-        <p>可直接檢視各模組資料量，並進行本機備份、還原及清空舊資料，減少測試與交接時的資料遺失風險。</p>
+      <!-- 系統資料中心 -->
+      <section class="panel-card data-center-card" style="margin-top: 20px; padding: 24px 26px;">
+        <div class="section-eyebrow">System</div>
+        <h3 style="margin: 8px 0 6px;">系統資料中心</h3>
+        <p style="color: var(--text-2); font-size: 13.5px; margin: 0 0 16px;">本機資料備份、還原及清除，適合測試及交接使用。</p>
 
         <div class="data-summary-grid">
           <div class="summary-box">
@@ -179,6 +146,7 @@
             </tbody>
           </table>
         </div>
+
         <div id="dataCenterNote" class="note">資料中心可用於測試環境快速備份與還原。</div>
       </section>
     </main>
@@ -187,14 +155,14 @@
   <script src="assets/js/app.js"></script>
   <script>
     (() => {
-      const moduleCountValue = document.getElementById('moduleCountValue');
-      const recordCountValue = document.getElementById('recordCountValue');
+      const moduleCountValue  = document.getElementById('moduleCountValue');
+      const recordCountValue  = document.getElementById('recordCountValue');
       const storageUsageValue = document.getElementById('storageUsageValue');
       const moduleSummaryBody = document.getElementById('moduleSummaryBody');
-      const dataCenterNote = document.getElementById('dataCenterNote');
-      const backupBtn = document.getElementById('backupBtn');
-      const restoreFile = document.getElementById('restoreFile');
-      const clearDataBtn = document.getElementById('clearDataBtn');
+      const dataCenterNote    = document.getElementById('dataCenterNote');
+      const backupBtn         = document.getElementById('backupBtn');
+      const restoreFile       = document.getElementById('restoreFile');
+      const clearDataBtn      = document.getElementById('clearDataBtn');
 
       function formatBytes(bytes) {
         if (!Number.isFinite(bytes) || bytes <= 0) return '0 KB';
@@ -202,22 +170,21 @@
       }
 
       function renderSummary() {
-        const modules = AppUtils.summarizeAllModules();
+        const modules      = AppUtils.summarizeAllModules();
         const totalRecords = modules.reduce((sum, item) => sum + item.count, 0);
-        const totalBytes = modules.reduce((sum, item) => sum + item.bytes, 0);
+        const totalBytes   = modules.reduce((sum, item) => sum + item.bytes, 0);
 
-        moduleCountValue.textContent = String(modules.length);
-        recordCountValue.textContent = String(totalRecords);
+        moduleCountValue.textContent  = String(modules.length);
+        recordCountValue.textContent  = String(totalRecords);
         storageUsageValue.textContent = formatBytes(totalBytes);
 
         if (!modules.length) {
           moduleSummaryBody.innerHTML = '<tr><td colspan="3" class="empty-cell">目前未有資料。</td></tr>';
           return;
         }
-
-        moduleSummaryBody.innerHTML = modules
-          .map(item => `<tr><td>${AppUtils.escapeHtml(item.moduleKey)}</td><td>${item.count}</td><td>${formatBytes(item.bytes)}</td></tr>`)
-          .join('');
+        moduleSummaryBody.innerHTML = modules.map(item =>
+          `<tr><td>${AppUtils.escapeHtml(item.moduleKey)}</td><td>${item.count}</td><td>${formatBytes(item.bytes)}</td></tr>`
+        ).join('');
       }
 
       backupBtn.addEventListener('click', () => {
@@ -230,7 +197,7 @@
         if (!file) return;
         try {
           const payload = await AppUtils.parseJsonFile(file);
-          const result = AppUtils.restoreFromBackup(payload, { clearBeforeRestore: true });
+          const result  = AppUtils.restoreFromBackup(payload, { clearBeforeRestore: true });
           dataCenterNote.textContent = `已還原備份，共寫入 ${result.restoredModules} 個模組。`;
           renderSummary();
         } catch (error) {
@@ -241,8 +208,7 @@
       });
 
       clearDataBtn.addEventListener('click', () => {
-        const confirmed = window.confirm('確定要清空所有模組資料？此操作無法復原。');
-        if (!confirmed) return;
+        if (!window.confirm('確定要清空所有模組資料？此操作無法復原。')) return;
         const result = AppUtils.clearAllData();
         dataCenterNote.textContent = `已清空資料，共移除 ${result.removedModules} 個模組。`;
         renderSummary();
