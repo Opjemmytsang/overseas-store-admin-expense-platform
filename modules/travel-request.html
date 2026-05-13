@@ -60,7 +60,7 @@
           <h3>出差申請表</h3>
           <div class="form-grid">
             <div class="field"><label for="requestNo">申請編號</label><input id="requestNo" readonly /></div>
-            <div class="field"><label for="status">狀態</label><input id="status" readonly value="待提交" /></div>
+            <div class="field"><label for="status">狀態</label><select id="status" disabled></select></div>
 
             <div class="field"><label for="applicant">申請人</label><input id="applicant" placeholder="例如 Alex Wong" /></div>
             <div class="field"><label for="storeDept">店舖 / 部門</label><select id="storeDept"></select></div>
@@ -190,6 +190,7 @@
 
   <script src="../assets/js/app.js"></script>
   <script src="../assets/js/form-options.js"></script>
+  <script src="../assets/js/passport-ocr.js"></script>
   <script src="../assets/js/travel-workflow.js"></script>
 </body>
 </html>

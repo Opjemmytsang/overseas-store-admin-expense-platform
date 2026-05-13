@@ -464,6 +464,146 @@ const AppUtils = {
     };
     this.saveRecord('expense-batches', nextBatch);
     return { batch: nextBatch, lines: nextLines };
+  },
+
+  // ── 檔案讀取 ──────────────────────────────────────────────────
+
+  readFileAsDataURL(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  },
+
+  async filesToStore(files) {
+    const rows = [];
+    for (const file of Array.from(files || [])) {
+      rows.push({
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        dataUrl: await this.readFileAsDataURL(file)
+      });
+    }
+    return rows;
+  },
+
+  // ── 日期 Dropdown 共用控件 ────────────────────────────────────
+
+  populateSelectItems(selectEl, items, placeholder) {
+    if (!selectEl) return;
+    const existing = selectEl.value;
+    const opts = placeholder
+      ? [`<option value="">${placeholder}</option>`]
+      : [];
+    for (const item of items) {
+      const value = typeof item === 'object' ? item.value : item;
+      const label = typeof item === 'object' ? item.label : item;
+      opts.push(`<option value="${this.escapeHtml(value)}">${this.escapeHtml(label)}</option>`);
+    }
+    selectEl.innerHTML = opts.join('');
+    if (existing) selectEl.value = existing;
+  },
+
+  ensureSelectOption(selectEl, value, label) {
+    if (!selectEl || !value) return;
+    const exists = Array.from(selectEl.options).some(opt => opt.value === value);
+    if (!exists) {
+      selectEl.insertAdjacentHTML('beforeend', `<option value="${this.escapeHtml(value)}">${this.escapeHtml(label)}</option>`);
+    }
+  },
+
+  daysInMonth(year, month) {
+    if (!year || !month) return 31;
+    return new Date(Number(year), Number(month), 0).getDate();
+  },
+
+  syncDateHidden(prefix) {
+    const year  = document.getElementById(`${prefix}Year`)?.value  || '';
+    const month = document.getElementById(`${prefix}Month`)?.value || '';
+    const day   = document.getElementById(`${prefix}Day`)?.value   || '';
+    const hidden = document.getElementById(`${prefix}Date`);
+    if (!hidden) return;
+    hidden.value = (year && month && day) ? `${year}-${month}-${day}` : '';
+  },
+
+  refreshDateDayOptions(prefix) {
+    const year   = document.getElementById(`${prefix}Year`)?.value  || '';
+    const month  = document.getElementById(`${prefix}Month`)?.value || '';
+    const dayEl  = document.getElementById(`${prefix}Day`);
+    if (!dayEl) return;
+
+    const maxDays = this.daysInMonth(year, month);
+    const items = Array.from({ length: maxDays }, (_, i) => {
+      const v = this.pad(i + 1);
+      return { value: v, label: `${v} 日` };
+    });
+    const prev = dayEl.value;
+    this.populateSelectItems(dayEl, items, '日');
+    if (prev && Number(prev) <= maxDays) dayEl.value = prev;
+  },
+
+  applyDateToDropdowns(prefix, dateStr) {
+    const yearEl  = document.getElementById(`${prefix}Year`);
+    const monthEl = document.getElementById(`${prefix}Month`);
+    const dayEl   = document.getElementById(`${prefix}Day`);
+    const hidden  = document.getElementById(`${prefix}Date`);
+    if (!yearEl || !monthEl || !dayEl) return;
+
+    if (!dateStr) {
+      yearEl.value  = '';
+      monthEl.value = '';
+      this.refreshDateDayOptions(prefix);
+      dayEl.value = '';
+      if (hidden) hidden.value = '';
+      return;
+    }
+
+    const parts = String(dateStr).split('-');
+    if (parts.length === 3) {
+      this.ensureSelectOption(yearEl, parts[0], `${parts[0]} 年`);
+      yearEl.value  = parts[0];
+      monthEl.value = parts[1];
+      this.refreshDateDayOptions(prefix);
+      dayEl.value = parts[2];
+      if (hidden) hidden.value = dateStr;
+    }
+  },
+
+  initDateDropdowns(prefix, options = {}) {
+    const yearEl  = document.getElementById(`${prefix}Year`);
+    const monthEl = document.getElementById(`${prefix}Month`);
+    const dayEl   = document.getElementById(`${prefix}Day`);
+    if (!yearEl || !monthEl || !dayEl) return;
+
+    const currentYear = new Date().getFullYear();
+    const startYear = Number(options.startYear ?? currentYear - 1);
+    const endYear   = Number(options.endYear   ?? currentYear + 3);
+    const step  = startYear <= endYear ? 1 : -1;
+    const total = Math.abs(endYear - startYear) + 1;
+
+    const yearItems = Array.from({ length: total }, (_, i) => {
+      const y = String(startYear + i * step);
+      return { value: y, label: `${y} 年` };
+    });
+    const monthItems = Array.from({ length: 12 }, (_, i) => {
+      const m = this.pad(i + 1);
+      return { value: m, label: `${m} 月` };
+    });
+
+    this.populateSelectItems(yearEl,  yearItems,  '年');
+    this.populateSelectItems(monthEl, monthItems, '月');
+    this.refreshDateDayOptions(prefix);
+
+    [yearEl, monthEl].forEach(el => {
+      el.addEventListener('change', () => {
+        this.refreshDateDayOptions(prefix);
+        this.syncDateHidden(prefix);
+      });
+    });
+    dayEl.addEventListener('change', () => this.syncDateHidden(prefix));
   }
 };
 
