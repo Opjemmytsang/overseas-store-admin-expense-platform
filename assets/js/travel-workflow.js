@@ -241,6 +241,7 @@ window.TravelWorkflow = (() => {
     const o = qs('origin')?.value.trim() || '未填';
     const d = qs('destination')?.value.trim() || '未填';
     setText('summaryRoute', (o === '未填' && d === '未填') ? '未填寫' : `${o} → ${d}`);
+    AppUtils.syncDateHidden('departure');
     setText('summaryDate', qs('departureDate')?.value || '未填寫');
     setText('summaryBaggage', qs('hasCheckedBaggage')?.checked ? '需要寄艙' : '不需要');
   }

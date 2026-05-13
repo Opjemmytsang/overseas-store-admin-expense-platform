@@ -29,113 +29,92 @@
       <a class="top-link" href="../index.html">← 返回行政及費用管理首頁</a>
 
       <section class="module-top">
-        <div class="module-eyebrow">Travel Request</div>
-        <h2>第一頁：出差需求提出</h2>
-        <p>申請人只需填寫最少資料。送出後，系統可即時以 webhook 方式通知企業微信 / 跟進流程；待上司批准後，再由第二頁立即跟進訂購。</p>
-      </section>
-
-      <section class="panel-grid" style="margin-top:20px;">
-        <div class="panel-card">
-          <div class="section-eyebrow">Step 1</div>
-          <h3>申請人只填基本需求</h3>
-          <ul class="clean-list">
-            <li>起點、終點、出發日期、寄艙行李、出差原因。</li>
-            <li>上傳護照 / 證件圖片，由系統先讀可見文字，不足時再 fallback 至機讀區。</li>
-            <li>提交後直接進入待審批狀態。</li>
-          </ul>
-        </div>
-        <div class="panel-card">
-          <div class="section-eyebrow">Step 2</div>
-          <h3>系統代為通知及串流程</h3>
-          <ul class="clean-list">
-            <li>自動產生申請編號。</li>
-            <li>自動發通知到 webhook / 企業微信流程。</li>
-            <li>批准後於第二頁立即處理 Trip.com 查價及訂購。</li>
-          </ul>
-        </div>
+        <div class="module-eyebrow">Travel Request · Step 1 of 2</div>
+        <h2>出差需求提出</h2>
+        <p>申請人填寫行程、寄艙需求及旅客證件資料，提交後系統自動通知審批人；批准後可於第二頁直接跟進訂購。</p>
       </section>
 
       <div class="module-layout">
         <section class="form-card">
-          <h3>出差申請表</h3>
+
+          <!-- 基本資料 -->
           <div class="form-grid">
             <div class="field"><label for="requestNo">申請編號</label><input id="requestNo" readonly /></div>
             <div class="field"><label for="status">狀態</label><select id="status" disabled></select></div>
-
             <div class="field"><label for="applicant">申請人</label><input id="applicant" placeholder="例如 Alex Wong" /></div>
             <div class="field"><label for="storeDept">店舖 / 部門</label><select id="storeDept"></select></div>
-
             <div class="field"><label for="origin">起點</label><input id="origin" placeholder="例如 HKG" /></div>
             <div class="field"><label for="destination">終點</label><input id="destination" placeholder="例如 NRT" /></div>
 
             <div class="field">
               <label>出發日期</label>
               <input id="departureDate" type="hidden" />
-              <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;">
+              <div class="date-dropdowns">
                 <select id="departureYear"></select>
                 <select id="departureMonth"></select>
                 <select id="departureDay"></select>
               </div>
-              <div class="note" style="margin-top:8px;">請以年 / 月 / 日逐項選擇，減少日期誤判。</div>
             </div>
+
             <div class="field">
-              <label for="hasCheckedBaggage">寄艙行李</label>
-              <div class="summary-box" style="display:flex;align-items:center;gap:10px;">
-                <input id="hasCheckedBaggage" type="checkbox" style="width:auto;" />
-                <span style="margin:0;">需要寄艙行李</span>
+              <label>寄艙行李</label>
+              <div class="checkbox-row">
+                <input id="hasCheckedBaggage" type="checkbox" />
+                <label for="hasCheckedBaggage">需要寄艙行李</label>
               </div>
             </div>
 
             <div class="field full"><label for="purpose">出差原因</label><textarea id="purpose" placeholder="例如 巡店 / 開舖支援 / 會議 / 培訓"></textarea></div>
           </div>
 
-          <div class="section-eyebrow" style="margin-top:20px;">Document OCR</div>
-          <h3 style="margin-top:8px;">證件資料自動帶入</h3>
-          <div class="upload-grid" style="grid-template-columns:1fr;">
-            <div class="upload-box">
-              <h4>護照 / 證件圖片</h4>
-              <p>上傳後可按「讀取證件資料」，系統會先嘗試從可見文字讀取姓名、證件號碼、國籍及日期；如資料不足，再 fallback 到護照底部機讀區。</p>
-              <input id="documentFile" type="file" accept="image/*,.pdf" multiple />
-              <div class="preview-grid" id="documentPreview"></div>
+          <!-- 證件 OCR -->
+          <div class="form-section">
+            <p class="form-section-title">Document OCR · 證件資料自動帶入</p>
+            <div class="upload-grid" style="grid-template-columns:1fr;">
+              <div class="upload-box">
+                <h4>護照 / 證件圖片</h4>
+                <p>上傳後按「讀取證件資料」，系統先從可見文字讀取姓名、號碼、國籍及日期；資料不足時自動 fallback 至護照底部機讀區（MRZ）。讀取後可手動修正任何欄位。</p>
+                <input id="documentFile" type="file" accept="image/*,.pdf" multiple />
+                <div class="preview-grid" id="documentPreview"></div>
+              </div>
+            </div>
+
+            <div class="form-grid" style="margin-top:16px;">
+              <div class="field"><label for="travelerEnglishName">旅客英文名</label><input id="travelerEnglishName" placeholder="自動帶入後可手動修正" /></div>
+              <div class="field"><label for="documentType">證件類型</label><input id="documentType" placeholder="例如 護照" /></div>
+              <div class="field"><label for="documentNumber">證件號碼</label><input id="documentNumber" placeholder="例如 K1234567" /></div>
+              <div class="field"><label for="nationality">國籍</label><input id="nationality" placeholder="例如 CHN / HKG" /></div>
+
+              <div class="field">
+                <label>出生日期</label>
+                <input id="birthDate" type="hidden" />
+                <div class="date-dropdowns">
+                  <select id="birthYear"></select>
+                  <select id="birthMonth"></select>
+                  <select id="birthDay"></select>
+                </div>
+              </div>
+
+              <div class="field">
+                <label>到期日</label>
+                <input id="expiryDate" type="hidden" />
+                <div class="date-dropdowns">
+                  <select id="expiryYear"></select>
+                  <select id="expiryMonth"></select>
+                  <select id="expiryDay"></select>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="form-grid" style="margin-top:16px;">
-            <div class="field"><label for="travelerEnglishName">旅客英文名</label><input id="travelerEnglishName" placeholder="自動帶入後可手動修正" /></div>
-            <div class="field"><label for="documentType">證件類型</label><input id="documentType" placeholder="例如 護照" /></div>
-
-            <div class="field"><label for="documentNumber">證件號碼</label><input id="documentNumber" placeholder="例如 K1234567" /></div>
-            <div class="field"><label for="nationality">國籍</label><input id="nationality" placeholder="例如 CHN / HKG" /></div>
-
-            <div class="field">
-              <label>出生日期</label>
-              <input id="birthDate" type="hidden" />
-              <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;">
-                <select id="birthYear"></select>
-                <select id="birthMonth"></select>
-                <select id="birthDay"></select>
-              </div>
-              <div class="note" style="margin-top:8px;">可由 OCR 自動帶入，亦可手動以年 / 月 / 日調整。</div>
-            </div>
-            <div class="field">
-              <label>到期日</label>
-              <input id="expiryDate" type="hidden" />
-              <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;">
-                <select id="expiryYear"></select>
-                <select id="expiryMonth"></select>
-                <select id="expiryDay"></select>
-              </div>
-              <div class="note" style="margin-top:8px;">可由 OCR 自動帶入，亦可手動以年 / 月 / 日調整。</div>
-            </div>
-          </div>
-
-          <div class="button-row">
+          <!-- 操作按鈕 -->
+          <div class="button-row" style="margin-top:20px;">
             <button class="btn btn-secondary" id="readDocumentBtn" type="button">讀取證件資料</button>
             <button class="btn btn-secondary" id="saveDraftBtn" type="button">儲存草稿</button>
             <button class="btn btn-primary" id="submitRequestBtn" type="button">提交出差申請</button>
           </div>
-          <div class="note" id="ocrStatus">尚未開始讀取證件資料。</div>
-          <div class="note" id="webhookStatus">提交後會嘗試呼叫 webhook / 企業微信流程。</div>
+          <div class="action-note" id="ocrStatus">尚未開始讀取證件資料。</div>
+          <div class="action-note" id="webhookStatus" style="margin-top:6px;">提交後會嘗試呼叫 webhook / 企業微信流程。</div>
         </section>
 
         <aside class="status-card">
@@ -160,6 +139,10 @@
               <div><strong>第二頁用途</strong><span>批准後直接做查價及訂購</span></div>
               <div class="badge ok">可串流程</div>
             </div>
+          </div>
+
+          <div class="note" style="margin-top:14px;">
+            證件資料由 OCR 讀取後可手動修正，最終以儲存時表格內容為準。
           </div>
         </aside>
       </div>
