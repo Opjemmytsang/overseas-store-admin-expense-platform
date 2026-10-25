@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RODS | Retail Operations Decision System</title>
+  <link rel="stylesheet" href="rods-dashboard.css">
+</head>
+<body>
+  <div class="app">
+
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+      <div class="header-content">
+        <div class="header-brand">
+          <div class="header-logo">RODS</div>
+          <div class="header-titles">
+            <h1 class="header-main">RODS <span class="divider">|</span> Retail Operations Decision System</h1>
+            <p class="header-sub">零售營運決策系統｜Sales · Inventory · Replenishment · Action List</p>
+          </div>
+        </div>
+        <div class="header-meta">
+          <span id="data-date"></span>
+          <span id="data-count" class="data-count-tag">尚未載入資料</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== UPLOAD BAR ===== -->
+    <div class="upload-bar">
+      <div class="upload-inner">
+        <label class="btn-primary" for="csv-upload">
+          &#128193; 上載 CSV 檔案
+          <input type="file" id="csv-upload" accept=".csv">
+        </label>
+        <button class="btn-outline" onclick="loadSampleData()">使用範例資料</button>
+        <span id="upload-status" class="upload-status"></span>
+      </div>
+    </div>
+
+    <!-- ===== DASHBOARD (hidden until data loaded) ===== -->
+    <div id="dashboard" class="dashboard hidden">
+
+      <!-- FILTER BAR -->
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label class="filter-label">店級</label>
+          <select id="filter-grade" onchange="applyFilters()">
+            <option value="all">全部</option>
+            <option value="AA">AA</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">貨類</label>
+          <select id="filter-category" onchange="applyFilters()">
+            <option value="all">全部</option>
+            <option value="A1">A1</option>
+            <option value="G">G</option>
+            <option value="J1">J1</option>
+            <option value="J5">J5</option>
+            <option value="T1">T1</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label class="filter-label">地區</label>
+          <select id="filter-region" onchange="applyFilters()">
+            <option value="all">全部</option>
+            <option value="香港">香港</option>
+            <option value="澳門">澳門</option>
+            <option value="海外">海外</option>
+          </select>
+        </div>
+        <button class="btn-reset" onclick="resetFilters()">重設篩選</button>
+        <span id="filter-info" class="filter-info"></span>
+      </div>
+
+      <!-- KPI CARDS -->
+      <section class="kpi-row">
+        <div class="kpi-card kpi-primary">
+          <div class="kpi-icon">&#36;</div>
+          <div class="kpi-body">
+            <div class="kpi-label">本月銷售額</div>
+            <div class="kpi-value" id="kpi-sales">—</div>
+            <div class="kpi-unit">HKD</div>
+          </div>
+        </div>
+        <div class="kpi-card kpi-primary">
+          <div class="kpi-icon">&#128722;</div>
+          <div class="kpi-body">
+            <div class="kpi-label">銷售件數</div>
+            <div class="kpi-value" id="kpi-qty">—</div>
+            <div class="kpi-unit">件</div>
+          </div>
+        </div>
+        <div class="kpi-card kpi-gold">
+          <div class="kpi-icon">&#128179;</div>
+          <div class="kpi-body">
+            <div class="kpi-label">庫存金額</div>
+            <div class="kpi-value" id="kpi-inventory">—</div>
+            <div class="kpi-unit">HKD</div>
+          </div>
+        </div>
+        <div class="kpi-card kpi-green" id="kpi-st-card">
+          <div class="kpi-icon">&#128200;</div>
+          <div class="kpi-body">
+            <div class="kpi-label">售罄率</div>
+            <div class="kpi-value" id="kpi-sellthrough">—</div>
+            <div class="kpi-unit">%</div>
+          </div>
+        </div>
+        <div class="kpi-card kpi-red" id="kpi-hr-card">
+          <div class="kpi-icon">&#9888;</div>
+          <div class="kpi-body">
+            <div class="kpi-label">高風險存貨件數</div>
+            <div class="kpi-value" id="kpi-highrisk">—</div>
+            <div class="kpi-unit">件 (庫齡 ≥ 180日)</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STORE RANKINGS -->
+      <section class="card">
+        <h2 class="card-title">&#127970; 分店排名</h2>
+        <div class="table-scroll">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th class="col-rank">排名</th>
+                <th>分店</th>
+                <th>地區</th>
+                <th>店級</th>
+                <th class="col-num">銷售額</th>
+                <th class="col-num">銷售件數</th>
+                <th class="col-num">庫存金額</th>
+                <th class="col-bar">售罄率</th>
+                <th class="col-status">狀態</th>
+                <th>行動建議</th>
+              </tr>
+            </thead>
+            <tbody id="store-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TOP 10 TWO-COL -->
+      <div class="two-col">
+        <!-- TOP 10 BEST SELLERS -->
+        <section class="card">
+          <h2 class="card-title">&#128293; Top 10 熱賣貨</h2>
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th class="col-rank">#</th>
+                  <th>模號</th>
+                  <th>貨類</th>
+                  <th class="col-num">銷售額</th>
+                  <th class="col-num">銷售件數</th>
+                </tr>
+              </thead>
+              <tbody id="sellers-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- TOP 10 SLOW MOVERS -->
+        <section class="card">
+          <h2 class="card-title">&#128308; Top 10 滯銷貨</h2>
+          <div class="table-scroll">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th class="col-rank">#</th>
+                  <th>模號</th>
+                  <th>貨類</th>
+                  <th class="col-num">庫存件數</th>
+                  <th class="col-num">庫存金額</th>
+                  <th class="col-num">平均庫齡</th>
+                  <th>建議</th>
+                </tr>
+              </thead>
+              <tbody id="movers-tbody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- ACTION LIST -->
+      <section class="card">
+        <h2 class="card-title">&#9889; 行動清單</h2>
+        <div class="action-grid">
+          <div class="action-panel panel-blue">
+            <h3 class="panel-title">&#128309; 需要補貨</h3>
+            <div id="action-replenish"></div>
+          </div>
+          <div class="action-panel panel-red">
+            <h3 class="panel-title">&#128308; 需要清貨</h3>
+            <div id="action-clearance"></div>
+          </div>
+          <div class="action-panel panel-yellow">
+            <h3 class="panel-title">&#128310; 需要區域主管跟進</h3>
+            <div id="action-manager"></div>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /dashboard -->
+  </div><!-- /app -->
+
+  <script src="rods-dashboard.js"></script>
+</body>
+</html>
